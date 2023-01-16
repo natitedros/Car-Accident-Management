@@ -2,9 +2,10 @@ const express = require('express')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
 const cookieParser = require('cookie-parser')
+const authRoutes = require('./routes/authRoutes')
 
 //connect to db
-const dbURI = 'mongodb+srv://carcrashdatabase:natibasha@cluster0.xqkdez6.mongodb.net/?retryWrites=true&w=majority'
+const dbURI = 'mongodb+srv://carcrashdatabase:natibasha@cluster0.xqkdez6.mongodb.net/CarAccDb?retryWrites=true&w=majority'
 
 const app = express()
 
@@ -16,3 +17,7 @@ app.listen(3000)
 
 //middleware and static fields
 app.use(morgan('dev'))
+app.use(express.json());
+app.use(cookieParser())
+
+app.use(authRoutes)
