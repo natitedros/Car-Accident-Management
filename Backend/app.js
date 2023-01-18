@@ -3,6 +3,7 @@ const morgan = require('morgan')
 const mongoose = require('mongoose')
 const cookieParser = require('cookie-parser')
 const authRoutes = require('./routes/authRoutes')
+const adminRoutes = require('./routes/adminRoutes')
 
 //connect to db
 const dbURI = 'mongodb+srv://carcrashdatabase:natibasha@cluster0.xqkdez6.mongodb.net/CarAccDb?retryWrites=true&w=majority'
@@ -21,3 +22,4 @@ app.use(express.json());
 app.use(cookieParser())
 
 app.use(authRoutes)
+app.use('/admin', adminRoutes)
