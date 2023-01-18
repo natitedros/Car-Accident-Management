@@ -15,7 +15,7 @@ const caseSchema = new mongoose.Schema({
         type: ObjectId,
         required: true
     },
-    //opened, status, pending
+    //opened, closed, pending
     status:{
         type: String
     },

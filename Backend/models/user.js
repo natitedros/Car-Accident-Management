@@ -33,6 +33,9 @@ const userSchema = new mongoose.Schema({
           coordinates: {
             type: [Number]
           },
+    },
+    badgeNumber:{
+        type: String
     }
 })
 
