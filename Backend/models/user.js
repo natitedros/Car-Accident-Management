@@ -13,6 +13,9 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Please choose a role'],
         
     },
+    phoneNumber: {
+        type: String
+    },
     email: {
         type: String,
         required: [true, 'Please enter an email'],

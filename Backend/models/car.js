@@ -7,12 +7,12 @@ const carSchema = new mongoose.Schema({
         required: [true, 'Please enter the name of your car'],
         maxlength: [15, 'maximum character is 15']
     },
-    platenumber:{
+    plateNumber:{
         type: String,
         required: [true, 'Please enter the plate number'],
         length: 6
     },
-    ownerid:{
+    ownerId:{
         type: ObjectId
     },
     region:{
