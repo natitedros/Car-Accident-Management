@@ -21,7 +21,7 @@ module.exports.delete_user = (req, res)=>{
         .catch((err)=>console.log(err))
 }
 module.exports.list_cases = (req, res)=>{
-    Case.find()
+    Case.find().sort( {createdAt: -1})
         .then((result)=>{
             res.status(201).json({cases: result})
         })
