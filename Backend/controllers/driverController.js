@@ -1,9 +1,8 @@
-const { builtinModules } = require('module')
 const Case = require('../models/accidentcase')
 const Car = require('../models/car')
 
 module.exports.cases_get = (req, res) =>{
-    Case.find({subjectId: req.body.id})
+    Case.find({subjectId: req.params.id})
         .then((result)=>{
             res.status(201).json(result)
         })
@@ -11,7 +10,7 @@ module.exports.cases_get = (req, res) =>{
 }
 
 module.exports.cars_get = (req, res)=>{
-    Car.find({ownerId: req.body.id})
+    Car.find({ownerId: req.params.id})
         .then((result)=>{
             res.status(201).json(result)
         })
