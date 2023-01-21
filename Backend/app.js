@@ -13,7 +13,7 @@ const dbURI = 'mongodb+srv://carcrashdatabase:natibasha@cluster0.xqkdez6.mongodb
 const app = express()
 
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true})
-    .then((result) => console.log('Connected to db'))
+    .then((result) => console.log('Connected to Database'))
     .catch((err) => console.log(err))
 
 app.listen(3000)
