@@ -12,7 +12,7 @@ module.exports.search_post = (req, res)=>{
         })
 }
 module.exports.delete_user = (req, res)=>{
-    User.findByIdAndDelete(req.body.id)
+    User.findByIdAndDelete(req.params.id)
         .then((result)=>{
             console.log(result)
             res.status(201).json({message: "user deleted"})
