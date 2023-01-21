@@ -23,6 +23,7 @@ app.use(morgan('dev'))
 app.use(express.json());
 app.use(cookieParser())
 
+app.get('/isconnected', (req, res)=>res.status(200).json({msg: "server online"}))
 app.use(authRoutes)
 app.use('/admin', adminRoutes)
 app.use('/driver', driverRoutes)
