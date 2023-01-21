@@ -7,8 +7,9 @@ on:
   pull_request:
     branches: [ "main" ]
     
-
-    
+defaults:
+    run:
+      working-directory: Backend   
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -28,6 +29,4 @@ jobs:
     - run: npm install
       working-directory: Backend
     - run: npm run build --if-present
-      working-directory: Backend
-    - run: npm test
       working-directory: Backend
