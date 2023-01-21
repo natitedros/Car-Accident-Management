@@ -12,9 +12,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./Backend
     strategy:
       matrix:
         node-version: [16.x]
@@ -28,5 +25,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
+      working-directory: Backend
     - run: npm run build --if-present
+      working-directory: Backend
     - run: npm test
+      working-directory: Backend
