@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "test": "mocha",
+    "test": "jest",
     "start": "node app",
     "dev": "nodemon app"
   },
