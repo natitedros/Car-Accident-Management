@@ -9,7 +9,7 @@ on:
     
 defaults:
   run:
-    working-directory: Backend
+    working-directory: ./Backend/
     
 jobs:
   build:
@@ -28,7 +28,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        cache-dependency-path: Backend/package-lock.json
+        cache-dependency-path: ./Backend/package-lock.json
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
