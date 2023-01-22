@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:car_accident_management/pages/driver/driver_home.dart';
 import 'package:car_accident_management/pages/driver/driver_profile.dart';
@@ -34,8 +34,7 @@ class _DriverPageState extends State<DriverPage> {
               height: 60,
               backgroundColor: Colors.white,
               elevation: 2,
-              labelBehavior:
-                  NavigationDestinationLabelBehavior.onlyShowSelected,
+              labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
               selectedIndex: index,
               onDestinationSelected: (index) =>
                   setState(() => this.index = index),
