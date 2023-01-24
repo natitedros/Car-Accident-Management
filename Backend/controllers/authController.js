@@ -28,13 +28,21 @@ const handleErrors = (err)=>{
     return error
 }
 
+//create token
+const maxAge = 3 * 24 * 60 * 60
+const createToken = (id)=>{
+    return jwt.sign({ id }, 'natitedros secret', {
+        expiresIn: maxAge
+    })
+}
+
 module.exports.signup_post = async (req, res)=>{
     const {name, role, email, password, location} = req.body;
     
     try{
         const user = await User.create({ name, role, email, password, location })
         //add the session key here
-        res.status(201).json({ user: user._id })
+        res.status(201).json({ user: user })
 
     }catch(err){
         const errors = handleErrors(err)
@@ -51,9 +59,9 @@ module.exports.login_post = async (req, res)=>{
         const token = createToken(user._id)
 
         res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 })
-        res.status(200).json({ user: user._id})
+        res.status(200).json({ user: user})
     }catch(err){
-
+        console.log(err)
         const errors = handleErrors(err)
         res.status(400).json({ errors })
         
