@@ -24,7 +24,7 @@ app.listen(3000)
 //middleware and static fields
 app.use(morgan('dev'))
 app.use(express.json());
-app.use(urlencoded({ extended: true, limit: '50mb' }))
+// app.use(urlencoded({ extended: true, limit: '50mb' }))
 app.use(cookieParser())
 
 app.get('/isconnected', (req, res)=>res.status(200).json({msg: "server online"}))
