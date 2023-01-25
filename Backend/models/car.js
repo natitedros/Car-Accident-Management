@@ -13,7 +13,7 @@ const carSchema = new mongoose.Schema({
         length: 6
     },
     ownerId:{
-        type: ObjectId
+        type: String
     },
     region:{
         type: String
