@@ -1,6 +1,12 @@
+// import 'dart:io';
+
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:car_accident_management/pages/login.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+// import 'package:requests/requests.dart';
 import '../datamodel.dart';
 
 void main() => runApp(const Signup());
@@ -43,6 +49,7 @@ class _SignupStatefulState extends State<SignupStateful> {
   TextEditingController roleController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
   TextEditingController repeatedPasswordController = TextEditingController();
 
   // String? name;
@@ -50,23 +57,92 @@ class _SignupStatefulState extends State<SignupStateful> {
   // String? email;
   // String? password;
 
-  Future<DataModel?> submitData(
-      String name, String role, String email, String password) async {
-    var response = await http.post(Uri.https('reqres.in', '/api/users'), body: {
-      "name": name,
-      "role": role,
-      "email": email,
-      "password": password,
-    });
-    var data = response.body;
-    print(data);
+  // Future getData() async {
+  //   var r = await Requests.get('https://adega.onrender.com/isconnected');
+  //   r.raiseForStatus();
+  //   print(r.json());
+  //   print(r.content());
+  //   String body = r.content();
+  // }
 
-    if (response.statusCode == 201) {
-      String responseString = response.body;
-      dataModelFromJson(responseString);
+  Future<DataModel?> submitData(String name, String role, String email,
+      String phoneNumber, String password) async {
+    var headersList = {
+      'Accept': '*/*',
+      'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
+      'Content-Type': 'application/json'
+    };
+
+    var url = Uri.parse('https://adega.onrender.com/signup');
+    var body = {
+      'email': email,
+      'phoneNumber': phoneNumber,
+      'password': password,
+      'name': name,
+      'role': role
+    };
+
+    var req = http.Request('POST', url);
+    req.headers.addAll(headersList);
+    req.body = json.encode(body);
+
+    var res = await req.send();
+    final resBody = await res.stream.bytesToString();
+    print(req.body);
+    if (res.statusCode == 201 || res.statusCode == 300) {
+      print(resBody);
     } else {
-      return null;
+      print('hi');
+      print(res.reasonPhrase);
     }
+
+    return null;
+
+    var headers = {
+      'Content-Type': 'application/json',
+      'Cookie':
+          'jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzY2ZkMWM1M2M4M2NjNGU3ZDBjNzU5ZiIsImlhdCI6MTY3NDU3MTAyMywiZXhwIjoxNjc0ODMwMjIzfQ.Un4CcfQiZK-YFZ5YSX-Idq4FihEFKXE0iimyWQGhBE0'
+    };
+    var request =
+        http.Request('POST', Uri.parse('https://adega.onrender.com/login'));
+    request.body =
+        json.encode({"email": "nati@google.com", "password": "1234567"});
+    request.headers.addAll(headers);
+    var response = await request.send();
+    log(request.toString());
+    print(response);
+    // http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+    } else {
+      print(response.reasonPhrase);
+    }
+
+    //   var response = await Requests.post('https://adega.onrender.com/signup',
+    //       //http.post(Uri.https('reqres.in', '/api/users'),
+    //       headers: {
+    //         'Content-type': 'application/json',
+    //         'Accept': 'application/json',
+    //       },
+    //       body: {
+    //         "name": name,
+    //         "role": role,
+    //         "email": email,
+    //         "password": password,
+    //         // 'location':{'type': "Point", 'coordinates':[1,2]}
+    //       },
+    //       bodyEncoding: RequestBodyEncoding.FormURLEncoded);
+    //   response.raiseForStatus();
+    //   var data = response.body;
+    //   print(data);
+
+    // if (response.statusCode == 201) {
+    //   String responseString = response.body;
+    //   dataModelFromJson(responseString);
+    // } else {
+    //   return null;
+    // }
   }
 
   @override
@@ -194,7 +270,35 @@ class _SignupStatefulState extends State<SignupStateful> {
                   ),
                 ),
               ),
-
+              Container(
+                padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
+                child: TextField(
+                  style: TextStyle(fontSize: 15.0),
+                  controller: phoneNumberController,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    filled: true,
+                    fillColor: Color(0xFFF5F5F5),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFE4E4E4),
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFF2CACE7),
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    labelText: 'phone number',
+                    labelStyle: TextStyle(
+                      color: Color(0xFFAEAEAE),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
               Container(
                 padding: const EdgeInsets.fromLTRB(30, 5, 30, 0),
                 child: TextField(
@@ -280,14 +384,17 @@ class _SignupStatefulState extends State<SignupStateful> {
                       String name = nameController.text;
                       String role = roleController.text;
                       String email = emailController.text;
+                      String phoneNumber = phoneNumberController.text;
+
                       String password = passwordController.text;
                       // print(name);
                       // print(role);
                       // print(email);
                       // print(password);
 
-                      DataModel? data =
-                          await submitData(name, role, email, password);
+                      DataModel? data = //await getData();
+                          await submitData(
+                              name, role, email, phoneNumber, password);
 
                       setState(() {
                         _dataModel = data;
