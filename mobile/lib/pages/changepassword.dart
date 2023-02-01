@@ -19,12 +19,16 @@ class ChangePassword extends StatelessWidget {
       // title: _title,
       home: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
           title: const Text(
             'Change Password',
             style: TextStyle(fontSize: 15.0),
           ),
           centerTitle: true,
-          backgroundColor: Color(0xFF2CACE7),
+          backgroundColor: Color(0xFFFFC107),
         ),
         body: const ChangePasswordStateful(),
       ),
@@ -251,7 +255,7 @@ class _ChangePasswordStatefulState extends State<ChangePasswordStateful> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       elevation: 3,
-                      backgroundColor: Color(0xFF2CACE7),
+                      backgroundColor: Color(0xFFFFC107),
                     ),
                     onPressed: () async {
                       String newPassword = newPasswordController.text;

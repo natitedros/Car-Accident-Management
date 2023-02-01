@@ -91,7 +91,7 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
             child: const Text(
               'Change Password',
               style: TextStyle(
-                color: Color(0xFF2CACE7),
+                color: Color(0xFFFFC107),
               ),
             ),
             onPressed: () {
@@ -109,7 +109,7 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
             child: const Text(
               'Change Phone Number',
               style: TextStyle(
-                color: Color(0xFF2CACE7),
+                color: Color(0xFFFFC107),
               ),
             ),
             onPressed: () {

@@ -33,7 +33,7 @@ class _DriverPageState extends State<DriverPage> {
           child: NavigationBar(
               height: 60,
               backgroundColor: Colors.white,
-              elevation: 2,
+              elevation: 5,
               labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
               selectedIndex: index,
               onDestinationSelected: (index) =>
@@ -56,7 +56,7 @@ class _DriverPageState extends State<DriverPage> {
                     ),
                     selectedIcon: Icon(
                       Icons.car_repair_outlined,
-                      color: Color.fromARGB(255, 203, 61, 45),
+                      color: Color(0xFFCB3D2D),
                     ),
                     label: 'Cars'),
                 NavigationDestination(
@@ -66,7 +66,7 @@ class _DriverPageState extends State<DriverPage> {
                     ),
                     selectedIcon: Icon(
                       Icons.file_copy_outlined,
-                      color: Color(0xFFFFC107),
+                      color: Color(0xFF3AD425),
                     ),
                     label: 'Cases'),
                 NavigationDestination(
@@ -76,7 +76,7 @@ class _DriverPageState extends State<DriverPage> {
                     ),
                     selectedIcon: Icon(
                       Icons.person_outline_rounded,
-                      color: Color(0xFF643A71),
+                      color: Color(0xFFFFC107),
                     ),
                     label: 'Profile'),
               ]),

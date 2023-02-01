@@ -4,12 +4,12 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../datamodel.dart';
+import '../../datamodel.dart';
 
-void main() => runApp(const ChangePhone());
+void main() => runApp(const AddCar());
 
-class ChangePhone extends StatelessWidget {
-  const ChangePhone({Key? key}) : super(key: key);
+class AddCar extends StatelessWidget {
+  const AddCar({Key? key}) : super(key: key);
 
   // static const String _title = 'Sample App';
 
@@ -24,13 +24,13 @@ class ChangePhone extends StatelessWidget {
             onPressed: () => Navigator.of(context).pop(),
           ),
           title: const Text(
-            'Change Phone Number',
+            'Add car',
             style: TextStyle(fontSize: 15.0),
           ),
           centerTitle: true,
-          backgroundColor: Color(0xFFFFC107),
+          backgroundColor: Color(0xFFCB3D2D),
         ),
-        body: const ChangePhoneStateful(),
+        body: const AddCarStateful(),
       ),
       theme: ThemeData(
           fontFamily: 'Feather',
@@ -44,19 +44,25 @@ class ChangePhone extends StatelessWidget {
   }
 }
 
-class ChangePhoneStateful extends StatefulWidget {
-  const ChangePhoneStateful({Key? key}) : super(key: key);
+class AddCarStateful extends StatefulWidget {
+  const AddCarStateful({Key? key}) : super(key: key);
 
   @override
-  State<ChangePhoneStateful> createState() => _ChangePhoneStatefulState();
+  State<AddCarStateful> createState() => _AddCarStatefulState();
 }
 
-class _ChangePhoneStatefulState extends State<ChangePhoneStateful> {
+class _AddCarStatefulState extends State<AddCarStateful> {
   DataModel? _dataModel;
-  TextEditingController newPhoneController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController colorController = TextEditingController();
+  TextEditingController modelController = TextEditingController();
+  TextEditingController plateController = TextEditingController();
 
   Future<DataModel?> submitData(
-    String newPhone,
+    String name,
+    String model,
+    String color,
+    String plate,
   ) async {
     var headersList = {
       'Accept': '*/*',
@@ -64,9 +70,12 @@ class _ChangePhoneStatefulState extends State<ChangePhoneStateful> {
       'Content-Type': 'application/json'
     };
 
-    var url = Uri.parse('https://adega.onrender.com/changePassword');
+    var url = Uri.parse('https://adega.onrender.com/addcar');
     var body = {
-      'newPhone': newPhone,
+      'name': name,
+      'model': model,
+      'color': color,
+      'plate': plate,
     };
 
     var req = http.Request('POST', url);
@@ -79,7 +88,6 @@ class _ChangePhoneStatefulState extends State<ChangePhoneStateful> {
     if (res.statusCode == 201 || res.statusCode == 300) {
       print(resBody);
     } else {
-      print('hi');
       print(res.reasonPhrase);
     }
 
@@ -131,7 +139,7 @@ class _ChangePhoneStatefulState extends State<ChangePhoneStateful> {
               //   ),
               // ),
               SizedBox(
-                height: height * 0.2, //height to 9% of screen height,
+                height: height * 0.1, //height to 9% of screen height,
               ),
               // SizedBox(height: 20.0),
 
@@ -139,7 +147,7 @@ class _ChangePhoneStatefulState extends State<ChangePhoneStateful> {
                 padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
                 child: TextField(
                   style: TextStyle(fontSize: 15.0),
-                  controller: newPhoneController,
+                  controller: nameController,
                   decoration: InputDecoration(
                     isDense: true,
                     filled: true,
@@ -156,7 +164,97 @@ class _ChangePhoneStatefulState extends State<ChangePhoneStateful> {
                       ),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    labelText: 'new phone number',
+                    labelText: 'name',
+                    labelStyle: TextStyle(
+                      color: Color(0xFFAEAEAE),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+
+              Container(
+                padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                child: TextField(
+                  style: TextStyle(fontSize: 15.0),
+                  controller: modelController,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    filled: true,
+                    fillColor: Color(0xFFF5F5F5),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFE4E4E4),
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFF2CACE7),
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    labelText: 'model',
+                    labelStyle: TextStyle(
+                      color: Color(0xFFAEAEAE),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+
+              Container(
+                padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                child: TextField(
+                  style: TextStyle(fontSize: 15.0),
+                  controller: colorController,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    filled: true,
+                    fillColor: Color(0xFFF5F5F5),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFE4E4E4),
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFF2CACE7),
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    labelText: 'color',
+                    labelStyle: TextStyle(
+                      color: Color(0xFFAEAEAE),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+
+              Container(
+                padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                child: TextField(
+                  style: TextStyle(fontSize: 15.0),
+                  controller: plateController,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    filled: true,
+                    fillColor: Color(0xFFF5F5F5),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFE4E4E4),
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFF2CACE7),
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    labelText: 'Licence plate Number',
                     labelStyle: TextStyle(
                       color: Color(0xFFAEAEAE),
                       fontWeight: FontWeight.bold,
@@ -172,23 +270,25 @@ class _ChangePhoneStatefulState extends State<ChangePhoneStateful> {
                   height: height * 0.09,
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: ElevatedButton(
-                    child: const Text('CHANGE NUMBER'),
+                    child: const Text('ADD CAR'),
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                       elevation: 3,
-                      backgroundColor: Color(0xFFFFC107),
+                      backgroundColor: Color(0xFFCB3D2D),
                     ),
                     onPressed: () async {
-                      String newPhone = newPhoneController.text;
-
+                      String name = nameController.text;
+                      String model = modelController.text;
+                      String color = colorController.text;
+                      String plate = plateController.text;
                       // print(newPassword);
                       // print(repeatedPassword);
                       // print(oldPaswword);
 
                       DataModel? data = //await getData();
-                          await submitData(newPhone);
+                          await submitData(name, model, color, plate);
 
                       setState(() {
                         _dataModel = data;
