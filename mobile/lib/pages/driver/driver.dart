@@ -16,9 +16,9 @@ class _DriverPageState extends State<DriverPage> {
   int index = 0;
   final screens = [
     DriverHomePage(),
-    DriverProfilePage(),
     DriverCarsPage(),
     DriverCasesPage(),
+    DriverProfilePage(),
   ];
 
   @override

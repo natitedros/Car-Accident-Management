@@ -71,6 +71,8 @@ class _LoginStatefulState extends State<LoginStateful> {
     Map temp = jsonDecode(
         resBody); // accepts the data from the server and maps it onto temp
 
+    // log(temp.toString());
+
     if (res.statusCode == 200 ||
         res.statusCode == 201 ||
         res.statusCode == 300) {
@@ -80,8 +82,8 @@ class _LoginStatefulState extends State<LoginStateful> {
           role: temp['user']['role']);
       print(resBody);
       print("user is ${temp['user']['name']}");
-      print("user is ${temp['user']['email']}");
-      print("user is a ${temp['user']['role']}");
+      print("email is ${temp['user']['email']}");
+      print("role is a ${temp['user']['role']}");
 
       return data;
     } else {
