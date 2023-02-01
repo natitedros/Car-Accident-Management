@@ -50,6 +50,7 @@ class returenData {
   String? name;
   String? email;
   String? role;
+  // String? phoneNumber;   when a phone number is obtained from the server
 
   returenData({this.email, this.name, this.role, this.errors});
 }
