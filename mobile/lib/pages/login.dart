@@ -8,6 +8,8 @@ import '../datamodel.dart';
 
 import 'package:car_accident_management/pages/signup.dart';
 import 'package:car_accident_management/pages/driver/driver.dart';
+import 'package:car_accident_management/pages/admin/admin.dart';
+import 'package:car_accident_management/pages/police/police.dart';
 
 void main() => runApp(const Login());
 
@@ -337,13 +339,13 @@ class _LoginStatefulState extends State<LoginStateful> {
                       } else if (data.role == 'police') {
                         Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(builder: (context) => DriverPage()),
+                          MaterialPageRoute(builder: (context) => PolicePage()),
                           (Route<dynamic> route) => false,
                         );
                       } else if (data.role == 'admin') {
                         Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(builder: (context) => DriverPage()),
+                          MaterialPageRoute(builder: (context) => AdminPage()),
                           (Route<dynamic> route) => false,
                         );
                       }

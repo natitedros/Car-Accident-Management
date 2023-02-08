@@ -92,7 +92,10 @@ class _SignupStatefulState extends State<SignupStateful> {
     if (res.statusCode == 201 || res.statusCode == 300) {
       print(resBody);
     } else {
-      print('hi');
+      // print('hi')
+      print(res.statusCode);
+      print(resBody);
+
       print(res.reasonPhrase);
     }
 
