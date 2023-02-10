@@ -12,7 +12,7 @@ const caseSchema = new mongoose.Schema({
           },
     },
     subjectId: {
-        type: ObjectId,
+        type: String,
         required: true
     },
     //opened, closed, pending
@@ -20,7 +20,7 @@ const caseSchema = new mongoose.Schema({
         type: String
     },
     handlerId: {
-        type: ObjectId
+        type: String
     }
 
 },{timestamps: true})

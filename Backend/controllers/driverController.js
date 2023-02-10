@@ -25,3 +25,12 @@ module.exports.add_car = (req, res)=>{
         })
         .catch((err)=>console.log(err))
 }
+
+module.exports.add_minor_case = (req, res)=>{
+    const accidentcase = new Case(req.body)
+    accidentcase.save()
+        .then((result)=>{
+            res.status(201).json({case: result._id})
+        })
+        .catch((err)=>console.log(err))
+}

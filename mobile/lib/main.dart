@@ -1,10 +1,12 @@
-import 'dart:ui';
+//import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
 import 'package:car_accident_management/pages/login.dart';
 import 'package:car_accident_management/pages/signup.dart';
 import 'package:car_accident_management/pages/driver/driver.dart';
+import 'package:car_accident_management/pages/admin/admin.dart';
+import 'package:car_accident_management/pages/police/police.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -13,10 +15,12 @@ void main() {
       '/': (context) => Login(),
       '/signup': (context) => Signup(),
       '/driver': (context) => DriverPage(),
+      '/admin': (context) => AdminPage(),
+      '/police': (context) => PolicePage(),
     },
     theme: ThemeData(
         fontFamily: 'Feather',
-        textTheme: TextTheme(
+        textTheme: const TextTheme(
           bodyText1: TextStyle(),
           bodyText2: TextStyle(),
         ).apply(

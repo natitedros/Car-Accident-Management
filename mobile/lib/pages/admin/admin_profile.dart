@@ -9,14 +9,14 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:car_accident_management/pages/login.dart';
 
-class DriverProfilePage extends StatefulWidget {
+class AdminProfilePage extends StatefulWidget {
   @override
-  _DriverProfilePageState createState() {
-    return _DriverProfilePageState();
+  _AdminProfilePageState createState() {
+    return _AdminProfilePageState();
   }
 }
 
-class _DriverProfilePageState extends State<DriverProfilePage> {
+class _AdminProfilePageState extends State<AdminProfilePage> {
   // void fetchData() async {
   //   Response response =
   //       await get(Uri.parse('https://jsonplaceholder.typicode.com/todos/1'));
@@ -72,7 +72,7 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
           ),
           Text("Natnael Tedros",
               style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 30.0)),
-          Text("Driver",
+          Text("Admin",
               style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 20.0)),
           SizedBox(
             height: height * 0.03,
