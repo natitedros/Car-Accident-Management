@@ -4,7 +4,8 @@
 
 import 'dart:convert';
 
-DataModel? dataModelFromJson(String str) => DataModel.fromJson(json.decode(str));
+DataModel? dataModelFromJson(String str) =>
+    DataModel.fromJson(json.decode(str));
 
 String dataModelToJson(DataModel? data) => json.encode(data!.toJson());
 
@@ -26,20 +27,30 @@ class DataModel {
   DateTime? createdAt;
 
   factory DataModel.fromJson(Map<String, dynamic> json) => DataModel(
-    name: json["name"],
-    role: json["role"],
-    email: json["email"],
-    password: json["password"],
-    id: json["id"],
-    createdAt: DateTime.parse(json["createdAt"]),
-  );
+        name: json["name"],
+        role: json["role"],
+        email: json["email"],
+        password: json["password"],
+        id: json["id"],
+        createdAt: DateTime.parse(json["createdAt"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "name": name,
-    "role": role,
-    "email": email,
-    "password": password,
-    "id": id,
-    "createdAt": createdAt?.toIso8601String(),
-  };
+        "name": name,
+        "role": role,
+        "email": email,
+        "password": password,
+        "id": id,
+        "createdAt": createdAt?.toIso8601String(),
+      };
+}
+
+class returenData {
+  Map<String, String>? errors;
+  String? name;
+  String? email;
+  String? role;
+  // String? phoneNumber;   when a phone number is obtained from the server
+
+  returenData({this.email, this.name, this.role, this.errors});
 }

@@ -1,24 +1,24 @@
 //import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:car_accident_management/pages/driver/driver_home.dart';
-import 'package:car_accident_management/pages/driver/driver_profile.dart';
-import 'package:car_accident_management/pages/driver/driver_cars.dart';
-import 'package:car_accident_management/pages/driver/driver_cases.dart';
+import 'package:car_accident_management/pages/police/police_profile.dart';
+import 'package:car_accident_management/pages/police/police_home.dart';
+import 'package:car_accident_management/pages/police/police_cases.dart';
 
-void main() => runApp(DriverPage());
+// import 'package:car_accident_management/pages/driver/driver_cases.dart';
 
-class DriverPage extends StatefulWidget {
+void main() => runApp(PolicePage());
+
+class PolicePage extends StatefulWidget {
   @override
-  _DriverPageState createState() => _DriverPageState();
+  _PolicePageState createState() => _PolicePageState();
 }
 
-class _DriverPageState extends State<DriverPage> {
+class _PolicePageState extends State<PolicePage> {
   int index = 0;
   final screens = [
-    DriverHomePage(),
-    DriverCarsPage(),
-    DriverCasesPage(),
-    DriverProfilePage(),
+    PoliceHomePage(),
+    PoliceCasesPage(),
+    PoliceProfilePage(),
   ];
 
   @override
@@ -49,16 +49,16 @@ class _DriverPageState extends State<DriverPage> {
                       color: Color(0xFF2CACE7),
                     ),
                     label: 'Home'),
-                NavigationDestination(
-                    icon: Icon(
-                      Icons.car_repair_outlined,
-                      color: Color(0xFFAFAFAF),
-                    ),
-                    selectedIcon: Icon(
-                      Icons.car_repair_outlined,
-                      color: Color(0xFFCB3D2D),
-                    ),
-                    label: 'Cars'),
+                // NavigationDestination(
+                //     icon: Icon(
+                //       Icons.car_repair_outlined,
+                //       color: Color(0xFFAFAFAF),
+                //     ),
+                //     selectedIcon: Icon(
+                //       Icons.car_repair_outlined,
+                //       color: Color(0xFFCB3D2D),
+                //     ),
+                //     label: 'Cars'),
                 NavigationDestination(
                     icon: Icon(
                       Icons.file_copy_outlined,

@@ -2,12 +2,12 @@
 
 import 'package:flutter/material.dart';
 
-class DriverHomePage extends StatefulWidget {
+class AdminHomePage extends StatefulWidget {
   @override
-  _DriverHomePageState createState() => _DriverHomePageState();
+  _AdminHomePageState createState() => _AdminHomePageState();
 }
 
-class _DriverHomePageState extends State<DriverHomePage> {
+class _AdminHomePageState extends State<AdminHomePage> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;

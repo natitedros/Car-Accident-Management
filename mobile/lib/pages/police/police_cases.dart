@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:car_accident_management/pages/case_info_layout.dart';
 
-class DriverCasesPage extends StatefulWidget {
+class PoliceCasesPage extends StatefulWidget {
   @override
-  _DriverCasesPageState createState() => _DriverCasesPageState();
+  _PoliceCasesPageState createState() => _PoliceCasesPageState();
 }
 
-class _DriverCasesPageState extends State<DriverCasesPage> {
+class _PoliceCasesPageState extends State<PoliceCasesPage> {
   final List _cars = ['case1', 'case2', 'case3', 'case4', 'case5', 'case6'];
 
   @override
