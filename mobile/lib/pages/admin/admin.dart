@@ -3,22 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:car_accident_management/pages/admin/admin_profile.dart';
 import 'package:car_accident_management/pages/admin/admin_home.dart';
 import 'package:car_accident_management/pages/admin/admin_cases.dart';
+import 'package:car_accident_management/datamodel.dart';
 
 // import 'package:car_accident_management/pages/driver/driver_cases.dart';
 
-void main() => runApp(AdminPage());
+// void main() => runApp(AdminPage());
 
 class AdminPage extends StatefulWidget {
+  final returenData data;
+  const AdminPage({Key? key, required this.data}) : super(key: key);
+
   @override
   _AdminPageState createState() => _AdminPageState();
 }
 
 class _AdminPageState extends State<AdminPage> {
   int index = 0;
-  final screens = [
+  late final screens = [
     AdminHomePage(),
     AdminCasesPage(),
-    AdminProfilePage(),
+    AdminProfilePage(data: widget.data),
   ];
 
   @override

@@ -3,22 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:car_accident_management/pages/police/police_profile.dart';
 import 'package:car_accident_management/pages/police/police_home.dart';
 import 'package:car_accident_management/pages/police/police_cases.dart';
+import 'package:car_accident_management/datamodel.dart';
 
 // import 'package:car_accident_management/pages/driver/driver_cases.dart';
 
-void main() => runApp(PolicePage());
+// void main() => runApp(PolicePage());
 
 class PolicePage extends StatefulWidget {
+  final returenData data;
+  const PolicePage({Key? key, required this.data}) : super(key: key);
+
   @override
   _PolicePageState createState() => _PolicePageState();
 }
 
 class _PolicePageState extends State<PolicePage> {
   int index = 0;
-  final screens = [
+  late final screens = [
     PoliceHomePage(),
     PoliceCasesPage(),
-    PoliceProfilePage(),
+    PoliceProfilePage(data: widget.data),
   ];
 
   @override

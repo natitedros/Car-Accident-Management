@@ -10,6 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:car_accident_management/pages/login.dart';
 
 class PoliceProfilePage extends StatefulWidget {
+  final returenData data;
+  const PoliceProfilePage({Key? key, required this.data}) : super(key: key);
+
   @override
   _PoliceProfilePageState createState() {
     return _PoliceProfilePageState();
@@ -70,14 +73,14 @@ class _PoliceProfilePageState extends State<PoliceProfilePage> {
           SizedBox(
             height: height * 0.03,
           ),
-          Text("Natnael Tedros",
+          Text("${widget.data.name}",
               style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 30.0)),
-          Text("Police",
+          Text("${widget.data.role}",
               style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 20.0)),
           SizedBox(
             height: height * 0.03,
           ),
-          Text("natitedros@gmail.com",
+          Text("${widget.data.email}",
               style: TextStyle(color: Color(0xFFBEBEBE), fontSize: 15.0)),
           Padding(
             padding: const EdgeInsets.all(8.0),

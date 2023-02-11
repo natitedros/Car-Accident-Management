@@ -14,9 +14,9 @@ void main() {
     routes: {
       '/': (context) => Login(),
       '/signup': (context) => Signup(),
-      '/driver': (context) => DriverPage(),
-      '/admin': (context) => AdminPage(),
-      '/police': (context) => PolicePage(),
+      // '/driver': (context) => DriverPage(),
+      // '/admin': (context) => AdminPage(),
+      // '/police': (context) => PolicePage(),
     },
     theme: ThemeData(
         fontFamily: 'Feather',
