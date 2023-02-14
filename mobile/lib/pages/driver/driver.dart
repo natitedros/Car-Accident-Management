@@ -4,21 +4,24 @@ import 'package:car_accident_management/pages/driver/driver_home.dart';
 import 'package:car_accident_management/pages/driver/driver_profile.dart';
 import 'package:car_accident_management/pages/driver/driver_cars.dart';
 import 'package:car_accident_management/pages/driver/driver_cases.dart';
+import 'package:car_accident_management/datamodel.dart';
 
-void main() => runApp(DriverPage());
+// void main() => runApp(DriverPage());
 
 class DriverPage extends StatefulWidget {
+  final returenData data;
+  const DriverPage({Key? key, required this.data}) : super(key: key);
   @override
   _DriverPageState createState() => _DriverPageState();
 }
 
 class _DriverPageState extends State<DriverPage> {
   int index = 0;
-  final screens = [
+  late final screens = [
     DriverHomePage(),
     DriverCarsPage(),
     DriverCasesPage(),
-    DriverProfilePage(),
+    DriverProfilePage(data: widget.data),
   ];
 
   @override

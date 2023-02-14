@@ -333,19 +333,22 @@ class _LoginStatefulState extends State<LoginStateful> {
                       } else if (data.role == 'driver') {
                         Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(builder: (context) => DriverPage()),
+                          MaterialPageRoute(
+                              builder: (context) => DriverPage(data: data)),
                           (Route<dynamic> route) => false,
                         );
                       } else if (data.role == 'police') {
                         Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(builder: (context) => PolicePage()),
+                          MaterialPageRoute(
+                              builder: (context) => PolicePage(data: data)),
                           (Route<dynamic> route) => false,
                         );
                       } else if (data.role == 'admin') {
                         Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(builder: (context) => AdminPage()),
+                          MaterialPageRoute(
+                              builder: (context) => AdminPage(data: data)),
                           (Route<dynamic> route) => false,
                         );
                       }
