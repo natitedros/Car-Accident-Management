@@ -21,7 +21,7 @@ class _AdminPageState extends State<AdminPage> {
   int index = 0;
   late final screens = [
     AdminHomePage(),
-    AdminCasesPage(),
+    AdminCasesPage(data: widget.data),
     AdminProfilePage(data: widget.data),
   ];
 

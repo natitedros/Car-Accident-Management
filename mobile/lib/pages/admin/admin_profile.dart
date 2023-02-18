@@ -1,13 +1,13 @@
-import 'package:http/http.dart';
+// import 'package:http/http.dart';
 import '../../datamodel.dart';
 import '../changepassword.dart';
 import '../changenumber.dart';
 
-import 'dart:convert';
-import 'dart:developer';
+// import 'dart:convert';
+// import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:car_accident_management/pages/login.dart';
+// import 'package:car_accident_management/pages/login.dart';
 
 class AdminProfilePage extends StatefulWidget {
   final returenData data;
@@ -20,20 +20,10 @@ class AdminProfilePage extends StatefulWidget {
 }
 
 class _AdminProfilePageState extends State<AdminProfilePage> {
-  // void fetchData() async {
-  //   Response response =
-  //       await get(Uri.parse('https://jsonplaceholder.typicode.com/todos/1'));
-  //   log(response.body);
-  //   log('hi');
-  // }
-
   @override
   void initState() {
     super.initState();
-    // fetchData();
   }
-
-  // String? role = "";
 
   @override
   Widget build(BuildContext context) {

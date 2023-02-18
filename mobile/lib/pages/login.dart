@@ -79,22 +79,29 @@ class _LoginStatefulState extends State<LoginStateful> {
         res.statusCode == 201 ||
         res.statusCode == 300) {
       returenData data = returenData(
-          name: temp['user']['name'],
-          email: temp['user']['email'],
-          role: temp['user']['role']);
-      print(resBody);
-      print("user is ${temp['user']['name']}");
-      print("email is ${temp['user']['email']}");
-      print("role is a ${temp['user']['role']}");
+        name: temp['user']['name'],
+        email: temp['user']['email'],
+        role: temp['user']['role'],
+        id: temp['user']['_id'],
+      );
+
+      // print(resBody);
+      // print("user is ${temp['user']['name']}");
+      // print("email is ${temp['user']['email']}");
+      // print("role is a ${temp['user']['role']}");
+      // print("id is a ${temp['user']['_id']}");
 
       return data;
     } else {
+      print(resBody);
       print("error is ${temp['errors']}");
       returenData data = returenData(errors: Map.from(temp['errors']));
       // print("Passed");
       return data;
     }
   }
+
+// ------------------------------NOT USED------------------------------------------//
 
   Future<DataModel?> submitData(String email, String password) async {
     var headersList = {
@@ -181,6 +188,7 @@ class _LoginStatefulState extends State<LoginStateful> {
     //   print(response.reasonPhrase);
     // }
   }
+//-----------------------------------------------------------------------//
 
   @override
   Widget build(BuildContext context) {

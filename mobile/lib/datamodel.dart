@@ -47,10 +47,61 @@ class DataModel {
 
 class returenData {
   Map<String, String>? errors;
+
+  String? id;
   String? name;
   String? email;
   String? role;
-  // String? phoneNumber;   when a phone number is obtained from the server
+  //String? phoneNumber;   //when a phone number is obtained from the server
 
-  returenData({this.email, this.name, this.role, this.errors});
+  //here is where all the information recieved from the server is stored
+
+  returenData({this.email, this.name, this.role, this.errors, this.id});
+}
+
+class Location {
+  String? type;
+  List<dynamic>? coordinates;
+  Location({this.type, this.coordinates});
+}
+
+class returenCases {
+  // Map<String, String>? location;
+
+  String? id;
+  String? status;
+  String? subjectId;
+  String? createdAt;
+  String? handlerId;
+  Location? location;
+
+  //String? phoneNumber;   //when a phone number is obtained from the server
+  //here is where all the information recieved from the server is stored
+  returenCases(
+      {this.id,
+      this.status,
+      this.subjectId,
+      this.createdAt,
+      this.handlerId,
+      this.location});
+}
+
+class returenCars {
+  // Map<String, String>? location;
+
+  String? id;
+  String? name;
+  String? plateNumber;
+  String? ownerId;
+  String? region;
+
+  //String? phoneNumber;   //when a phone number is obtained from the server
+  //here is where all the information recieved from the server is stored
+  returenCars({
+    this.id,
+    this.name,
+    this.plateNumber,
+    this.ownerId,
+    this.region,
+  });
 }
