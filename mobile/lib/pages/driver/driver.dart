@@ -5,6 +5,8 @@ import 'package:car_accident_management/pages/driver/driver_profile.dart';
 import 'package:car_accident_management/pages/driver/driver_cars.dart';
 import 'package:car_accident_management/pages/driver/driver_cases.dart';
 import 'package:car_accident_management/datamodel.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 // void main() => runApp(DriverPage());
 
@@ -20,9 +22,36 @@ class _DriverPageState extends State<DriverPage> {
   late final screens = [
     DriverHomePage(),
     DriverCarsPage(),
-    DriverCasesPage(),
+    DriverCasesPage(data: widget.data),
     DriverProfilePage(data: widget.data),
   ];
+
+  //---------------------------------------------------------------
+
+  // Future<returenCases> fetchCases() async {
+  //   final response = await http.get(Uri.parse(
+  //       'https://adega.onrender.com/mycases/63d0050fdd72e0a01b0958a2'));
+  //   print("I am in response");
+  //   print(response.body);
+  //   if (response.statusCode == 200 ||
+  //       response.statusCode == 201 ||
+  //       response.statusCode == 300) {
+  //     // If the server did return a 200 OK response,
+  //     // then parse the JSON.
+  //     print(jsonDecode(response.body));
+  //     return returenCases.fromJson(jsonDecode(response.body));
+  //   } else {
+  //     // If the server did not return a 200 OK response,
+  //     // then throw an exception.
+  //     throw Exception('Failed to load album');
+  //   }
+  // }
+
+  @override
+  void initState() {
+    super.initState();
+    // fetchCases();
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
