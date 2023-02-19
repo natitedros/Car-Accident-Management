@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class CarInfoLayout extends StatelessWidget {
-  final String child;
+  final String? child;
 
-  CarInfoLayout({required this.child});
+  CarInfoLayout({this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class CarInfoLayout extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(20.0, 0.0, 10.0, 0),
               child: Text(
-                child,
+                child!,
                 style: TextStyle(
                   color: Color(0xFFAFAFAF),
                 ),
