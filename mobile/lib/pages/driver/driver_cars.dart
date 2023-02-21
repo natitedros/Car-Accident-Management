@@ -13,7 +13,7 @@ class DriverCarsPage extends StatefulWidget {
 
 class _DriverCarsPageState extends State<DriverCarsPage> {
 //data Type - List<returenCars>
-  Future<void> fetchCars() async {
+  Future<List<returenCars>?> fetchCars() async {
     final url = Uri.parse(
         'https://adega.onrender.com/driver/mycars/63d0050fdd72e0a01b0958a2');
     http.Response response = await http.get(url);
@@ -35,14 +35,14 @@ class _DriverCarsPageState extends State<DriverCarsPage> {
         }
         //We use teh array Cars to fill out the listcards
         print(Cars[0].name);
-        return;
+        return Cars;
       }
     } catch (err) {
       print(err);
     }
   }
 
-  final List _cars = ['car1', 'car2', 'car3', 'car4', 'car5', 'car6'];
+  late final List _cars = ['car1', 'car2', 'car3', 'car4', 'car5', 'car6'];
   @override
   void initState() {
     super.initState();
@@ -55,35 +55,48 @@ class _DriverCarsPageState extends State<DriverCarsPage> {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 3,
-        title: Text(
-          'Cars',
-          style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 15.0),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 3,
+          title: Text(
+            'Cars',
+            style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 15.0),
+          ),
+          centerTitle: true,
         ),
-        centerTitle: true,
-      ),
-      body: Container(
-          alignment: Alignment.center,
-          child: ListView.builder(
-              itemCount: _cars.length,
-              itemBuilder: (context, index) {
-                return CarInfoLayout(
-                  child: _cars[index],
-                );
-              })),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => AddCar()),
-            // (Route<dynamic> route) => false,
-          );
-        },
-        child: Icon(Icons.add),
-        backgroundColor: Color(0xFFCB3D2D),
-      ),
-    );
+        body: FutureBuilder(
+          future: fetchCars(),
+          builder: ((context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              List<returenCars>? z = snapshot.data;
+              print("z is ${z?[0].id}");
+              print(z?.length);
+              return Container(
+                  alignment: Alignment.center,
+                  child: ListView.builder(
+                      itemCount: z?.length,
+                      itemBuilder: (context, index) {
+                        return CarInfoLayout(
+                          child: z![index].name!,
+                        );
+                      }));
+            }
+            return Center(child: Text("loading"));
+          }
+              // ,
+              // ),
+              // floatingActionButton: FloatingActionButton(
+              //   onPressed: () {
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(builder: (context) => AddCar()),
+              //       // (Route<dynamic> route) => false,
+              //     );
+              //   },
+              //   child: Icon(Icons.add),
+              //   backgroundColor: Color(0xFFCB3D2D),
+              ),
+        ));
+    // );
   }
 }

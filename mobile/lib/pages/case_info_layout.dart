@@ -3,9 +3,9 @@ import 'package:car_accident_management/pages/changepassword.dart';
 import 'package:flutter/material.dart';
 
 class CaseInfoLayout extends StatelessWidget {
-  final String child;
+  final String? child;
 
-  CaseInfoLayout({required this.child});
+  CaseInfoLayout({this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class CaseInfoLayout extends StatelessWidget {
                       // (Route<dynamic> route) => false,
                     );
                   },
-                  child: Text(child,
+                  child: Text(child!,
                       style: TextStyle(
                           color: Color(0xFFAFAFAF),
                           decoration: TextDecoration.underline))),

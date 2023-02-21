@@ -12,7 +12,7 @@ class DriverCasesPage extends StatefulWidget {
 }
 
 class _DriverCasesPageState extends State<DriverCasesPage> {
-  Future<void> fetchCases() async {
+  Future<List<returenCases>?> fetchCases() async {
     final url = Uri.parse(
         'https://adega.onrender.com/driver/mycases/63d0050fdd72e0a01b0958a2');
     http.Response response = await http.get(url);
@@ -37,7 +37,7 @@ class _DriverCasesPageState extends State<DriverCasesPage> {
         }
         //We use teh array Cases to fill out the listcards
         print(Cases[0].status);
-        return;
+        return Cases;
       }
     } catch (err) {
       print(err);
@@ -58,24 +58,35 @@ class _DriverCasesPageState extends State<DriverCasesPage> {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 3,
-        title: Text(
-          'Cases',
-          style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 15.0),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 3,
+          title: Text(
+            'Cases',
+            style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 15.0),
+          ),
+          centerTitle: true,
         ),
-        centerTitle: true,
-      ),
-      body: Container(
-          alignment: Alignment.center,
-          child: ListView.builder(
-              itemCount: _cases.length,
-              itemBuilder: (context, index) {
-                return CaseInfoLayout(
-                  child: _cases[index],
-                );
-              })),
-    );
+        body: FutureBuilder(
+          future: fetchCases(),
+          builder: ((context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              List<returenCases>? z = snapshot.data;
+              print('z is ${z?[0].status}');
+              print(z?.length);
+
+              return Container(
+                  alignment: Alignment.center,
+                  child: ListView.builder(
+                      itemCount: z?.length,
+                      itemBuilder: (context, index) {
+                        return CaseInfoLayout(
+                          child: z![index].createdAt!,
+                        );
+                      }));
+            }
+            return Center(child: Text('loading'));
+          }),
+        ));
   }
 }
