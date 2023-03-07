@@ -15,15 +15,6 @@ class _PoliceCasesPageState extends State<PoliceCasesPage> {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 3,
-        title: Text(
-          'Cases',
-          style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 15.0),
-        ),
-        centerTitle: true,
-      ),
       body: Container(
           alignment: Alignment.center,
           child: ListView.builder(

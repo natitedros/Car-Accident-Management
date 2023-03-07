@@ -34,9 +34,10 @@ class CaseInfoLayout extends StatelessWidget {
         ),
         height: 70,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.fromLTRB(20.0, 0.0, 10.0, 0),
+              padding: const EdgeInsets.fromLTRB(20.0, 0.0, 0.0, 0),
               child: TextButton(
                   onPressed: () {
                     Navigator.push(
@@ -50,8 +51,10 @@ class CaseInfoLayout extends StatelessWidget {
                           color: Color(0xFFAFAFAF),
                           decoration: TextDecoration.underline))),
             ),
-            SizedBox(width: width * 0.55),
-            Text('open', style: TextStyle(color: Color(0xFF3AD425)))
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0.0, 0.0, 20.0, 0),
+              child: Text('open', style: TextStyle(color: Color(0xFF3AD425))),
+            )
           ],
         ),
       ),

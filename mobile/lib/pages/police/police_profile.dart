@@ -20,20 +20,13 @@ class PoliceProfilePage extends StatefulWidget {
 }
 
 class _PoliceProfilePageState extends State<PoliceProfilePage> {
-  // void fetchData() async {
-  //   Response response =
-  //       await get(Uri.parse('https://jsonplaceholder.typicode.com/todos/1'));
-  //   log(response.body);
-  //   log('hi');
-  // }
+
 
   @override
   void initState() {
     super.initState();
-    // fetchData();
   }
 
-  // String? role = "";
 
   @override
   Widget build(BuildContext context) {
@@ -41,15 +34,7 @@ class _PoliceProfilePageState extends State<PoliceProfilePage> {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 3,
-        title: Text(
-          'Profile',
-          style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 15.0),
-        ),
-        centerTitle: true,
-      ),
+
       body: Container(
         alignment: Alignment.center,
         child: Column(children: <Widget>[

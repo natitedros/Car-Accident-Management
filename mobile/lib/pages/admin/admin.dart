@@ -4,10 +4,8 @@ import 'package:car_accident_management/pages/admin/admin_profile.dart';
 import 'package:car_accident_management/pages/admin/admin_home.dart';
 import 'package:car_accident_management/pages/admin/admin_cases.dart';
 import 'package:car_accident_management/datamodel.dart';
+import 'package:car_accident_management/pages/login.dart';
 
-// import 'package:car_accident_management/pages/driver/driver_cases.dart';
-
-// void main() => runApp(AdminPage());
 
 class AdminPage extends StatefulWidget {
   final returenData data;
@@ -19,6 +17,10 @@ class AdminPage extends StatefulWidget {
 
 class _AdminPageState extends State<AdminPage> {
   int index = 0;
+  String title0 = "Home";
+  String title1 = "Cases";
+  String title2 = "Profile";
+  String mainTitle = "Home";
   late final screens = [
     AdminHomePage(),
     AdminCasesPage(data: widget.data),
@@ -27,6 +29,31 @@ class _AdminPageState extends State<AdminPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 3,
+          title: Text(
+            mainTitle,
+            style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 15.0),
+          ),
+          centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.logout,
+                color: Color(0xFFFFC107),
+              ),
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => Login()),
+                      (Route<dynamic> route) => false,
+                );
+              },
+            )
+          ],
+        ),
         body: screens[index],
         bottomNavigationBar: NavigationBarTheme(
           data: NavigationBarThemeData(
@@ -41,7 +68,18 @@ class _AdminPageState extends State<AdminPage> {
               labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
               selectedIndex: index,
               onDestinationSelected: (index) =>
-                  setState(() => this.index = index),
+                  setState(() {
+                    this.index = index;
+                    if (index == 0){
+                      mainTitle = title0;
+                    }
+                    else if(index == 1){
+                      mainTitle = title1;
+                    }
+                    else if (index == 2){
+                      mainTitle = title2;
+                    }
+                  }),
               destinations: [
                 NavigationDestination(
                     icon: Icon(
@@ -53,16 +91,6 @@ class _AdminPageState extends State<AdminPage> {
                       color: Color(0xFF2CACE7),
                     ),
                     label: 'Home'),
-                // NavigationDestination(
-                //     icon: Icon(
-                //       Icons.car_repair_outlined,
-                //       color: Color(0xFFAFAFAF),
-                //     ),
-                //     selectedIcon: Icon(
-                //       Icons.car_repair_outlined,
-                //       color: Color(0xFFCB3D2D),
-                //     ),
-                //     label: 'Cars'),
                 NavigationDestination(
                     icon: Icon(
                       Icons.file_copy_outlined,

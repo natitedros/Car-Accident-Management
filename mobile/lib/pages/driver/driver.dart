@@ -4,6 +4,7 @@ import 'package:car_accident_management/pages/driver/driver_home.dart';
 import 'package:car_accident_management/pages/driver/driver_profile.dart';
 import 'package:car_accident_management/pages/driver/driver_cars.dart';
 import 'package:car_accident_management/pages/driver/driver_cases.dart';
+import 'package:car_accident_management/pages/login.dart';
 import 'package:car_accident_management/datamodel.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -19,6 +20,11 @@ class DriverPage extends StatefulWidget {
 
 class _DriverPageState extends State<DriverPage> {
   int index = 0;
+  String title0 = "Home";
+  String title1 = "Cars";
+  String title2 = "Cases";
+  String title3 = "Profile";
+  String mainTitle = "Home";
   late final screens = [
     DriverHomePage(),
     DriverCarsPage(),
@@ -26,35 +32,37 @@ class _DriverPageState extends State<DriverPage> {
     DriverProfilePage(data: widget.data),
   ];
 
-  //---------------------------------------------------------------
-
-  // Future<returenCases> fetchCases() async {
-  //   final response = await http.get(Uri.parse(
-  //       'https://adega.onrender.com/mycases/63d0050fdd72e0a01b0958a2'));
-  //   print("I am in response");
-  //   print(response.body);
-  //   if (response.statusCode == 200 ||
-  //       response.statusCode == 201 ||
-  //       response.statusCode == 300) {
-  //     // If the server did return a 200 OK response,
-  //     // then parse the JSON.
-  //     print(jsonDecode(response.body));
-  //     return returenCases.fromJson(jsonDecode(response.body));
-  //   } else {
-  //     // If the server did not return a 200 OK response,
-  //     // then throw an exception.
-  //     throw Exception('Failed to load album');
-  //   }
-  // }
-
   @override
   void initState() {
     super.initState();
-    // fetchCases();
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 3,
+          title: Text(
+            mainTitle,
+            style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 15.0),
+          ),
+          centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.logout,
+                color: Color(0xFFFFC107),
+              ),
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => Login()),
+                      (Route<dynamic> route) => false,
+                );
+              },
+            )
+          ],
+        ),
         body: screens[index],
         bottomNavigationBar: NavigationBarTheme(
           data: NavigationBarThemeData(
@@ -69,7 +77,21 @@ class _DriverPageState extends State<DriverPage> {
               labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
               selectedIndex: index,
               onDestinationSelected: (index) =>
-                  setState(() => this.index = index),
+                  setState(() {
+                    this.index = index;
+                    if (index == 0){
+                      mainTitle = title0;
+                    }
+                    else if (index == 1){
+                      mainTitle = title1;
+                    }
+                    else if (index == 2){
+                      mainTitle = title2;
+                    }
+                    else if (index == 3){
+                      mainTitle = title3;
+                    }
+                  } ),
               destinations: [
                 NavigationDestination(
                     icon: Icon(

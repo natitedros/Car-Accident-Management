@@ -32,9 +32,10 @@ class CarInfoLayout extends StatelessWidget {
         ),
         height: 70,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.fromLTRB(20.0, 0.0, 10.0, 0),
+              padding: const EdgeInsets.fromLTRB(20.0, 0.0, 0.0, 0),
               child: Text(
                 child!,
                 style: TextStyle(
@@ -42,13 +43,15 @@ class CarInfoLayout extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(width: width * 0.65),
-            IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.delete_outline_outlined,
-                  color: Color(0xFFAFAFAF),
-                )),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0.0, 0.0, 20.0, 0),
+              child: IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.delete_outline_outlined,
+                    color: Color(0xFFAFAFAF),
+                  )),
+            ),
           ],
         ),
       ),

@@ -20,12 +20,6 @@ class DriverProfilePage extends StatefulWidget {
 }
 
 class _DriverProfilePageState extends State<DriverProfilePage> {
-  // void fetchData() async {
-  //   Response response =
-  //       await get(Uri.parse('https://jsonplaceholder.typicode.com/todos/1'));
-  //   log(response.body);
-  //   log('hi');
-  // }
 
   @override
   void initState() {
@@ -33,7 +27,6 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
     // fetchData();
   }
 
-  // String? role = "";
 
   @override
   Widget build(BuildContext context) {
@@ -41,15 +34,7 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 3,
-        title: Text(
-          'Profile',
-          style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 15.0),
-        ),
-        centerTitle: true,
-      ),
+
       body: Container(
         alignment: Alignment.center,
         child: Column(children: <Widget>[

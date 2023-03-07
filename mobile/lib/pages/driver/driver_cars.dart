@@ -55,15 +55,7 @@ class _DriverCarsPageState extends State<DriverCarsPage> {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 3,
-          title: Text(
-            'Cars',
-            style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 15.0),
-          ),
-          centerTitle: true,
-        ),
+
         body: FutureBuilder(
           future: fetchCars(),
           builder: ((context, snapshot) {

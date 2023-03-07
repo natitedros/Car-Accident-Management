@@ -16,14 +16,10 @@ void main() => runApp(const Login());
 class Login extends StatelessWidget {
   const Login({Key? key}) : super(key: key);
 
-  // static const String _title = 'Sample App';
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // title: _title,
       home: Scaffold(
-        // appBar: AppBar(title: const Text(_title)),
         body: const LoginStateful(),
       ),
       theme: ThemeData(
@@ -50,9 +46,9 @@ class _LoginStatefulState extends State<LoginStateful> {
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  String? errorEmail =
-      ""; // the error message that shows when the user inputs wrong information
+  String? errorEmail = ""; // the error message that shows when the user inputs wrong information
   String? errorPassword = "";
+  String loginButtonText = "LOG IN";
 
   Future<returenData> submittData(String email, String password) async {
     var headersList = {
@@ -73,7 +69,6 @@ class _LoginStatefulState extends State<LoginStateful> {
     Map temp = jsonDecode(
         resBody); // accepts the data from the server and maps it onto temp
 
-    // log(temp.toString());
 
     if (res.statusCode == 200 ||
         res.statusCode == 201 ||
@@ -84,111 +79,13 @@ class _LoginStatefulState extends State<LoginStateful> {
         role: temp['user']['role'],
         id: temp['user']['_id'],
       );
-
-      // print(resBody);
-      // print("user is ${temp['user']['name']}");
-      // print("email is ${temp['user']['email']}");
-      // print("role is a ${temp['user']['role']}");
-      // print("id is a ${temp['user']['_id']}");
-
       return data;
     } else {
-      print(resBody);
-      print("error is ${temp['errors']}");
       returenData data = returenData(errors: Map.from(temp['errors']));
-      // print("Passed");
       return data;
     }
   }
 
-// ------------------------------NOT USED------------------------------------------//
-
-  Future<DataModel?> submitData(String email, String password) async {
-    var headersList = {
-      'Accept': '*/*',
-      'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
-      'Content-Type': 'application/json'
-    };
-
-    var url = Uri.parse('https://adega.onrender.com/login');
-    var body = {'email': email, 'password': password};
-
-    var req = http.Request('POST', url);
-    req.headers.addAll(headersList);
-    req.body = json.encode(body);
-    log(req.body);
-    var res = await req.send();
-    final resBody = await res.stream.bytesToString();
-    Map temp = jsonDecode(
-        resBody); // accepts the data from the server and maps it onto temp
-    log(req.toString());
-    log(res.toString());
-    log(res.statusCode.toString());
-    if (res.statusCode == 200 ||
-        res.statusCode == 201 ||
-        res.statusCode == 300) {
-      print(resBody); // prints the whole result accepted from temp
-      print(temp['user']['name']);
-      // takes the result from temp and displays the output as a string
-      DataModel data = DataModel(
-        name: temp['user']['name'],
-      );
-      return data;
-    } else {
-      log(resBody);
-      print(temp['errors']);
-      // errorMessage = temp['errors']['email'];
-    }
-    return null;
-
-    // var response = await http.post(Uri.https('reqres.in', '/api/users'), body: {
-    //   "email": email,
-    //   "password": password,
-    // });
-    // var data = response.body;
-    // print(data);
-
-    // if (response.statusCode == 201) {
-    //   String responseString = response.body;
-    //   dataModelFromJson(responseString);
-    // } else {
-    //   return null;
-    // }
-    // var r = await Requests.post(
-    //   'https://adega.onrender.com/login',
-    //   body: {
-    //     'email': email,
-    //     'password': password,
-    //   },
-    // );
-
-    // r.raiseForStatus();
-    // dynamic json = r.json();
-    // print(json!['email']);
-    // print(r.json());
-
-    // var headers = {
-    //   'Content-Type': 'application/json',
-    //   'Cookie':
-    //       'jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzY2ZkMWM1M2M4M2NjNGU3ZDBjNzU5ZiIsImlhdCI6MTY3NDU3MTAyMywiZXhwIjoxNjc0ODMwMjIzfQ.Un4CcfQiZK-YFZ5YSX-Idq4FihEFKXE0iimyWQGhBE0'
-    // };
-    // var request =
-    //     http.Request('POST', Uri.parse('https://adega.onrender.com/login'));
-    // request.body =
-    //     json.encode({"email": "nati@google.com", "password": "1234567"});
-    // request.headers.addAll(headers);
-    // var response = await request.send();
-    // log(request.toString());
-    // print(response);
-    // // http.StreamedResponse response = await request.send();
-
-    // if (response.statusCode == 200) {
-    //   print(await response.stream.bytesToString());
-    // } else {
-    //   print(response.reasonPhrase);
-    // }
-  }
-//-----------------------------------------------------------------------//
 
   @override
   Widget build(BuildContext context) {
@@ -213,10 +110,6 @@ class _LoginStatefulState extends State<LoginStateful> {
             Container(
               alignment: Alignment.center,
               padding: const EdgeInsets.all(10),
-              // child: const Text(
-              //   'Sign in',
-              //   style: TextStyle(fontSize: 20),
-              // )
             ),
             Container(
               padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
@@ -289,12 +182,6 @@ class _LoginStatefulState extends State<LoginStateful> {
               style: TextStyle(color: Colors.red, fontSize: 10.0),
             )),
 
-            // TextButton(
-            //   onPressed: () {
-            //     //forgot password screen
-            //   },
-            //   child: const Text('Forgot Password',),
-            // ),
             SizedBox(
               height: height * 0.02,
             ),
@@ -302,19 +189,8 @@ class _LoginStatefulState extends State<LoginStateful> {
                 height: height * 0.09,
                 padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
                 child: ElevatedButton(
-                    child: const Text('LOG IN'),
+                    child: Text(loginButtonText),
 
-                    // style: ButtonStyle(
-                    //   shadowColor: MaterialStatePropertyAll<Color>(Colors.pink),
-                    //     backgroundColor: MaterialStatePropertyAll<Color>(
-                    //       Color(0xFF2CACE7),
-                    //     ),
-                    //     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    //         RoundedRectangleBorder(
-                    //             borderRadius: BorderRadius.circular(10.0),
-                    //         )
-                    //     )
-                    // ),
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -325,17 +201,20 @@ class _LoginStatefulState extends State<LoginStateful> {
                     onPressed: () async {
                       String email = emailController.text;
                       String password = passwordController.text;
+                      setState(() {
+                        loginButtonText = "Loading...";
+                      });
 
                       returenData data = await submittData(email, password);
                       if (data.errors != null) {
                         setState(() {
-                          // _dataModel = data;
 
                           // here depending on the return value "data" the system recognizes
                           // whether the user is a driver,police or admin and notify user if email or password is wrong
                           if (data.errors!['email'] != null) {
                             errorEmail = data.errors!['email'];
                             errorPassword = data.errors!['password'];
+                            loginButtonText = "LOG IN";
                           }
                         });
                       } else if (data.role == 'driver') {
@@ -392,8 +271,6 @@ class _LoginStatefulState extends State<LoginStateful> {
                   ),
                   onPressed: () {
                     //signup screen
-                    // Navigator.pushReplacementNamed(context, '/signup');
-
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(builder: (context) => Signup()),
