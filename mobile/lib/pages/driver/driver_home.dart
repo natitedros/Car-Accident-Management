@@ -13,15 +13,7 @@ class _DriverHomePageState extends State<DriverHomePage> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 3,
-        title: Text(
-          'Home',
-          style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 15.0),
-        ),
-        centerTitle: true,
-      ),
+
       body: Container(
         alignment: Alignment.center,
         child: Column(

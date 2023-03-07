@@ -54,7 +54,7 @@ class returenData {
   String? role;
   //String? phoneNumber;   //when a phone number is obtained from the server
 
-  //here is where all the information recieved from the server is stored
+  //here is where all the information received from the server is stored
 
   returenData({this.email, this.name, this.role, this.errors, this.id});
 }
