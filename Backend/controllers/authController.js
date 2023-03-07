@@ -37,10 +37,10 @@ const createToken = (id)=>{
 }
 
 module.exports.signup_post = async (req, res)=>{
-    const {name, role, email, password, location} = req.body;
+    const {name, role, email, password, phoneNumber, location} = req.body;
     
     try{
-        const user = await User.create({ name, role, email, password, location })
+        const user = await User.create({ name, role, email, password, phoneNumber, location })
         //add the session key here
         res.status(201).json({ user: user })
 
