@@ -69,13 +69,14 @@ class _LoginStatefulState extends State<LoginStateful> {
     Map temp = jsonDecode(
         resBody); // accepts the data from the server and maps it onto temp
 
-
+    print(resBody);
     if (res.statusCode == 200 ||
         res.statusCode == 201 ||
         res.statusCode == 300) {
       returenData data = returenData(
         name: temp['user']['name'],
         email: temp['user']['email'],
+        phoneNumber: temp['user']['phoneNumber'],
         role: temp['user']['role'],
         id: temp['user']['_id'],
       );

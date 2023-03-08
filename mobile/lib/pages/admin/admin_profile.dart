@@ -66,7 +66,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
               style: TextStyle(color: Color(0xFFBEBEBE), fontSize: 15.0)),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text("+ 251933908669",
+            child: Text("${widget.data.phoneNumber}",
                 style: TextStyle(color: Color(0xFFBEBEBE), fontSize: 15.0)),
           ),
           SizedBox(
