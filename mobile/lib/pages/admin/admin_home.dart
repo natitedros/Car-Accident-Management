@@ -1,114 +1,156 @@
-// import 'dart:html';
-
+import 'dart:convert';
+import 'dart:developer';
+import 'package:http/http.dart' as http;
+import 'package:car_accident_management/pages/admin/admin_user_details.dart';
 import 'package:flutter/material.dart';
+import '../../datamodel.dart';
 
 class AdminHomePage extends StatefulWidget {
+  final returenData data;
+  const AdminHomePage({Key? key, required this.data}) : super(key: key);
   @override
   _AdminHomePageState createState() => _AdminHomePageState();
 }
 
 class _AdminHomePageState extends State<AdminHomePage> {
+
+  TextEditingController emailController = TextEditingController();
+  String? errorEmail = "";
+
+  Future<returenData> searchUser(String email) async {
+    var headersList = {
+      'Accept': '*/*',
+      'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
+      'Content-Type': 'application/json'
+    };
+
+    var url = Uri.parse('https://adega.onrender.com/admin/search');
+    var body = {'email': email};
+
+    var req = http.Request('POST', url);
+    req.headers.addAll(headersList);
+    req.body = json.encode(body);
+    log(req.body);
+    var res = await req.send();
+    final resBody = await res.stream.bytesToString();
+    Map temp = jsonDecode(
+        resBody); // accepts the data from the server and maps it onto temp
+
+    print(temp);
+    if (res.statusCode == 200 ||
+        res.statusCode == 201 ||
+        res.statusCode == 300) {
+      returenData data = returenData(
+        name: temp['name'],
+        email: temp['email'],
+        phoneNumber: temp['phoneNumber'],
+        role: temp['role'],
+        id: temp['id'],
+      );
+      return data;
+    } else {
+      returenData data = returenData(errors: Map.from(temp));
+      return data;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
 
       body: Container(
-        alignment: Alignment.center,
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(
-              width: width * 0.5,
-              height: height * 0.2,
-              child: ElevatedButton(
-                onPressed: () => {},
-                style: ElevatedButton.styleFrom(
-                  elevation: 5,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      side: BorderSide(
-                        width: 3.0,
-                        color: Color(0xFF2CACE7),
-                      )),
-                  backgroundColor: Color.fromARGB(255, 245, 252, 255),
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  textStyle: TextStyle(),
-                ),
-                child: Column(
-                  // Replace with a Row for horizontal icon + text
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Icon(
-                        Icons.location_on_sharp,
-                        color: Color(0xFF2CACE7),
-                        size: 40.0,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: Text(
-                        "Call Nearby Police",
-                        style: TextStyle(
-                          fontFamily: 'Feather',
-                          color: Color(0xFF2CACE7),
-                          fontSize: 15.0,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+          children: [
+            Text(
+              "Search any user here...",
+              style: TextStyle(
+                fontSize: 17
               ),
             ),
-            SizedBox(height: height * 0.1),
-            SizedBox(
-              width: width * 0.5,
-              height: height * 0.2,
-              child: ElevatedButton(
-                onPressed: () => {},
-                style: ElevatedButton.styleFrom(
-                  elevation: 3,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      side: BorderSide(
-                        width: 3.0,
-                        color: Colors.amber,
-                      )),
-                  backgroundColor: Color.fromARGB(255, 255, 254, 248),
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  textStyle: TextStyle(),
-                ),
-                child: Column(
-                  // Replace with a Row for horizontal icon + text
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Icon(
-                        Icons.camera,
-                        color: Colors.amber,
-                        size: 40.0,
+          SizedBox(height: height * 0.05),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                      style: TextStyle(fontSize: 15.0),
+                      controller: emailController,
+                      decoration: InputDecoration(
+                      isDense: true,
+                      filled: true,
+                      fillColor: Color(0xFFF5F5F5),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFFE4E4E4),
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFF2CACE7),
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      labelText: 'Filter by email',
+                      labelStyle: TextStyle(
+                        color: Color(0xFFAEAEAE),
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: Text(
-                        "Upload Photo",
-                        style: TextStyle(
-                          fontFamily: 'Feather',
-                          color: Colors.amber,
-                          fontSize: 15.0,
-                        ),
-                      ),
-                    )
-                  ],
+                  ),
                 ),
+
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10.0, 0.0, 5.0, 0),
+                  child: IconButton(
+                      onPressed: () async {
+                        if (emailController.text == widget.data.email){
+                          setState(() {
+                            errorEmail = "You have entered your own account!";
+                          });
+                        }
+                        else{
+
+                          returenData userResult = await searchUser(emailController.text);
+                          if (userResult.errors == null) {
+                            Navigator.push(context, MaterialPageRoute(
+                                builder: (context) =>
+                                    UserDetailsPage(data: userResult)),
+                              // (Route<dynamic> route) => false,
+                            );
+                          }
+                          else{
+                            setState(() {
+                              errorEmail = userResult.errors?['error'];
+                            });
+                          }
+                        }
+                      },
+                      icon: Icon(
+                        Icons.search_outlined,
+                        color: Color(0xFFAFAFAF),
+                        size: 35,
+                      )),
+                ),
+              ],
+            ),
+            SizedBox(height: height * 0.02),
+            Center(
+              child: Text(
+                "$errorEmail",
+                style: TextStyle(color: Colors.red, fontSize: 14.0),
               ),
             ),
           ],
         ),
+
       ),
+
     );
   }
 }

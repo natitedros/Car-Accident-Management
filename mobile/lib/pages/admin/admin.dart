@@ -22,7 +22,7 @@ class _AdminPageState extends State<AdminPage> {
   String title2 = "Profile";
   String mainTitle = "Home";
   late final screens = [
-    AdminHomePage(),
+    AdminHomePage(data: widget.data),
     AdminCasesPage(data: widget.data),
     AdminProfilePage(data: widget.data),
   ];
