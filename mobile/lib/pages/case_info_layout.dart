@@ -1,9 +1,10 @@
+import 'package:car_accident_management/datamodel.dart';
 import 'package:car_accident_management/pages/casedetails.dart';
 import 'package:car_accident_management/pages/changepassword.dart';
 import 'package:flutter/material.dart';
 
 class CaseInfoLayout extends StatelessWidget {
-  final String? child;
+  final returenCases? child;
 
   CaseInfoLayout({this.child});
 
@@ -11,6 +12,7 @@ class CaseInfoLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    DateTime caseTime = DateTime.parse("${child?.createdAt}");
 
     return Padding(
       padding: const EdgeInsets.all(10.0),
@@ -42,11 +44,14 @@ class CaseInfoLayout extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => CaseDetailPage()),
+                      MaterialPageRoute(builder: (context) => CaseDetailPage(
+                        child: child
+
+                      )),
                       // (Route<dynamic> route) => false,
                     );
                   },
-                  child: Text(child!,
+                  child: Text("${caseTime.day}/${caseTime.month}/${caseTime.year}",
                       style: TextStyle(
                           color: Color(0xFFAFAFAF),
                           decoration: TextDecoration.underline))),

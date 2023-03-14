@@ -1,6 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:car_accident_management/pages/case_info_layout.dart';
-
+import 'package:http/http.dart' as http;
 import '../../datamodel.dart';
 
 class AdminCasesPage extends StatefulWidget {
@@ -16,7 +18,52 @@ class AdminCasesPage extends StatefulWidget {
 class _AdminCasesPageState extends State<AdminCasesPage> {
   // perform GET REQUEST here using the id as the parameter and save the incoming data to the list below
 
-  final List _cases = ['case1', 'case2', 'case3', 'case4', 'case5', 'case6'];
+  Future<List<returenCases>?> fetchCases() async {
+    var headersList = {
+      'Accept': '*/*',
+      'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
+      'Content-Type': 'application/json'
+    };
+
+    var url = Uri.parse('https://adega.onrender.com/admin/cases');
+
+    var req = http.Request('GET', url);
+    req.headers.addAll(headersList);
+    var res = await req.send();
+    final resBody = await res.stream.bytesToString();
+    // print(resBody);
+    Map temp = jsonDecode(
+        resBody); // accepts the data from the server and maps it onto temp
+
+    final cases = <returenCases>[];
+
+    if (res.statusCode == 200 ||
+        res.statusCode == 201 ||
+        res.statusCode == 300) {
+      for (var i = 0; i < temp['cases'].length; i++){
+        returenCases singleCase = returenCases(
+            location: Location(
+                type: temp['cases'][i]['location']['type'],
+                coordinates: temp['cases'][i]['location']['coordinates']
+            ),
+            id: temp['cases'][i]['id'],
+            createdAt: temp['cases'][i]['createdAt'],
+            status: temp['cases'][i]['status'],
+            handlerId: temp['cases'][i]['handlerId']
+        );
+        cases.add(singleCase);
+      }
+      return cases;
+    } else {
+      return [];
+    }
+
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,15 +71,25 @@ class _AdminCasesPageState extends State<AdminCasesPage> {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      body: Container(
-          alignment: Alignment.center,
-          child: ListView.builder(
-              itemCount: _cases.length,
-              itemBuilder: (context, index) {
-                return CaseInfoLayout(
-                  child: _cases[index],
-                );
-              })),
-    );
+
+        body: FutureBuilder(
+          future: fetchCases(),
+          builder: ((context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              List<returenCases>? z = snapshot.data;
+
+              return Container(
+                  alignment: Alignment.center,
+                  child: ListView.builder(
+                      itemCount: z?.length,
+                      itemBuilder: (context, index) {
+                        return CaseInfoLayout(
+                          child: z![index],
+                        );
+                      }));
+            }
+            return Center(child: Text('loading'));
+          }),
+        ));
   }
 }

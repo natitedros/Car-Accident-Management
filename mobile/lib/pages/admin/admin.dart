@@ -1,10 +1,13 @@
 //import 'package:flutter/cupertino.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:car_accident_management/pages/admin/admin_profile.dart';
 import 'package:car_accident_management/pages/admin/admin_home.dart';
 import 'package:car_accident_management/pages/admin/admin_cases.dart';
 import 'package:car_accident_management/datamodel.dart';
 import 'package:car_accident_management/pages/login.dart';
+import 'package:http/http.dart' as http;
 
 
 class AdminPage extends StatefulWidget {
@@ -21,11 +24,16 @@ class _AdminPageState extends State<AdminPage> {
   String title1 = "Cases";
   String title2 = "Profile";
   String mainTitle = "Home";
+  List<returenCases>? casesList;
+
+
+
   late final screens = [
     AdminHomePage(data: widget.data),
     AdminCasesPage(data: widget.data),
     AdminProfilePage(data: widget.data),
   ];
+
 
   @override
   Widget build(BuildContext context) => Scaffold(
