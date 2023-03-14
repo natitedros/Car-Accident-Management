@@ -35,16 +35,13 @@ class _DriverCasesPageState extends State<DriverCasesPage> {
               createdAt: singleCase['createdAt'],
               location: loc));
         }
-        //We use teh array Cases to fill out the listcards
-        print(Cases[0].status);
+        //We use the array Cases to fill out the list cards
         return Cases;
       }
     } catch (err) {
       print(err);
     }
   }
-
-  final List _cases = ['case1', 'case2', 'case3', 'case4', 'case5', 'case6'];
 
   @override
   void initState() {
@@ -64,8 +61,6 @@ class _DriverCasesPageState extends State<DriverCasesPage> {
           builder: ((context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               List<returenCases>? z = snapshot.data;
-              print('z is ${z?[0].status}');
-              print(z?.length);
 
               return Container(
                   alignment: Alignment.center,
@@ -73,7 +68,7 @@ class _DriverCasesPageState extends State<DriverCasesPage> {
                       itemCount: z?.length,
                       itemBuilder: (context, index) {
                         return CaseInfoLayout(
-                          child: z![index].createdAt!,
+                          child: z![index],
                         );
                       }));
             }

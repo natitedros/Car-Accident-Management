@@ -7,35 +7,19 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:car_accident_management/pages/login.dart';
 
-void main() => runApp(CaseDetailPage());
+// void main() => runApp(CaseDetailPage());
 
-class CaseDetailPage extends StatefulWidget {
-  @override
-  _CaseDetailPageState createState() {
-    return _CaseDetailPageState();
-  }
-}
-
-class _CaseDetailPageState extends State<CaseDetailPage> {
-  // void fetchData() async {
-  //   Response response =
-  //       await get(Uri.parse('https://jsonplaceholder.typicode.com/todos/1'));
-  //   log(response.body);
-  //   log('hi');
-  // }
-
-  @override
-  void initState() {
-    super.initState();
-    // fetchData();
-  }
-
-  // String? role = "";
+class CaseDetailPage extends StatelessWidget {
+  final returenCases? child;
+  const CaseDetailPage({Key? key, required this.child}) : super(key: key);
+  // CaseDetailPage({this.child});
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    DateTime caseTime = DateTime.parse("${child?.createdAt}");
+
 
     return Scaffold(
       appBar: AppBar(
@@ -57,17 +41,25 @@ class _CaseDetailPageState extends State<CaseDetailPage> {
           SizedBox(
             height: height * 0.03,
           ),
-          Text("Date: 19/20/2020",
-              style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 30.0)),
-          Text("Time: 16:25",
+          Text("Accident time:",
+              style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 25.0)),
+          Text("${caseTime.day}/${caseTime.month}/${caseTime.year}  at   ${caseTime.hour}:${caseTime.minute}",
               style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 20.0)),
-          Text("Handler: Lealem Kinfe",
+          SizedBox(
+            height: height * 0.02,
+          ),
+          Text("Status: ${child?.status}",
+              style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 20.0)),
+          SizedBox(
+            height: height * 0.02,
+          ),
+          Text("Handler: ${child?.handlerId}",
               style: TextStyle(color: Color(0xFFBEBEBE), fontSize: 15.0)),
           SizedBox(
-            height: height * 0.15,
+            height: height * 0.05,
           ),
           Text("Verdict: ",
-              style: TextStyle(color: Color(0xFFBEBEBE), fontSize: 15.0)),
+              style: TextStyle(color: Color(0xFFBEBEBE), fontSize: 20.0)),
         ]),
       ),
     );
