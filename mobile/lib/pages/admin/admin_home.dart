@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:car_accident_management/pages/admin/admin_user_details.dart';
 import 'package:flutter/material.dart';
 import '../../datamodel.dart';
+import 'admin_create_police.dart';
 
 class AdminHomePage extends StatefulWidget {
   final returenData data;
@@ -35,7 +36,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
     final resBody = await res.stream.bytesToString();
     Map temp = jsonDecode(
         resBody); // accepts the data from the server and maps it onto temp
-
     print(temp);
     if (res.statusCode == 200 ||
         res.statusCode == 201 ||
@@ -146,6 +146,18 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 style: TextStyle(color: Colors.red, fontSize: 14.0),
               ),
             ),
+            SizedBox(height: height * 0.02),
+            ElevatedButton(
+                onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context) =>
+                          CreatePolicePage()
+                  ),
+                    // (Route<dynamic> route) => false,
+                  );
+                },
+                child: const Text("Create Traffic Police Account")
+            )
           ],
         ),
 
