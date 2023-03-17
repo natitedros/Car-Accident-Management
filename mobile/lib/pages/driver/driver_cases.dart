@@ -12,9 +12,9 @@ class DriverCasesPage extends StatefulWidget {
 }
 
 class _DriverCasesPageState extends State<DriverCasesPage> {
-  Future<List<returenCases>?> fetchCases() async {
+  Future<List<returenCases>?> fetchCases(String id) async {
     final url = Uri.parse(
-        'https://adega.onrender.com/driver/mycases/63d0050fdd72e0a01b0958a2');
+        'https://adega.onrender.com/driver/mycases/$id');
     http.Response response = await http.get(url);
     Iterable resBody = jsonDecode(response.body);
     // accepts the data from the server and maps it onto temp
@@ -46,7 +46,6 @@ class _DriverCasesPageState extends State<DriverCasesPage> {
   @override
   void initState() {
     super.initState();
-    fetchCases();
   }
 
   @override
@@ -57,7 +56,7 @@ class _DriverCasesPageState extends State<DriverCasesPage> {
     return Scaffold(
 
         body: FutureBuilder(
-          future: fetchCases(),
+          future: fetchCases("${widget.data.id}"),
           builder: ((context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               List<returenCases>? z = snapshot.data;

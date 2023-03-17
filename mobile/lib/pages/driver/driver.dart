@@ -27,7 +27,7 @@ class _DriverPageState extends State<DriverPage> {
   String mainTitle = "Home";
   late final screens = [
     DriverHomePage(),
-    DriverCarsPage(),
+    DriverCarsPage(data: widget.data),
     DriverCasesPage(data: widget.data),
     DriverProfilePage(data: widget.data),
   ];
