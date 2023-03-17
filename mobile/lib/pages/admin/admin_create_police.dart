@@ -20,9 +20,14 @@ class _CreatePolicePageState extends State<CreatePolicePage> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController repeatedPasswordController = TextEditingController();
+  String errorEmail = "";
+  String errorPassword = "";
+  String errorName = "";
+  String errorPhoneNumber = "";
+  String errorBadgeNumber = "";
   String btnText = "CREATE";
 
-  Future<DataModel?> submitData(String name, String badgeNumber, String email,
+  Future<returenData> submitData(String name, String badgeNumber, String email,
       String phoneNumber, String password) async {
     var headersList = {
       'Accept': '*/*',
@@ -47,14 +52,24 @@ class _CreatePolicePageState extends State<CreatePolicePage> {
     var res = await req.send();
     final resBody = await res.stream.bytesToString();
     // print(req.body);
-    if (res.statusCode == 201 || res.statusCode == 300) {
-      print(resBody);
+    Map temp = jsonDecode(
+        resBody);
+    if (res.statusCode == 200 ||
+        res.statusCode == 201 ||
+        res.statusCode == 300) {
+      returenData data = returenData(
+        name: temp['user']['name'],
+        email: temp['user']['email'],
+        phoneNumber: temp['user']['phoneNumber'],
+        role: temp['user']['role'],
+        id: temp['user']['_id'],
+      );
+      return data;
     } else {
-
-      print(res.reasonPhrase);
+      returenData data = returenData(errors: Map.from(temp['errors']));
+      return data;
     }
 
-    return null;
   }
 
   @override
@@ -62,21 +77,33 @@ class _CreatePolicePageState extends State<CreatePolicePage> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Color(0xFF3AD425)),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 3,
+        title: Text(
+          'Police Information',
+          style: TextStyle(color: Color(0xFF3AD425), fontSize: 15.0),
+        ),
+        centerTitle: true,
+      ),
       body: Padding(
           padding: const EdgeInsets.all(5),
           child: ListView(
             children: <Widget>[
-              Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                child: Image.asset(
-                  'assets/logo.png',
-                  height: height * 0.3, //height to 9% of screen height,
-                  width: width * 0.3,
+              Center(
+                child: Text(
+                  'Enter Police information below',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
                 ),
               ),
               SizedBox(
-                height: height * 0.0, //height to 9% of screen height,
+                height: height * 0.01, //height to 9% of screen height,
               ),
               Container(
                 alignment: Alignment.center,
@@ -111,6 +138,14 @@ class _CreatePolicePageState extends State<CreatePolicePage> {
                   ),
                 ),
               ),
+              Center(
+                  child: Text(
+                    "$errorName",
+                    style: TextStyle(color: Colors.red, fontSize: 10.0),
+                  )),
+              SizedBox(
+                height: height * 0.02,
+              ),
 
               Container(
                 padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
@@ -142,7 +177,14 @@ class _CreatePolicePageState extends State<CreatePolicePage> {
                   ),
                 ),
               ),
-
+              Center(
+                  child: Text(
+                    "$errorBadgeNumber",
+                    style: TextStyle(color: Colors.red, fontSize: 10.0),
+                  )),
+              SizedBox(
+                height: height * 0.02,
+              ),
               Container(
                 padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
                 child: TextField(
@@ -172,6 +214,14 @@ class _CreatePolicePageState extends State<CreatePolicePage> {
                   ),
                 ),
               ),
+              Center(
+                  child: Text(
+                    "$errorEmail",
+                    style: TextStyle(color: Colors.red, fontSize: 10.0),
+                  )),
+              SizedBox(
+                height: height * 0.02,
+              ),
               Container(
                 padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
                 child: TextField(
@@ -200,6 +250,14 @@ class _CreatePolicePageState extends State<CreatePolicePage> {
                     ),
                   ),
                 ),
+              ),
+              Center(
+                  child: Text(
+                    "$errorPhoneNumber",
+                    style: TextStyle(color: Colors.red, fontSize: 10.0),
+                  )),
+              SizedBox(
+                height: height * 0.02,
               ),
               Container(
                 padding: const EdgeInsets.fromLTRB(30, 5, 30, 0),
@@ -231,8 +289,14 @@ class _CreatePolicePageState extends State<CreatePolicePage> {
                   ),
                 ),
               ),
-
-
+              Center(
+                  child: Text(
+                    "$errorPassword",
+                    style: TextStyle(color: Colors.red, fontSize: 10.0),
+                  )),
+              SizedBox(
+                height: height * 0.02,
+              ),
               SizedBox(
                 height: height * 0.02,
               ),
@@ -250,7 +314,7 @@ class _CreatePolicePageState extends State<CreatePolicePage> {
                     ),
                     onPressed: () async {
                       setState(() {
-                        btnText = "CREATING...";
+                        btnText = "Creating...";
                       });
                       String name = nameController.text;
                       String badgeNumber = badgeController.text;
@@ -259,12 +323,24 @@ class _CreatePolicePageState extends State<CreatePolicePage> {
 
                       String password = passwordController.text;
 
-                      DataModel? data = await submitData(
+                      returenData data = await submitData(
                           name, badgeNumber, email, phoneNumber, password);
-                      setState(() {
-                        _dataModel = data;
-                      });
-                      Navigator.of(context).pop();
+                      if (data.errors != null){
+                        setState(() {
+                          errorEmail = data.errors!['email']!;
+                          errorPassword = data.errors!['password']!;
+                          errorPhoneNumber = data.errors!['phoneNumber']!;
+                          errorName = data.errors!['name']!;
+                          // errorBadgeNumber = data.errors!['badgeNumber']!;
+                          btnText = "CREATE";
+                        });
+                      }
+                      else{
+                        setState(() {
+                          btnText = "DONE";
+                        });
+                        Navigator.of(context).pop();
+                      }
                     },
                   )),
             ],
