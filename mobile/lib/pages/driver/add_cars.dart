@@ -6,11 +6,9 @@ import 'package:http/http.dart' as http;
 
 import '../../datamodel.dart';
 
-void main() => runApp(const AddCar());
-
 class AddCar extends StatelessWidget {
-  const AddCar({Key? key}) : super(key: key);
-
+  final returenData data;
+  const AddCar({Key? key, required this.data}) : super(key: key);
   // static const String _title = 'Sample App';
 
   @override
@@ -30,7 +28,7 @@ class AddCar extends StatelessWidget {
           centerTitle: true,
           backgroundColor: Color(0xFFCB3D2D),
         ),
-        body: const AddCarStateful(),
+        body: AddCarStateful(data: data,),
       ),
       theme: ThemeData(
           fontFamily: 'Feather',
@@ -45,7 +43,8 @@ class AddCar extends StatelessWidget {
 }
 
 class AddCarStateful extends StatefulWidget {
-  const AddCarStateful({Key? key}) : super(key: key);
+  final returenData data;
+  const AddCarStateful({Key? key, required this.data}) : super(key: key);
 
   @override
   State<AddCarStateful> createState() => _AddCarStatefulState();
@@ -56,13 +55,23 @@ class _AddCarStatefulState extends State<AddCarStateful> {
   TextEditingController nameController = TextEditingController();
   TextEditingController colorController = TextEditingController();
   TextEditingController modelController = TextEditingController();
-  TextEditingController plateController = TextEditingController();
+  TextEditingController plateNumberController = TextEditingController();
+  TextEditingController regionController = TextEditingController();
+  bool _validateName = false;
+  bool _validateModel = false;
+  bool _validateColor = false;
+  bool _validateRegion = false;
+  bool _validatePlate = false;
+  String addBtn = "ADD CAR";
+  String addStatus = "";
+
 
   Future<DataModel?> submitData(
-    String name,
-    String model,
-    String color,
-    String plate,
+      String name,
+      String model,
+      String color,
+      String plate,
+      String region
   ) async {
     var headersList = {
       'Accept': '*/*',
@@ -70,12 +79,14 @@ class _AddCarStatefulState extends State<AddCarStateful> {
       'Content-Type': 'application/json'
     };
 
-    var url = Uri.parse('https://adega.onrender.com/addcar');
+    var url = Uri.parse('https://adega.onrender.com/driver/addcar');
     var body = {
       'name': name,
       'model': model,
       'color': color,
-      'plate': plate,
+      'plateNumber': plate,
+      'region': region,
+      'ownerId': widget.data.id
     };
 
     var req = http.Request('POST', url);
@@ -90,37 +101,13 @@ class _AddCarStatefulState extends State<AddCarStateful> {
     } else {
       print(res.reasonPhrase);
     }
-
     return null;
-
-    // var headers = {
-    //   'Content-Type': 'application/json',
-    //   'Cookie':
-    //       'jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzY2ZkMWM1M2M4M2NjNGU3ZDBjNzU5ZiIsImlhdCI6MTY3NDU3MTAyMywiZXhwIjoxNjc0ODMwMjIzfQ.Un4CcfQiZK-YFZ5YSX-Idq4FihEFKXE0iimyWQGhBE0'
-    // };
-    // var request =
-    //     http.Request('POST', Uri.parse('https://adega.onrender.com/login'));
-    // request.body =
-    //     json.encode({"email": "nati@google.com", "password": "1234567"});
-    // request.headers.addAll(headers);
-    // var response = await request.send();
-    // log(request.toString());
-    // print(response);
-    // // http.StreamedResponse response = await request.send();
-
-    // if (response.statusCode == 200) {
-    //   print(await response.stream.bytesToString());
-    // } else {
-    //   print(response.reasonPhrase);
-    // }
   }
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    // print(height);
-    // print(width);
 
     return Container(
       //height: height * 0.1, //height to 10% of screen height, 100/10 = 0.1
@@ -129,15 +116,7 @@ class _AddCarStatefulState extends State<AddCarStateful> {
           padding: const EdgeInsets.all(5),
           child: ListView(
             children: <Widget>[
-              // Container(
-              //   alignment: Alignment.center,
-              //   padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-              //   child: Image.asset(
-              //     'assets/logo.png',
-              //     height: height * 0.3, //height to 9% of screen height,
-              //     width: width * 0.3,
-              //   ),
-              // ),
+
               SizedBox(
                 height: height * 0.1, //height to 9% of screen height,
               ),
@@ -165,6 +144,7 @@ class _AddCarStatefulState extends State<AddCarStateful> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     labelText: 'name',
+                    errorText: _validateName ? 'Value Can\'t Be Empty' : null,
                     labelStyle: TextStyle(
                       color: Color(0xFFAEAEAE),
                       fontWeight: FontWeight.bold,
@@ -195,6 +175,7 @@ class _AddCarStatefulState extends State<AddCarStateful> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     labelText: 'model',
+                    errorText: _validateModel ? 'Value Can\'t Be Empty' : null,
                     labelStyle: TextStyle(
                       color: Color(0xFFAEAEAE),
                       fontWeight: FontWeight.bold,
@@ -225,6 +206,37 @@ class _AddCarStatefulState extends State<AddCarStateful> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     labelText: 'color',
+                    errorText: _validateColor ? 'Value Can\'t Be Empty' : null,
+                    labelStyle: TextStyle(
+                      color: Color(0xFFAEAEAE),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                child: TextField(
+                  style: TextStyle(fontSize: 15.0),
+                  controller: regionController,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    filled: true,
+                    fillColor: Color(0xFFF5F5F5),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFE4E4E4),
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFF2CACE7),
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    labelText: 'region',
+                    errorText: _validateRegion ? 'Value Can\'t Be Empty' : null,
                     labelStyle: TextStyle(
                       color: Color(0xFFAEAEAE),
                       fontWeight: FontWeight.bold,
@@ -237,7 +249,7 @@ class _AddCarStatefulState extends State<AddCarStateful> {
                 padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
                 child: TextField(
                   style: TextStyle(fontSize: 15.0),
-                  controller: plateController,
+                  controller: plateNumberController,
                   decoration: InputDecoration(
                     isDense: true,
                     filled: true,
@@ -255,6 +267,7 @@ class _AddCarStatefulState extends State<AddCarStateful> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     labelText: 'Licence plate Number',
+                    errorText: _validatePlate ? 'Value Can\'t Be Empty' : null,
                     labelStyle: TextStyle(
                       color: Color(0xFFAEAEAE),
                       fontWeight: FontWeight.bold,
@@ -263,14 +276,11 @@ class _AddCarStatefulState extends State<AddCarStateful> {
                 ),
               ),
 
-              SizedBox(
-                height: height * 0.15,
-              ),
               Container(
                   height: height * 0.09,
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: ElevatedButton(
-                    child: const Text('ADD CAR'),
+                    child: Text('ADD CAR'),
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -279,22 +289,75 @@ class _AddCarStatefulState extends State<AddCarStateful> {
                       backgroundColor: Color(0xFFCB3D2D),
                     ),
                     onPressed: () async {
+                      setState(() {
+                        addBtn = "Adding...";
+                        addStatus = "";
+                      });
                       String name = nameController.text;
                       String model = modelController.text;
                       String color = colorController.text;
-                      String plate = plateController.text;
-                      // print(newPassword);
-                      // print(repeatedPassword);
-                      // print(oldPaswword);
-
-                      DataModel? data = //await getData();
-                          await submitData(name, model, color, plate);
-
+                      String plateNumber = plateNumberController.text;
+                      String region = regionController.text;
+                      bool allAvailable = true;
                       setState(() {
-                        _dataModel = data;
+                        if(nameController.text.isEmpty){
+                          _validateName = true;
+                          allAvailable = false;
+                        }
+                        else{
+                          _validateName = false;
+                        }
+                        if(modelController.text.isEmpty){
+                          _validateModel = true;
+                          allAvailable = false;
+                        }
+                        else{
+                          _validateModel = false;
+                        }
+                        if(colorController.text.isEmpty){
+                          _validateColor = true;
+                          allAvailable = allAvailable && false;
+                        }else{
+                          _validateColor = false;
+                        }
+                        if(plateNumberController.text.isEmpty){
+                          _validatePlate = true;
+                          allAvailable = false;
+                        }
+                        else{
+                          _validatePlate = false;
+                        }
+                        if(regionController.text.isEmpty){
+                          _validateRegion = true;
+                          allAvailable = false;
+                        }
+                        else{
+                          _validateRegion = false;
+                        }
+
                       });
+                      if(allAvailable){
+                        DataModel? data = await submitData(name, model, color, plateNumber, region);
+                        setState(() {
+                          addBtn = "ADD CAR";
+                          addStatus = "Added!";
+                        });
+                      }
+
+                      // setState(() {
+                      //   _dataModel = data;
+                      // });
                     },
                   )),
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Center(child: Text(
+                    "$addStatus",
+                    style: TextStyle(
+                      fontSize: 19
+                    ),
+                )),
+              )
             ],
           )),
     );

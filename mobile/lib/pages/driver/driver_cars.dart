@@ -62,8 +62,7 @@ class _DriverCarsPageState extends State<DriverCarsPage> {
           builder: ((context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               List<returenCars>? z = snapshot.data;
-              print("z is ${z?[0].id}");
-              print(z?.length);
+
               return Container(
                   alignment: Alignment.center,
                   child: ListView.builder(
@@ -72,12 +71,26 @@ class _DriverCarsPageState extends State<DriverCarsPage> {
                         return CarInfoLayout(
                           child: z![index].name!,
                         );
-                      }));
+                      }),
+              );
             }
-            return Center(child: Text("loading"));
+            return Center(child: Text("loading..."));
           }
               ),
-        ));
+        ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Color(0xFFCB3D2D),
+          onPressed: (){
+            Navigator.push(context, MaterialPageRoute(
+                builder: (context) =>
+                    AddCar(data: widget.data)
+            ),
+              // (Route<dynamic> route) => false,
+            );
+          },
+          child: const Icon(Icons.add),
+        )
+    );
     // );
   }
 }
