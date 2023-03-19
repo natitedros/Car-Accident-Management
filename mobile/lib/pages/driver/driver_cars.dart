@@ -7,15 +7,19 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class DriverCarsPage extends StatefulWidget {
+  final returenData data;
+  const DriverCarsPage({Key? key, required this.data}) : super(key: key);
+
   @override
   _DriverCarsPageState createState() => _DriverCarsPageState();
 }
 
 class _DriverCarsPageState extends State<DriverCarsPage> {
 //data Type - List<returenCars>
-  Future<List<returenCars>?> fetchCars() async {
+  Future<List<returenCars>?> fetchCars(String id) async {
+
     final url = Uri.parse(
-        'https://adega.onrender.com/driver/mycars/63d0050fdd72e0a01b0958a2');
+        'https://adega.onrender.com/driver/mycars/$id');
     http.Response response = await http.get(url);
     Iterable resBody = jsonDecode(response.body);
     // accepts the data from the server and maps it onto temp
@@ -33,8 +37,7 @@ class _DriverCarsPageState extends State<DriverCarsPage> {
               ownerId: singleCase['ownerId'],
               region: singleCase['region']));
         }
-        //We use teh array Cars to fill out the listcards
-        print(Cars[0].name);
+        //We use teh array Cars to fill out the list cards
         return Cars;
       }
     } catch (err) {
@@ -42,11 +45,9 @@ class _DriverCarsPageState extends State<DriverCarsPage> {
     }
   }
 
-  late final List _cars = ['car1', 'car2', 'car3', 'car4', 'car5', 'car6'];
   @override
   void initState() {
     super.initState();
-    fetchCars();
   }
 
   @override
@@ -57,7 +58,7 @@ class _DriverCarsPageState extends State<DriverCarsPage> {
     return Scaffold(
 
         body: FutureBuilder(
-          future: fetchCars(),
+          future: fetchCars("${widget.data.id}"),
           builder: ((context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               List<returenCars>? z = snapshot.data;
@@ -75,18 +76,6 @@ class _DriverCarsPageState extends State<DriverCarsPage> {
             }
             return Center(child: Text("loading"));
           }
-              // ,
-              // ),
-              // floatingActionButton: FloatingActionButton(
-              //   onPressed: () {
-              //     Navigator.push(
-              //       context,
-              //       MaterialPageRoute(builder: (context) => AddCar()),
-              //       // (Route<dynamic> route) => false,
-              //     );
-              //   },
-              //   child: Icon(Icons.add),
-              //   backgroundColor: Color(0xFFCB3D2D),
               ),
         ));
     // );
