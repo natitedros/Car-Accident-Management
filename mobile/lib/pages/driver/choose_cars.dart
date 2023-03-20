@@ -1,59 +1,156 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import '../../datamodel.dart';
+import 'package:http/http.dart' as http;
+
+class ChooseCars extends StatelessWidget {
+  final List<returenCars>? cars;
+  final Position position;
+  final returenData data;
+  const ChooseCars({Key? key, required this.cars, required this.position, required this.data}) : super(key: key);
+
+  static const String _title = 'Which car are you in?';
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: _title,
+      home: Scaffold(
+        appBar: AppBar(
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            title: const Text(_title)
+        ),
+        body: ChooseCarsPage(carList: cars, position: position, data: data),
+      ),
+    );
+  }
+}
 
 class ChooseCarsPage extends StatefulWidget {
-  const ChooseCarsPage({Key? key}) : super(key: key);
+  final List<returenCars>? carList;
+  final Position position;
+  final returenData data;
+  const ChooseCarsPage({Key? key,
+    required this.carList,
+    required this.position,
+    required this.data
+  }) : super(key: key);
 
   @override
   State<ChooseCarsPage> createState() => _ChooseCarsPageState();
 }
-enum SingingCharacter { lafayette, jefferson }
 class _ChooseCarsPageState extends State<ChooseCarsPage> {
-  SingingCharacter? _character = SingingCharacter.lafayette;
+  int _selectedIndex = 0;
+  String successMsg = '';
+  String btnTxt = 'Call Now';
+  Future<bool> createCase(Position pos, returenCars? car, returenData data) async {
+
+    var headersList = {
+      'Accept': '*/*',
+      'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
+      'Content-Type': 'application/json'
+    };
+
+    var url = Uri.parse('https://adega.onrender.com/driver/minor/addcase');
+    var body = {
+      "location": {
+        "type": "Point",
+        "coordinates": [pos.longitude, pos.latitude]
+      },
+      "subjectId": "${data.id}",
+      "status": "open",
+      "severity": "minor",
+      "carName": "${car?.name}",
+      "carModel": "${car?.model}",
+      "carColor": "${car?.color}",
+      "carPlateNumber" : "${car?.plateNumber}",
+
+    };
+    var req = http.Request('POST', url);
+    req.headers.addAll(headersList);
+    req.body = json.encode(body);
+    print(req.body);
+    var res = await req.send();
+    final resBody = await res.stream.bytesToString();
+
+    print(resBody);
+    if (res.statusCode == 200 ||
+        res.statusCode == 201 ||
+        res.statusCode == 300) {
+      print("Case successfully created!");
+      return true;
+    } else {
+      print("Bad request!");
+      return false;
+    }
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Color(0xFF3AD425)),
-          onPressed: () => Navigator.of(context).pop(),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Center(child: Text("Choose from the list below", style: TextStyle(
+          fontSize: 20
+        ),)),
+        ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: widget.carList?.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Card(
+              child: ListTile(
+                title: Text('${widget.carList?[index].name} - ${widget.carList?[index].model}'),
+                selected: index == _selectedIndex,
+                onTap: () {
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                },
+              ),
+            );
+          },
         ),
-        backgroundColor: Colors.white,
-        elevation: 3,
-        title: Text(
-          'Choose Accident Car',
-          style: TextStyle(color: Color(0xFF3AD425), fontSize: 15.0),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ElevatedButton(
+              onPressed: () async {
+                if (btnTxt == "Back"){
+                  Navigator.of(context).pop();
+                }
+                else{
+                  setState(() {
+                    btnTxt = "Calling...";
+                  });
+                  bool isComplete = await createCase(widget.position, widget.carList?[_selectedIndex], widget.data);
+                  if (isComplete){
+                    setState(() {
+                      btnTxt = "Back";
+                      successMsg = "Police Notified! You will receive a notification when police is on its way...";
+                    });
+                  }
+                }
+              },
+              child: Text(
+                "$btnTxt"
+              )
+          ),
         ),
-        centerTitle: true,
-      ),
-      body: Column(
-        children: <Widget>[
-          ListTile(
-            title: const Text('Lafayette'),
-            leading: Radio<SingingCharacter>(
-              value: SingingCharacter.lafayette,
-              groupValue: _character,
-              onChanged: (SingingCharacter? value) {
-                setState(() {
-                  _character = value;
-                });
-              },
-            ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.all(30.0),
+            child: Text("$successMsg"),
           ),
-          ListTile(
-            title: const Text('Thomas Jefferson'),
-            leading: Radio<SingingCharacter>(
-              value: SingingCharacter.jefferson,
-              groupValue: _character,
-              onChanged: (SingingCharacter? value) {
-                setState(() {
-                  _character = value;
-                });
-              },
-            ),
-          ),
-        ],
-      ),
+        )
+      ],
     );
   }
 }

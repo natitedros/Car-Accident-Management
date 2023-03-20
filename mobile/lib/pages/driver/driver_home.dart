@@ -1,10 +1,16 @@
 // import 'dart:html';
 
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:car_accident_management/pages/driver/choose_cars.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
+import '../../datamodel.dart';
+
 class DriverHomePage extends StatefulWidget {
+  final returenData data;
+  const DriverHomePage({Key? key, required this.data}) : super(key: key);
   @override
   _DriverHomePageState createState() => _DriverHomePageState();
 }
@@ -23,7 +29,34 @@ class _DriverHomePageState extends State<DriverHomePage> {
     return pos;
   }
 
+  Future<List<returenCars>?> fetchCars(String id) async {
 
+    final url = Uri.parse(
+        'https://adega.onrender.com/driver/mycars/$id');
+    http.Response response = await http.get(url);
+    Iterable resBody = jsonDecode(response.body);
+    // accepts the data from the server and maps it onto temp
+
+    try {
+      if (response.statusCode == 200 ||
+          response.statusCode == 201 ||
+          response.statusCode == 300) {
+        List<returenCars> Cars = [];
+        for (var singleCase in resBody) {
+          Cars.add(returenCars(
+              id: singleCase['_id'],
+              name: singleCase['name'],
+              plateNumber: singleCase['plateNumber'],
+              ownerId: singleCase['ownerId'],
+              region: singleCase['region']));
+        }
+        //We use teh array Cars to fill out the list cards
+        return Cars;
+      }
+    } catch (err) {
+      print(err);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +76,10 @@ class _DriverHomePageState extends State<DriverHomePage> {
                 onPressed: () async {
                   Position? pos = await getLocation();
                   if (pos != null){
+                    List<returenCars>? carsList = await fetchCars("${widget.data.id}");
                     Navigator.push(context, MaterialPageRoute(
                         builder: (context) =>
-                            ChooseCarsPage()),
+                            ChooseCars(cars: carsList, data: widget.data, position: pos)),
                       // (Route<dynamic> route) => false,
                     );
                   }
