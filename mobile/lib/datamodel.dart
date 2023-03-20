@@ -92,6 +92,8 @@ class returenCars {
   String? id;
   String? name;
   String? plateNumber;
+  String? model;
+  String? color;
   String? ownerId;
   String? region;
 
@@ -101,6 +103,8 @@ class returenCars {
     this.id,
     this.name,
     this.plateNumber,
+    this.model,
+    this.color,
     this.ownerId,
     this.region,
   });

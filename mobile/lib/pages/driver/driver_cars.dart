@@ -33,6 +33,7 @@ class _DriverCarsPageState extends State<DriverCarsPage> {
           Cars.add(returenCars(
               id: singleCase['_id'],
               name: singleCase['name'],
+              model: singleCase['model'],
               plateNumber: singleCase['plateNumber'],
               ownerId: singleCase['ownerId'],
               region: singleCase['region']));
