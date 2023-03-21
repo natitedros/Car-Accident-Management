@@ -12,11 +12,21 @@ const carSchema = new mongoose.Schema({
         required: [true, 'Please enter the plate number'],
         length: 6
     },
+    model:{
+        type: String,
+        required: [true, "Please enter the car model"]
+    },
+    color:{
+        type: String,
+        required: [true, "Please enter the car color"]
+    },
     ownerId:{
-        type: String
+        type: String,
+        required: [true, 'Please enter the owner id'],
     },
     region:{
-        type: String
+        type: String,
+        required: [true, 'Please enter the region'],
     }
 })
 
