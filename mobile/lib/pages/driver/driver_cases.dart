@@ -33,6 +33,11 @@ class _DriverCasesPageState extends State<DriverCasesPage> {
               status: singleCase['status'],
               subjectId: singleCase['subjectId'],
               createdAt: singleCase['createdAt'],
+              severity: singleCase['severity'],
+              carName: singleCase['carName'],
+              carModel: singleCase['carModel'],
+              carColor: singleCase['carColor'],
+              carPlateNumber: singleCase['carPlateNumber'],
               location: loc));
         }
         //We use the array Cases to fill out the list cards

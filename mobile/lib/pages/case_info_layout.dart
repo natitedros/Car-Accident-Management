@@ -58,7 +58,7 @@ class CaseInfoLayout extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0.0, 0.0, 20.0, 0),
-              child: Text('open', style: TextStyle(color: Color(0xFF3AD425))),
+              child: Text('${child?.status}', style: TextStyle(color: Color(0xFF3AD425))),
             )
           ],
         ),

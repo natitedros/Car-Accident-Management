@@ -73,6 +73,12 @@ class returenCases {
   String? subjectId;
   String? createdAt;
   String? handlerId;
+  String? severity;
+  String? carName;
+  String? carModel;
+  String? carPlateNumber;
+  String? carColor;
+  String? verdict;
   Location? location;
 
   //String? phoneNumber;   //when a phone number is obtained from the server
@@ -81,6 +87,11 @@ class returenCases {
       {this.id,
       this.status,
       this.subjectId,
+      this.carName,
+      this.carModel,
+      this.carColor,
+      this.carPlateNumber,
+      this.severity,
       this.createdAt,
       this.handlerId,
       this.location});
