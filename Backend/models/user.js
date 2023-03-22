@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, 'Please enter a name'],
-        maxlength: [10, 'maximum character is 10'] 
+        maxlength: [30, 'maximum character is 10'] 
     },
     role: {
         type: String,
