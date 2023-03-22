@@ -40,16 +40,20 @@ class SignupStateful extends StatefulWidget {
 }
 
 class _SignupStatefulState extends State<SignupStateful> {
-  DataModel? _dataModel;
   TextEditingController nameController = TextEditingController();
   TextEditingController roleController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController repeatedPasswordController = TextEditingController();
+  String? errorEmail = ""; // the error message that shows when the user inputs wrong information
+  String? errorPassword = "";
+  String? errorName = "";
+  String role = "driver";
+  String btnTxt = "SIGN UP";
 
 
-  Future<DataModel?> submitData(String name, String role, String email,
+  Future<returenData> submitData(String name, String role, String email,
       String phoneNumber, String password) async {
     var headersList = {
       'Accept': '*/*',
@@ -72,17 +76,22 @@ class _SignupStatefulState extends State<SignupStateful> {
 
     var res = await req.send();
     final resBody = await res.stream.bytesToString();
-    // print(req.body);
+
+    Map temp = jsonDecode(resBody);
+
     if (res.statusCode == 201 || res.statusCode == 300) {
-      print(resBody);
+      returenData data = returenData(
+        name: temp['user']['name'],
+        email: temp['user']['email'],
+        phoneNumber: temp['user']['phoneNumber'],
+        role: temp['user']['role'],
+        id: temp['user']['_id'],
+      );
+      return data;
     } else {
-      print(res.statusCode);
-      print(resBody);
-
-      print(res.reasonPhrase);
+      returenData data = returenData(errors: Map.from(temp['errors']));
+      return data;
     }
-
-    return null;
   }
 
   @override
@@ -144,35 +153,10 @@ class _SignupStatefulState extends State<SignupStateful> {
                   ),
                 ),
               ),
-
-              Container(
-                padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
-                child: TextField(
-                  style: TextStyle(fontSize: 15.0),
-                  controller: roleController,
-                  decoration: InputDecoration(
-                    isDense: true,
-                    filled: true,
-                    fillColor: Color(0xFFF5F5F5),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0xFFE4E4E4),
-                      ),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0xFF2CACE7),
-                      ),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    labelText: 'role',
-                    labelStyle: TextStyle(
-                      color: Color(0xFFAEAEAE),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15.0,
-                    ),
-                  ),
+              Center(
+                child: Text(
+                  "$errorName",
+                  style: TextStyle(color: Colors.red, fontSize: 10.0),
                 ),
               ),
 
@@ -203,6 +187,12 @@ class _SignupStatefulState extends State<SignupStateful> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                ),
+              ),
+              Center(
+                child: Text(
+                  "$errorEmail",
+                  style: TextStyle(color: Colors.red, fontSize: 10.0),
                 ),
               ),
               Container(
@@ -264,7 +254,42 @@ class _SignupStatefulState extends State<SignupStateful> {
                   ),
                 ),
               ),
+              Center(
+                child: Text(
+                  "$errorPassword",
+                  style: TextStyle(color: Colors.red, fontSize: 10.0),
+                ),
+              ),
 
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: RadioListTile(
+                        title: Text("Driver", style: TextStyle(color: Color(0xFFAEAEAE))),
+                        value: "driver",
+                        groupValue: role,
+                        onChanged: (value){
+                          setState(() {
+                            role = value.toString();
+                          }); //selected value
+                        }
+                    ),
+                  ),
+                  Expanded(
+                    child: RadioListTile(
+                        title: Text("Admin", style: TextStyle(color: Color(0xFFAEAEAE))),
+                        value: "admin",
+                        groupValue: role,
+                        onChanged: (value){
+                          setState(() {
+                            role = value.toString();
+                          }); //selected value
+                        }
+                    ),
+                  )
+                ],
+              ),
 
               SizedBox(
                 height: height * 0.02,
@@ -273,7 +298,7 @@ class _SignupStatefulState extends State<SignupStateful> {
                   height: height * 0.09,
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: ElevatedButton(
-                    child: const Text('SIGN UP'),
+                    child: Text('$btnTxt'),
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -282,29 +307,34 @@ class _SignupStatefulState extends State<SignupStateful> {
                       backgroundColor: Color(0xFF2CACE7),
                     ),
                     onPressed: () async {
+                      setState(() {
+                        btnTxt = "Registering...";
+                      });
                       String name = nameController.text;
-                      String role = roleController.text;
                       String email = emailController.text;
                       String phoneNumber = phoneNumberController.text;
-
                       String password = passwordController.text;
-                      // print(name);
-                      // print(role);
-                      // print(email);
-                      // print(password);
 
-                      DataModel? data = //await getData();
+                      returenData data =
                           await submitData(
                               name, role, email, phoneNumber, password);
+                      if (data.errors == null){
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => Login()),
+                              (Route<dynamic> route) => false,
+                        );
+                      }
+                      else{
+                        setState(() {
+                          btnTxt = "SIGN UP";
+                          errorName = data.errors!["name"];
+                          errorEmail = data.errors!['email'];
+                          errorPassword = data.errors!['password'];
+                        });
+                      }
 
-                      setState(() {
-                        _dataModel = data;
-                      });
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => Login()),
-                        (Route<dynamic> route) => false,
-                      );
+
                     },
                   )),
               Padding(

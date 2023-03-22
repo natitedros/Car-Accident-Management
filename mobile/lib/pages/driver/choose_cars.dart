@@ -16,9 +16,7 @@ class ChooseCars extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: _title,
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
             leading: IconButton(
               icon: Icon(Icons.arrow_back, color: Colors.white),
@@ -27,8 +25,7 @@ class ChooseCars extends StatelessWidget {
             title: const Text(_title)
         ),
         body: ChooseCarsPage(carList: cars, position: position, data: data),
-      ),
-    );
+      );
   }
 }
 
@@ -49,6 +46,7 @@ class _ChooseCarsPageState extends State<ChooseCarsPage> {
   int _selectedIndex = 0;
   String successMsg = '';
   String btnTxt = 'Call Now';
+
   Future<bool> createCase(Position pos, returenCars? car, returenData data) async {
 
     var headersList = {
@@ -108,7 +106,12 @@ class _ChooseCarsPageState extends State<ChooseCarsPage> {
           itemBuilder: (BuildContext context, int index) {
             return Card(
               child: ListTile(
-                title: Text('${widget.carList?[index].name} - ${widget.carList?[index].model}'),
+                title: Text(
+                    '${widget.carList?[index].name} - ${widget.carList?[index].model} - ${widget.carList?[index].plateNumber}',
+                    style: TextStyle(
+                        color: _selectedIndex == index ? Colors.blue : Color(0xFFAFAFAF),
+                        fontSize: 17.0)
+                ),
                 selected: index == _selectedIndex,
                 onTap: () {
                   setState(() {

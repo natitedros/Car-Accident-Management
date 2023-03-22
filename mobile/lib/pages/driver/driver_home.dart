@@ -46,6 +46,8 @@ class _DriverHomePageState extends State<DriverHomePage> {
           Cars.add(returenCars(
               id: singleCase['_id'],
               name: singleCase['name'],
+              model: singleCase['model'],
+              color: singleCase['color'],
               plateNumber: singleCase['plateNumber'],
               ownerId: singleCase['ownerId'],
               region: singleCase['region']));

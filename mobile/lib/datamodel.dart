@@ -78,6 +78,7 @@ class returenCases {
   String? carModel;
   String? carPlateNumber;
   String? carColor;
+  String? verdict;
   Location? location;
 
   //String? phoneNumber;   //when a phone number is obtained from the server
