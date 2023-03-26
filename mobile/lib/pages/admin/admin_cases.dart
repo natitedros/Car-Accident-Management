@@ -46,10 +46,23 @@ class _AdminCasesPageState extends State<AdminCasesPage> {
                 type: temp['cases'][i]['location']['type'],
                 coordinates: temp['cases'][i]['location']['coordinates']
             ),
+            car: CarSpec(
+            name: temp['cases'][i]['carName'],
+                model: temp['cases'][i]['carModel'],
+                color: temp['cases'][i]['carColor'],
+                plateNumber: temp['cases'][i]['carPlateNumber']
+            ),
+            driver: DriverInfo(
+                name: temp['cases'][i]['driverName'],
+                phoneNumber: temp['cases'][i]['driverPhoneNumber']
+            ),
             id: temp['cases'][i]['id'],
             createdAt: temp['cases'][i]['createdAt'],
             status: temp['cases'][i]['status'],
-            handlerId: temp['cases'][i]['handlerId']
+            handlerId: temp['cases'][i]['handlerId'],
+            subjectId: temp['cases'][i]['subjectId'],
+            severity: temp['cases'][i]['severity'],
+
         );
         cases.add(singleCase);
       }

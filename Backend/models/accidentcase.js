@@ -41,6 +41,14 @@ const caseSchema = new mongoose.Schema({
     carModel: {
         type: String,
         required: true
+    },
+    driverName: {
+        type: String,
+        required: true
+    },
+    driverPhoneNumber: {
+        type: String,
+        required: true
     }
 
 
