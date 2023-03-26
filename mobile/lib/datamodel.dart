@@ -64,6 +64,18 @@ class Location {
   List<dynamic>? coordinates;
   Location({this.type, this.coordinates});
 }
+class CarSpec {
+  String? name;
+  String? model;
+  String? color;
+  String? plateNumber;
+  CarSpec({this.name, this.model, this.color, this.plateNumber});
+}
+class DriverInfo {
+  String? name;
+  String? phoneNumber;
+  DriverInfo({this.name, this.phoneNumber});
+}
 
 class returenCases {
   // Map<String, String>? location;
@@ -74,27 +86,24 @@ class returenCases {
   String? createdAt;
   String? handlerId;
   String? severity;
-  String? carName;
-  String? carModel;
-  String? carPlateNumber;
-  String? carColor;
+  CarSpec? car;
   String? verdict;
+  DriverInfo? driver;
   Location? location;
 
   //String? phoneNumber;   //when a phone number is obtained from the server
-  //here is where all the information recieved from the server is stored
+  //here is where all the information received from the server is stored
   returenCases(
-      {this.id,
-      this.status,
-      this.subjectId,
-      this.carName,
-      this.carModel,
-      this.carColor,
-      this.carPlateNumber,
-      this.severity,
-      this.createdAt,
-      this.handlerId,
-      this.location});
+      {
+        this.id,
+        this.status,
+        this.subjectId,
+        this.car,
+        this.driver,
+        this.severity,
+        this.createdAt,
+        this.handlerId,
+        this.location});
 }
 
 class returenCars {

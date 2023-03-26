@@ -68,6 +68,8 @@ class _ChooseCarsPageState extends State<ChooseCarsPage> {
       "carModel": "${car?.model}",
       "carColor": "${car?.color}",
       "carPlateNumber" : "${car?.plateNumber}",
+      "driverName": "${data?.name}",
+      "driverPhoneNumber" : "${data?.phoneNumber}"
 
     };
     var req = http.Request('POST', url);

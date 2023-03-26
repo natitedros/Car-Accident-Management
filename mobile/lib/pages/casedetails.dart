@@ -1,18 +1,25 @@
-import 'package:http/http.dart';
 import '../../datamodel.dart';
 
-import 'dart:convert';
-import 'dart:developer';
-
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
-import 'package:car_accident_management/pages/login.dart';
 
-// void main() => runApp(CaseDetailPage());
+class MapUtils {
+
+  MapUtils._();
+
+  static Future<void> openMap(double latitude, double longitude) async {
+    Uri googleUrl = Uri.parse('https://www.google.com/maps/search/?api=1&query=$latitude,$longitude');
+    if (await canLaunchUrl(googleUrl)) {
+      await launchUrl(googleUrl);
+    } else {
+      throw 'Could not open the map.';
+    }
+  }
+}
 
 class CaseDetailPage extends StatelessWidget {
   final returenCases? child;
   const CaseDetailPage({Key? key, required this.child}) : super(key: key);
-  // CaseDetailPage({this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -52,13 +59,20 @@ class CaseDetailPage extends StatelessWidget {
               style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 20.0)),
           Text("Severity: ${child?.severity}",
               style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 20.0)),
-          Text("Car: ${child?.carName}-${child?.carModel}-${child?.carColor}",
+          Text("Car: ${child?.car?.name}-${child?.car?.model}-${child?.car?.color}",
               style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 20.0)),
-          Text("Plate Number: ${child?.carPlateNumber}",
+          Text("Plate Number: ${child?.car?.plateNumber}",
+              style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 20.0)),
+          Text("Driver: ${child?.driver?.name}  - ${child?.driver?.phoneNumber}",
               style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 20.0)),
           SizedBox(
             height: height * 0.02,
           ),
+          ElevatedButton(
+              onPressed: (){
+                MapUtils.openMap(child?.location?.coordinates?[0], child?.location?.coordinates?[1]);
+              },
+              child: const Text("See on map")),
           SizedBox(
             height: height * 0.05,
           ),

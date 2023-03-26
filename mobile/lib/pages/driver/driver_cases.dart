@@ -28,16 +28,24 @@ class _DriverCasesPageState extends State<DriverCasesPage> {
           Location loc = Location(
               type: singleCase['location']['type'],
               coordinates: singleCase['location']['coordinates']);
+          CarSpec car = CarSpec(
+            name: singleCase['carName'],
+            model: singleCase['carModel'],
+            color: singleCase['carColor'],
+            plateNumber: singleCase['carPlateNumber']
+          );
+          DriverInfo driver = DriverInfo(
+            name: singleCase['driverName'],
+            phoneNumber: singleCase['driverPhoneNumber']
+          );
           Cases.add(returenCases(
               id: singleCase['_id'],
               status: singleCase['status'],
               subjectId: singleCase['subjectId'],
               createdAt: singleCase['createdAt'],
               severity: singleCase['severity'],
-              carName: singleCase['carName'],
-              carModel: singleCase['carModel'],
-              carColor: singleCase['carColor'],
-              carPlateNumber: singleCase['carPlateNumber'],
+              car: car,
+              driver: driver,
               location: loc));
         }
         //We use the array Cases to fill out the list cards
