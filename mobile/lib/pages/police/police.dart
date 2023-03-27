@@ -6,6 +6,7 @@ import 'package:car_accident_management/pages/police/police_home.dart';
 import 'package:car_accident_management/pages/police/police_cases.dart';
 import 'package:car_accident_management/pages/login.dart';
 import 'package:car_accident_management/datamodel.dart';
+import 'package:geolocator/geolocator.dart';
 
 // import 'package:car_accident_management/pages/driver/driver_cases.dart';
 
@@ -26,8 +27,8 @@ class _PolicePageState extends State<PolicePage> {
   String title2 = "Profile";
   String mainTitle = "Home";
   late final screens = [
-    PoliceHomePage(),
-    PoliceCasesPage(),
+    PoliceHomePage(data: widget.data),
+    PoliceCasesPage(data: widget.data),
     PoliceProfilePage(data: widget.data),
   ];
 
