@@ -76,7 +76,12 @@ class _DriverCasesPageState extends State<DriverCasesPage> {
 
               return Container(
                   alignment: Alignment.center,
-                  child: ListView.builder(
+                  child: (z != null && z.isEmpty) ? const Text(
+                    "You don't have any cases to show",
+                    style: TextStyle(
+                        fontSize: 20
+                    ),
+                  ):ListView.builder(
                       itemCount: z?.length,
                       itemBuilder: (context, index) {
                         return CaseInfoLayout(
