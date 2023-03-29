@@ -89,6 +89,7 @@ class _PoliceCasesPageState extends State<PoliceCasesPage> {
                       itemBuilder: (context, index) {
                         return CaseInfoLayout(
                           child: z![index],
+                          data: widget.data,
                         );
                       }));
             }

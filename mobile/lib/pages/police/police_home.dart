@@ -72,7 +72,7 @@ class _PoliceHomePageState extends State<PoliceHomePage> {
               name: temp['cases'][i]['driverName'],
               phoneNumber: temp['cases'][i]['driverPhoneNumber']
           ),
-          id: temp['cases'][i]['id'],
+          id: temp['cases'][i]['_id'],
           createdAt: temp['cases'][i]['createdAt'],
           status: temp['cases'][i]['status'],
           handlerId: temp['cases'][i]['handlerId'],
@@ -129,6 +129,7 @@ class _PoliceHomePageState extends State<PoliceHomePage> {
                       itemBuilder: (context, index) {
                         return CaseInfoLayout(
                           child: cases![index],
+                          data: widget.data,
                         );
                       })),
             )

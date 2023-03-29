@@ -103,6 +103,7 @@ class _AdminCasesPageState extends State<AdminCasesPage> {
                       itemBuilder: (context, index) {
                         return CaseInfoLayout(
                           child: z![index],
+                          data: widget.data,
                         );
                       }));
             }
