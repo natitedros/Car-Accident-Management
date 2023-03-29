@@ -99,6 +99,7 @@ class returenCases {
         this.status,
         this.subjectId,
         this.car,
+        this.verdict,
         this.driver,
         this.severity,
         this.createdAt,

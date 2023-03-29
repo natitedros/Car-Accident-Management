@@ -86,6 +86,7 @@ class _DriverCasesPageState extends State<DriverCasesPage> {
                       itemBuilder: (context, index) {
                         return CaseInfoLayout(
                           child: z![index],
+                          data: widget.data,
                         );
                       }));
             }

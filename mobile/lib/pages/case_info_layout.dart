@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 
 class CaseInfoLayout extends StatelessWidget {
   final returenCases? child;
+  final returenData? data;
 
-  CaseInfoLayout({this.child});
+  CaseInfoLayout({this.child, this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +46,8 @@ class CaseInfoLayout extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => CaseDetailPage(
-                        child: child
-
+                        singleCase: child,
+                        user: data,
                       )),
                       // (Route<dynamic> route) => false,
                     );
