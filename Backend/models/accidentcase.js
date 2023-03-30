@@ -49,6 +49,9 @@ const caseSchema = new mongoose.Schema({
     driverPhoneNumber: {
         type: String,
         required: true
+    },
+    verdict: {
+        type: String,
     }
 
 
