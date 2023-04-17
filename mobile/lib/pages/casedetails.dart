@@ -12,7 +12,7 @@ class MapUtils {
   MapUtils._();
 
   static Future<void> openMap(double latitude, double longitude) async {
-    Uri googleUrl = Uri.parse('https://www.google.com/maps/search/?api=1&query=$latitude,$longitude');
+    Uri googleUrl = Uri.parse('https://www.google.com/maps/search/?api=1&query=$longitude,$latitude');
     if (await canLaunchUrl(googleUrl)) {
       await launchUrl(googleUrl);
     } else {
@@ -125,6 +125,8 @@ class _CaseDetailPageState extends State<CaseDetailPage> {
           ),
           ElevatedButton(
               onPressed: (){
+                print(widget.singleCase?.location?.coordinates?[0]);
+                print(widget.singleCase?.location?.coordinates?[1]);
                 MapUtils.openMap(widget.singleCase?.location?.coordinates?[0], widget.singleCase?.location?.coordinates?[1]);
               },
               child: const Text("See on map")),
