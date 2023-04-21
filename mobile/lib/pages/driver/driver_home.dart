@@ -1,12 +1,14 @@
 // import 'dart:html';
 
 import 'dart:convert';
+import 'package:camera/camera.dart';
 import 'package:http/http.dart' as http;
 import 'package:car_accident_management/pages/driver/choose_cars.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
 import '../../datamodel.dart';
+import 'camera_page.dart';
 
 class DriverHomePage extends StatefulWidget {
   final returenData data;
@@ -129,7 +131,10 @@ class _DriverHomePageState extends State<DriverHomePage> {
               width: width * 0.5,
               height: height * 0.2,
               child: ElevatedButton(
-                onPressed: () => {},
+                onPressed: ()async => {
+                  await availableCameras().then((value) => Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => CameraPage(cameras: value))))
+                },
                 style: ElevatedButton.styleFrom(
                   elevation: 3,
                   shape: RoundedRectangleBorder(
