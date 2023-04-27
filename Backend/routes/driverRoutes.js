@@ -2,6 +2,8 @@ const { Router } = require('express')
 
 const driverController = require('../controllers/driverController')
 
+const { upload } = require('../middleware/imageUploadMiddleware')
+
 const router = Router()
 
 //posts the id of driver from the front end to filter by 
