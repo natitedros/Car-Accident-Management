@@ -34,3 +34,15 @@ module.exports.add_minor_case = (req, res)=>{
         })
         .catch((err)=>console.log(err))
 }
+
+module.exports.add_case_images = (req, res) => {
+    if (req.file) {
+        const id = req.params.id
+
+    Case.findByIdAndUpdate(id, {proPic: req.file.filename})
+        .then((result)=>res.status(200).json({ case: result._id }))
+        .catch((err)=>console.log(err))
+    } else {
+        res.status(400).send("Please upload a valid image");
+    }
+}

@@ -52,7 +52,10 @@ const caseSchema = new mongoose.Schema({
     },
     verdict: {
         type: String,
-    }
+    },
+    images : [{
+        type: String,
+    }]
 
 
 },{timestamps: true})
