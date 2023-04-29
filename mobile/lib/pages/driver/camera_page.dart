@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:car_accident_management/pages/driver/upload_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -116,7 +117,15 @@ class _CameraPageState extends State<CameraPage> {
                         // const Spacer(),
                         Expanded(
                           child: IconButton(
-                              onPressed: () { print("done"); },
+                              onPressed: () { 
+                                print("done");
+                                Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) =>
+                                        UploadImagePage(images: pictures)
+                                ),
+                                  // (Route<dynamic> route) => false,
+                                );
+                                },
                               iconSize: 40,
                               icon: const Icon(CupertinoIcons.check_mark_circled, color: Colors.white)
                           ),
