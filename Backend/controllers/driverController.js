@@ -1,5 +1,13 @@
 const Case = require('../models/accidentcase')
 const Car = require('../models/car')
+const cloudinary = require('cloudinary').v2;
+require('dotenv').config();
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 module.exports.cases_get = (req, res) =>{
     Case.find({subjectId: req.params.id})
@@ -35,13 +43,21 @@ module.exports.add_minor_case = (req, res)=>{
         .catch((err)=>console.log(err))
 }
 
-module.exports.add_case_images = (req, res) => {
+module.exports.add_case_images = async (req, res) => {
     if (req.files) {
+
+        const imageNames = await Promise.all(
+            req.files.map(async (image) => new Promise((resolve, reject) => {
+                cloudinary.uploader.upload_stream((error, result) => {
+                    if (error) {
+                        reject(error)
+                    }
+                    resolve(result.url);
+                }).end(image.buffer)
+            }))
+        )
+
         const id = req.params.id
-        const imageNames = [];
-        for (const image of req.files) {
-            imageNames.push(image.filename);
-          }
         Case.findByIdAndUpdate(id, { images: imageNames })
             .then((result)=>res.status(200).json({ case: result._id }))
             .catch((err)=>console.log(err))
