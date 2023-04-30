@@ -6,6 +6,8 @@ const storageEngine = multer.diskStorage({
       },
 });
 
+const tempStorage = multer.memoryStorage()
+
 const path = require("path");
 
 const checkFileType = function (file, cb) {
@@ -25,7 +27,7 @@ if (mimeType && extName) {
 };
 
 const upload = multer({
-    storage: storageEngine,
+    storage: tempStorage,
     limits: { fileSize: 2000000 },
     fileFilter: (req, file, cb) => {
         checkFileType(file, cb);
