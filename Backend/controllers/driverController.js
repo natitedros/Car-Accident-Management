@@ -48,6 +48,7 @@ module.exports.add_case_images = async (req, res) => {
 
         const imageNames = await Promise.all(
             req.files.map(async (image) => new Promise((resolve, reject) => {
+                console.log(image)
                 cloudinary.uploader.upload_stream((error, result) => {
                     if (error) {
                         reject(error)
