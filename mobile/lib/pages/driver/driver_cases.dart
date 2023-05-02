@@ -38,6 +38,10 @@ class _DriverCasesPageState extends State<DriverCasesPage> {
             name: singleCase['driverName'],
             phoneNumber: singleCase['driverPhoneNumber']
           );
+          List<dynamic> images = [];
+          if (singleCase['images'] != null){
+            images = singleCase['images'];
+          }
           Cases.add(returenCases(
               id: singleCase['_id'],
               status: singleCase['status'],
@@ -46,7 +50,9 @@ class _DriverCasesPageState extends State<DriverCasesPage> {
               severity: singleCase['severity'],
               car: car,
               driver: driver,
-              location: loc));
+              location: loc,
+              images: images
+          ));
         }
         //We use the array Cases to fill out the list cards
         return Cases;

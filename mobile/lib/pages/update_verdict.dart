@@ -32,6 +32,7 @@ class _UpdateVerdictPageState extends State<UpdateVerdictPage> {
     req.body = jsonEncode(body);
     var res = await req.send();
     final resBody = await res.stream.bytesToString();
+    print(res.statusCode);
     if (res.statusCode == 200 || res.statusCode == 201 || res.statusCode == 300){
       return true;
     }

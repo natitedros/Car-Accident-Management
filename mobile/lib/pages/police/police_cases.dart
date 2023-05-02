@@ -49,6 +49,7 @@ class _PoliceCasesPageState extends State<PoliceCasesPage> {
               name: temp['cases'][i]['driverName'],
               phoneNumber: temp['cases'][i]['driverPhoneNumber']
           ),
+          images: temp['cases'][i]['images'],
           id: temp['cases'][i]['id'],
           createdAt: temp['cases'][i]['createdAt'],
           status: temp['cases'][i]['status'],

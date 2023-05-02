@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:car_accident_management/pages/display_images.dart';
 import 'package:car_accident_management/pages/update_verdict.dart';
 
 import '../../datamodel.dart';
@@ -101,103 +102,118 @@ class _CaseDetailPageState extends State<CaseDetailPage> {
       ),
       body: Container(
         alignment: Alignment.center,
-        child: Column(children: <Widget>[
-          SizedBox(
-            height: height * 0.03,
-          ),
-          const Text("Accident time:",
-              style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 25.0)),
-          Text("${caseTime.day}/${caseTime.month}/${caseTime.year}  at   ${caseTime.hour}:${caseTime.minute}",
-              style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 20.0)),
-          SizedBox(
-            height: height * 0.02,
-          ),
-          Text("Severity: ${widget.singleCase?.severity}",
-              style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 20.0)),
-          Text("Car: ${widget.singleCase?.car?.name}-${widget.singleCase?.car?.model}-${widget.singleCase?.car?.color}",
-              style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 20.0)),
-          Text("Plate Number: ${widget.singleCase?.car?.plateNumber}",
-              style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 20.0)),
-          Text("Driver: ${widget.singleCase?.driver?.name}  - ${widget.singleCase?.driver?.phoneNumber}",
-              style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 20.0)),
-          SizedBox(
-            height: height * 0.02,
-          ),
-          ElevatedButton(
-              onPressed: (){
-                print(widget.singleCase?.location?.coordinates?[0]);
-                print(widget.singleCase?.location?.coordinates?[1]);
-                MapUtils.openMap(widget.singleCase?.location?.coordinates?[0], widget.singleCase?.location?.coordinates?[1]);
-              },
-              child: const Text("See on map")),
-          SizedBox(
-            height: height * 0.05,
-          ),
-          Container(
-            child: (widget.singleCase?.status == 'open' && widget.user?.role == "police") ?
-                ElevatedButton(
-                  onPressed: () async {
-                    if (assignBtn == "Assign Self" || assignBtn == "Try again"){
-                      setState(() {
-                        assignBtn = "Assigning...";
-                      });
-                      bool isAssigned = await assignSelf("${widget.singleCase?.id}", "${widget.user?.id}");
-                      if (isAssigned){
-                        setState(() {
-                          assignBtn = "Done";
-                        });
-                      }else{
-                        assignBtn = "Try again";
-                      }
-                    }
+        child: SingleChildScrollView(
+          child: Column(children: <Widget>[
+            SizedBox(
+              height: height * 0.03,
+            ),
+            const Text("Accident time:",
+                style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 25.0)),
+            Text("${caseTime.day}/${caseTime.month}/${caseTime.year}  at   ${caseTime.hour}:${caseTime.minute}",
+                style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 20.0)),
+            SizedBox(
+              height: height * 0.02,
+            ),
+            Text("Severity: ${widget.singleCase?.severity}",
+                style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 20.0)),
+            Text("Car: ${widget.singleCase?.car?.name}-${widget.singleCase?.car?.model}-${widget.singleCase?.car?.color}",
+                style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 20.0)),
+            Text("Plate Number: ${widget.singleCase?.car?.plateNumber}",
+                style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 20.0)),
+            Text("Driver: ${widget.singleCase?.driver?.name}  - ${widget.singleCase?.driver?.phoneNumber}",
+                style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 20.0)),
+            SizedBox(
+              height: height * 0.02,
+            ),
+            ElevatedButton(
+                onPressed: (){
+                  print(widget.singleCase?.location?.coordinates?[0]);
+                  print(widget.singleCase?.location?.coordinates?[1]);
+                  MapUtils.openMap(widget.singleCase?.location?.coordinates?[0], widget.singleCase?.location?.coordinates?[1]);
+                },
+                child: const Text("See on map")),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: (widget.singleCase?.images) != null ? ElevatedButton(
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(
+                        builder: (context) =>
+                            DisplayImagesPage( images: widget.singleCase?.images,)
+                    ),
+                      // (Route<dynamic> route) => false,
+                    );
                   },
-                  child: Text(assignBtn),
-                ) :
-                Text("Verdict: ${widget.singleCase?.verdict}",
-                    style: TextStyle(color: Color(0xFFBEBEBE), fontSize: 20.0))
-          ),
-          Padding(
-            padding: const EdgeInsets.all(17.0),
-            child: Container(child: (widget.singleCase?.status =='pending' && widget.user?.role == 'police') ?
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(
-                          builder: (context) =>
-                              UpdateVerdictPage( singleCase: widget.singleCase,)
-                      ),
-                        // (Route<dynamic> route) => false,
-                      );
-                    }, style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14), // <-- Radius
-                      ),
-                    ), child: const Text('UPDATE')),
-                    ElevatedButton(onPressed: () async {
-                      if (closeBtn == 'CLOSE'){
+                  child: const Text('Crash Images')): null,
+            ),
+            SizedBox(
+              height: height * 0.05,
+            ),
+            Container(
+              child: (widget.singleCase?.status == 'open' && widget.user?.role == "police") ?
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (assignBtn == "Assign Self" || assignBtn == "Try again"){
                         setState(() {
-                          closeBtn = 'Closing...';
+                          assignBtn = "Assigning...";
                         });
-                        bool isClosed = await closeCase('${widget.singleCase?.id}');
-                        if (isClosed){
+                        bool isAssigned = await assignSelf("${widget.singleCase?.id}", "${widget.user?.id}");
+                        if (isAssigned){
                           setState(() {
-                            closeBtn = 'Done';
+                            assignBtn = "Done";
                           });
+                        }else{
+                          assignBtn = "Try again";
                         }
                       }
-                    }, style: ElevatedButton.styleFrom(
+                    },
+                    child: Text(assignBtn),
+                  ) :
+                  Text("Verdict: ${widget.singleCase?.verdict}",
+                      style: TextStyle(color: Color(0xFFBEBEBE), fontSize: 20.0))
+            ),
+            Padding(
+              padding: const EdgeInsets.all(17.0),
+              child: Container(child: (widget.singleCase?.status =='pending' && widget.user?.role == 'police') ?
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(
+                            builder: (context) =>
+                                UpdateVerdictPage( singleCase: widget.singleCase,)
+                        ),
+                          // (Route<dynamic> route) => false,
+                        );
+                      }, style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14), // <-- Radius
                         ),
-                      ), child: Text(closeBtn),
-                    ),
+                      ), child: const Text('UPDATE')),
+                      ElevatedButton(onPressed: () async {
+                        if (closeBtn == 'CLOSE'){
+                          setState(() {
+                            closeBtn = 'Closing...';
+                          });
+                          bool isClosed = await closeCase('${widget.singleCase?.id}');
+                          if (isClosed){
+                            setState(() {
+                              closeBtn = 'Done';
+                            });
+                          }
+                        }
+                      }, style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14), // <-- Radius
+                          ),
+                        ), child: Text(closeBtn),
+                      ),
 
-                  ],
-                ): null
-            ),
-          )
-        ]),
+                    ],
+                  ): null
+              ),
+            )
+          ]),
+        ),
       ),
     );
   }
