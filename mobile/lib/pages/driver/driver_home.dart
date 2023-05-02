@@ -83,7 +83,7 @@ class _DriverHomePageState extends State<DriverHomePage> {
                     List<returenCars>? carsList = await fetchCars("${widget.data.id}");
                     Navigator.push(context, MaterialPageRoute(
                         builder: (context) =>
-                            ChooseCars(cars: carsList, data: widget.data, position: pos)),
+                            ChooseCars(cars: carsList, data: widget.data, position: pos, isUpload: false)),
                       // (Route<dynamic> route) => false,
                     );
                   }
@@ -131,9 +131,17 @@ class _DriverHomePageState extends State<DriverHomePage> {
               width: width * 0.5,
               height: height * 0.2,
               child: ElevatedButton(
-                onPressed: ()async => {
-                  await availableCameras().then((value) => Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => CameraPage(cameras: value))))
+                onPressed: () async {
+                Position? pos = await getLocation();
+                  if (pos != null){
+                    List<returenCars>? carsList = await fetchCars("${widget.data.id}");
+                    Navigator.push(context, MaterialPageRoute(
+                    builder: (context) =>
+                    ChooseCars(cars: carsList, data: widget.data, position: pos, isUpload: true)),
+                    // (Route<dynamic> route) => false,
+                    );
+                  }
+
                 },
                 style: ElevatedButton.styleFrom(
                   elevation: 3,

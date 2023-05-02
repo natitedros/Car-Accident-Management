@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 class CameraPage extends StatefulWidget {
-  const CameraPage({Key? key, required this.cameras}) : super(key: key);
+  const CameraPage({Key? key, required this.cameras, required this.caseId}) : super(key: key);
 
   final List<CameraDescription>? cameras;
+  final String caseId;
 
   @override
   State<CameraPage> createState() => _CameraPageState();
@@ -48,7 +49,7 @@ class _CameraPageState extends State<CameraPage> {
       });
 
     } on CameraException catch (e) {
-      debugPrint('Error occured while taking picture: $e');
+      debugPrint('Error occurred while taking picture: $e');
       return null;
     }
   }
@@ -118,10 +119,10 @@ class _CameraPageState extends State<CameraPage> {
                         Expanded(
                           child: IconButton(
                               onPressed: () { 
-                                print("done");
+                                print(pictures[0].mimeType);
                                 Navigator.push(context, MaterialPageRoute(
                                     builder: (context) =>
-                                        UploadImagePage(images: pictures)
+                                        UploadImagePage(images: pictures, caseId: widget.caseId)
                                 ),
                                   // (Route<dynamic> route) => false,
                                 );

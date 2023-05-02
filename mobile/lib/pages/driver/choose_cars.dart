@@ -1,16 +1,20 @@
 import 'dart:convert';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import '../../datamodel.dart';
 import 'package:http/http.dart' as http;
 
+import 'camera_page.dart';
+
 class ChooseCars extends StatelessWidget {
   final List<returenCars>? cars;
   final Position position;
   final returenData data;
-  const ChooseCars({Key? key, required this.cars, required this.position, required this.data}) : super(key: key);
+  final bool isUpload;
+  const ChooseCars({Key? key, required this.isUpload, required this.cars, required this.position, required this.data}) : super(key: key);
 
   static const String _title = 'Which car are you in?';
 
@@ -24,7 +28,7 @@ class ChooseCars extends StatelessWidget {
             ),
             title: const Text(_title)
         ),
-        body: ChooseCarsPage(carList: cars, position: position, data: data),
+        body: ChooseCarsPage(carList: cars, position: position, data: data, isUpload: isUpload),
       );
   }
 }
@@ -33,10 +37,12 @@ class ChooseCarsPage extends StatefulWidget {
   final List<returenCars>? carList;
   final Position position;
   final returenData data;
+  final bool isUpload;
   const ChooseCarsPage({Key? key,
     required this.carList,
     required this.position,
-    required this.data
+    required this.data,
+    required this.isUpload
   }) : super(key: key);
 
   @override
@@ -45,9 +51,14 @@ class ChooseCarsPage extends StatefulWidget {
 class _ChooseCarsPageState extends State<ChooseCarsPage> {
   int _selectedIndex = 0;
   String successMsg = '';
-  String btnTxt = 'Call Now';
+  String btnTxt = '';
 
-  Future<bool> createCase(Position pos, returenCars? car, returenData data) async {
+  @override
+  void initState(){
+    btnTxt = (widget.isUpload) ? 'Take Photo' : 'Call Now';
+  }
+
+  Future<String?> createCase(Position pos, returenCars? car, returenData data) async {
 
     var headersList = {
       'Accept': '*/*',
@@ -79,15 +90,16 @@ class _ChooseCarsPageState extends State<ChooseCarsPage> {
     var res = await req.send();
     final resBody = await res.stream.bytesToString();
 
-    print(resBody);
+    Map temp = jsonDecode(
+        resBody);
     if (res.statusCode == 200 ||
         res.statusCode == 201 ||
         res.statusCode == 300) {
       print("Case successfully created!");
-      return true;
+      return temp['case'];
     } else {
       print("Bad request!");
-      return false;
+      return null;
     }
 
   }
@@ -128,19 +140,28 @@ class _ChooseCarsPageState extends State<ChooseCarsPage> {
           padding: const EdgeInsets.all(8.0),
           child: ElevatedButton(
               onPressed: () async {
-                if (btnTxt == "Back"){
-                  Navigator.of(context).pop();
+                if (widget.isUpload){
+                      String? caseId = await createCase(widget.position, widget.carList?[_selectedIndex], widget.data);
+                      if (caseId != null){
+                            await availableCameras().then((value) => Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => CameraPage(cameras: value, caseId: caseId))));
+                      }
                 }
                 else{
-                  setState(() {
-                    btnTxt = "Calling...";
-                  });
-                  bool isComplete = await createCase(widget.position, widget.carList?[_selectedIndex], widget.data);
-                  if (isComplete){
+                  if (btnTxt == "Back"){
+                    Navigator.of(context).pop();
+                  }
+                  else{
                     setState(() {
-                      btnTxt = "Back";
-                      successMsg = "Police Notified! You will receive a notification when police is on its way...";
+                      btnTxt = "Calling...";
                     });
+                    String? isComplete = await createCase(widget.position, widget.carList?[_selectedIndex], widget.data);
+                    if (isComplete != null){
+                      setState(() {
+                        btnTxt = "Back";
+                        successMsg = "Police Notified! You will receive a notification when police is on its way...";
+                      });
+                    }
                   }
                 }
               },

@@ -90,6 +90,7 @@ class returenCases {
   String? verdict;
   DriverInfo? driver;
   Location? location;
+  List<dynamic>? images;
 
   //String? phoneNumber;   //when a phone number is obtained from the server
   //here is where all the information received from the server is stored
@@ -104,7 +105,8 @@ class returenCases {
         this.severity,
         this.createdAt,
         this.handlerId,
-        this.location});
+        this.location,
+        this.images});
 }
 
 class returenCars {
