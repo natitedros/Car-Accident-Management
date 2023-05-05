@@ -1,4 +1,5 @@
 const Case = require('../models/accidentcase')
+const User = require('../models/user')
 
 module.exports.cases_get = (req, res)=>{
     Case.find({handlerId: req.params.id})
@@ -11,6 +12,12 @@ module.exports.cases_get = (req, res)=>{
 module.exports.update_case = (req, res)=>{
     Case.findByIdAndUpdate(req.params.id, req.body)
         .then(()=>res.status(201).json({message: "update success"}))
+        .catch((err)=>console.log(err))
+}
+
+module.exports.close_case = (req, res)=>{
+    Case.findByIdAndUpdate(req.params.id, {status: "closed"})
+        .then(()=>res.status(201).json({message: "success"}))
         .catch((err)=>console.log(err))
 }
 
@@ -38,5 +45,12 @@ module.exports.assign_self = (req, res)=>{
     const {policeId, caseId} = req.body
     Case.findByIdAndUpdate(caseId, {handlerId: policeId, status: "pending"})
         .then(()=>res.status(201).json({message: "success"}))
+        .catch((err)=>console.log(err))
+}
+
+module.exports.update_location = (req, res)=>{
+    const id = req.params.id
+    User.findByIdAndUpdate(id, req.body)
+        .then(()=>res.status(201).json({message : "success"}))
         .catch((err)=>console.log(err))
 }
