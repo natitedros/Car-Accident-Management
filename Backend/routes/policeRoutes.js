@@ -13,8 +13,4 @@ router.post('/nearme', policeController.near_me_get)
 //get the id of the case and add self as a handler
 router.post('/cases/assign', policeController.assign_self)
 
-router.post('/location/:id', policeController.update_location)
-
-router.get('closecase/:id', policeController.close_case)
-
 module.exports = router

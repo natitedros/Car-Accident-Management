@@ -29,15 +29,6 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Please enter a password'],
         minlength: [6, 'minimum password length is 6']
     },
-    location:{
-        type: {
-            type: String,
-            enum: ['Point']
-          },
-          coordinates: {
-            type: [Number]
-          },
-    },
     badgeNumber:{
         type: String
     }

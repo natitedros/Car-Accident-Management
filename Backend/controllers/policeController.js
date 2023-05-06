@@ -15,12 +15,6 @@ module.exports.update_case = (req, res)=>{
         .catch((err)=>console.log(err))
 }
 
-module.exports.close_case = (req, res)=>{
-    Case.findByIdAndUpdate(req.params.id, {status: "closed"})
-        .then(()=>res.status(201).json({message: "success"}))
-        .catch((err)=>console.log(err))
-}
-
 module.exports.near_me_get = (req, res)=>{
     const {location} = req.body
     const longitude = location.coordinates[0]
@@ -45,12 +39,5 @@ module.exports.assign_self = (req, res)=>{
     const {policeId, caseId} = req.body
     Case.findByIdAndUpdate(caseId, {handlerId: policeId, status: "pending"})
         .then(()=>res.status(201).json({message: "success"}))
-        .catch((err)=>console.log(err))
-}
-
-module.exports.update_location = (req, res)=>{
-    const id = req.params.id
-    User.findByIdAndUpdate(id, req.body)
-        .then(()=>res.status(201).json({message : "success"}))
         .catch((err)=>console.log(err))
 }
