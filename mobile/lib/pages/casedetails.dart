@@ -64,7 +64,7 @@ class _CaseDetailPageState extends State<CaseDetailPage> {
       "status" : 'closed'
     };
     final url = Uri.parse(
-        'https://adega.onrender.com/police/update/$caseId');
+        'https://adega.onrender.com/police/mycases/update/$caseId');
     var req = http.Request('POST', url);
     req.headers.addAll(headersList);
     req.body = jsonEncode(body);
@@ -127,8 +127,6 @@ class _CaseDetailPageState extends State<CaseDetailPage> {
             ),
             ElevatedButton(
                 onPressed: (){
-                  print(widget.singleCase?.location?.coordinates?[0]);
-                  print(widget.singleCase?.location?.coordinates?[1]);
                   MapUtils.openMap(widget.singleCase?.location?.coordinates?[0], widget.singleCase?.location?.coordinates?[1]);
                 },
                 child: const Text("See on map")),
@@ -168,8 +166,13 @@ class _CaseDetailPageState extends State<CaseDetailPage> {
                     },
                     child: Text(assignBtn),
                   ) :
-                  Text("Verdict: ${widget.singleCase?.verdict}",
-                      style: TextStyle(color: Color(0xFFBEBEBE), fontSize: 20.0))
+                  Container(
+                    child: (widget.user?.role != "police") ? Padding(
+                      padding: const EdgeInsets.all(17.0),
+                      child: Text("Verdict: ${widget.singleCase?.verdict}",
+                          style: TextStyle(color: Color(0xFFBEBEBE), fontSize: 20.0)),
+                    ) : null,
+                  )
             ),
             Padding(
               padding: const EdgeInsets.all(17.0),

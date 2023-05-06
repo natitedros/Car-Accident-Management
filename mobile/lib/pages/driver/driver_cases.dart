@@ -48,6 +48,7 @@ class _DriverCasesPageState extends State<DriverCasesPage> {
               subjectId: singleCase['subjectId'],
               createdAt: singleCase['createdAt'],
               severity: singleCase['severity'],
+              verdict: singleCase['verdict'],
               car: car,
               driver: driver,
               location: loc,
