@@ -57,7 +57,8 @@ class _AdminCasesPageState extends State<AdminCasesPage> {
                 phoneNumber: temp['cases'][i]['driverPhoneNumber']
             ),
             images: temp['cases'][i]['images'],
-            id: temp['cases'][i]['id'],
+            verdict: temp['cases'][i]['verdict'],
+            id: temp['cases'][i]['_id'],
             createdAt: temp['cases'][i]['createdAt'],
             status: temp['cases'][i]['status'],
             handlerId: temp['cases'][i]['handlerId'],

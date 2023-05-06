@@ -15,8 +15,11 @@ class UpdateVerdictPage extends StatefulWidget {
 
 class _UpdateVerdictPageState extends State<UpdateVerdictPage> {
   TextEditingController verdict = TextEditingController();
+
   String updateBtn = 'UPDATE';
-  Future<bool> updateVerdict(String id, String verdict) async {
+  Future<bool> updateVerdict(String? id, String verdict) async {
+    print(widget.singleCase?.id);
+    print(verdict);
     var headersList = {
       'Accept': '*/*',
       'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
@@ -87,13 +90,15 @@ class _UpdateVerdictPageState extends State<UpdateVerdictPage> {
               setState(() {
                 updateBtn = 'Updating...';
               });
-              bool isUpdated = await updateVerdict('${widget.singleCase?.id}', verdict.text);
+              bool isUpdated = await updateVerdict(widget.singleCase?.id, verdict.text);
               if (isUpdated){
                 setState(() {
-                  updateBtn = 'Done';
+                  updateBtn = 'UPDATE';
                 });
               }
-              updateBtn = 'Try again';
+              else{
+                updateBtn = 'Try again';
+              }
 
             }, child: Text(updateBtn))
           ],
