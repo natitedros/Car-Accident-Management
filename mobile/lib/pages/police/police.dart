@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:car_accident_management/pages/police/police_profile.dart';
@@ -41,6 +42,7 @@ class _PolicePageState extends State<PolicePage> {
   }
 
   Future<List<returenCases>> fetchCases(Position? pos) async {
+
     var headersList = {
       'Accept': '*/*',
       'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
@@ -116,10 +118,28 @@ class _PolicePageState extends State<PolicePage> {
   void initState(){
     super.initState();
     initializeNearby();
-    Timer timer = Timer.periodic(Duration(seconds: 3600), (timer) async {
+    Timer timer = Timer.periodic(Duration(seconds: 30), (timer) async {
       Position? pos = await getLocation();
       if (pos != null){
         List<returenCases> temp = await fetchCases(pos);
+        if (temp.length > cases.length){
+          bool isallowed = await AwesomeNotifications().isNotificationAllowed();
+          if (!isallowed) {
+            //no permission of local notification
+            AwesomeNotifications().requestPermissionToSendNotifications();
+          }else{
+            //show notification
+            AwesomeNotifications().createNotification(
+                content: NotificationContent( //simple notification
+                  id: 123,
+                  channelKey: 'basic', //set configuration with key "basic"
+                  title: 'Accident Near You!',
+                  body: 'There has been a crash near you! Check feed for info.',
+                  largeIcon: 'asset://assets/logo.png',
+                )
+            );
+          }
+        }
         setState(() {
           cases = temp;
           screens[0] = PoliceHomePage(data: widget.data, cases: cases);
