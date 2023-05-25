@@ -26,7 +26,8 @@ class ChooseCars extends StatelessWidget {
               icon: Icon(Icons.arrow_back, color: Colors.white),
               onPressed: () => Navigator.of(context).pop(),
             ),
-            title: const Text(_title)
+            title: const Text(_title),
+          backgroundColor: Color(0xFF2CACE7),
         ),
         body: ChooseCarsPage(carList: cars, position: position, data: data, isUpload: isUpload),
       );
@@ -123,7 +124,7 @@ class _ChooseCarsPageState extends State<ChooseCarsPage> {
                 title: Text(
                     '${widget.carList?[index].name} - ${widget.carList?[index].model} - ${widget.carList?[index].plateNumber}',
                     style: TextStyle(
-                        color: _selectedIndex == index ? Colors.blue : Color(0xFFAFAFAF),
+                        color: _selectedIndex == index ? Color(0xFF2CACE7) : Color(0xFFAFAFAF),
                         fontSize: 17.0)
                 ),
                 selected: index == _selectedIndex,
@@ -139,6 +140,13 @@ class _ChooseCarsPageState extends State<ChooseCarsPage> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                elevation: 3,
+                backgroundColor: Color(0xFF2CACE7),
+              ),
               onPressed: () async {
                 if (widget.isUpload){
                       String? caseId = await createCase(widget.position, widget.carList?[_selectedIndex], widget.data);
@@ -165,8 +173,11 @@ class _ChooseCarsPageState extends State<ChooseCarsPage> {
                   }
                 }
               },
-              child: Text(
-                "$btnTxt"
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Text(
+                  "$btnTxt"
+                ),
               )
           ),
         ),

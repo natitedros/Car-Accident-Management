@@ -77,8 +77,8 @@ class _UploadImagePageState extends State<UploadImagePage> {
           }
           else {
             setState(() {
-              uploadBtn = "Try Again"
-            })
+              uploadBtn = "Try Again";
+            });
           }
         }
       }, label: Text(uploadBtn)),

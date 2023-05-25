@@ -52,57 +52,79 @@ class _UpdateVerdictPageState extends State<UpdateVerdictPage> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF3AD425)),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xFF3AD425),
         elevation: 3,
         title: const Text(
           'Verdict',
-          style: TextStyle(color: Color(0xFF3AD425), fontSize: 15.0),
+          style: TextStyle(fontSize: 15.0),
         ),
         centerTitle: true,
       ),
-      body: Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Text('Input the verdict below...'),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: TextField(
-                controller: verdict,
-                keyboardType: TextInputType.multiline,
-                maxLines: 8,
-                decoration: const InputDecoration(
-                    hintText: "Enter verdict here",
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(width: 1, color: Colors.green)
-                    )
+      body: Center(
+
+        child: Column(
+            children: [
+              SizedBox(
+                height: height * 0.05,
+              ),
+              const Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Text('Input the verdict below...'),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: TextField(
+                  controller: verdict,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: 8,
+                  decoration: const InputDecoration(
+                      hintText: "Enter verdict here",
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 1, color: Colors.green)
+                      )
+                  ),
                 ),
               ),
-            ),
-            ElevatedButton(onPressed: () async {
-              setState(() {
-                updateBtn = 'Updating...';
-              });
-              bool isUpdated = await updateVerdict(widget.singleCase?.id, verdict.text);
-              if (isUpdated){
+              SizedBox(
+                height: height * 0.05,
+              ),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    elevation: 3,
+                    backgroundColor: Color(0xFF3AD425),
+                  ),
+                  onPressed: () async {
                 setState(() {
-                  updateBtn = 'UPDATE';
+                  updateBtn = 'Updating...';
                 });
-              }
-              else{
-                updateBtn = 'Try again';
-              }
+                bool isUpdated = await updateVerdict(widget.singleCase?.id, verdict.text);
+                if (isUpdated){
+                  setState(() {
+                    updateBtn = 'UPDATE';
+                  });
+                }
+                else{
+                  updateBtn = 'Try again';
+                }
 
-            }, child: Text(updateBtn))
-          ],
-        ),
+              }, child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Text(updateBtn),
+              ))
+            ],
+          ),
+      ),
     );
   }
 }
