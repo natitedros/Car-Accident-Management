@@ -18,9 +18,16 @@ class _CameraPageState extends State<CameraPage> {
   bool _isRearCameraSelected = true;
   List<XFile> pictures = [];
   int guideIndex = 0;
-  List<String> guides = ["Capture the left side of your car",
-    "Now the Front", "Now the right", "Now the back",
-    "Top view of impact", "Side view of impact place", "All Done!"];
+  List<String> guides = [
+    "Capture the left side of your car",
+    "Now the Front",
+    "Now the right",
+    "Now the back",
+    "Top view of impact",
+    "Side view of impact place",
+    "All Done!"
+  ];
+
   @override
   void dispose() {
     _cameraController.dispose();
@@ -45,9 +52,8 @@ class _CameraPageState extends State<CameraPage> {
       XFile picture = await _cameraController.takePicture();
       pictures.add(picture);
       setState(() {
-        guideIndex = (guideIndex+1)%guides.length;
+        guideIndex = (guideIndex + 1) % guides.length;
       });
-
     } on CameraException catch (e) {
       debugPrint('Error occurred while taking picture: $e');
       return null;
@@ -55,8 +61,7 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   Future initCamera(CameraDescription cameraDescription) async {
-    _cameraController =
-        CameraController(cameraDescription, ResolutionPreset.high);
+    _cameraController = CameraController(cameraDescription, ResolutionPreset.high);
     try {
       await _cameraController.initialize().then((_) {
         if (!mounted) return;
@@ -69,73 +74,90 @@ class _CameraPageState extends State<CameraPage> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
-        body: SafeArea(
-          child: Stack(children: [
+      backgroundColor: Colors.black, // Set background color to black
+      body: SafeArea(
+        child: Stack(
+          children: [
             (_cameraController.value.isInitialized)
-                ? CameraPreview(_cameraController)
+                ? Center(child: CameraPreview(_cameraController))
                 : Container(
-                color: Colors.black,
-                child: const Center(child: CircularProgressIndicator())),
+              color: Colors.black,
+              child: const Center(child: CircularProgressIndicator()),
+            ),
             Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.20,
-                  decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-                      color: Colors.black),
-                  child:
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(guides[guideIndex]),
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.20,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(0)),
+                  color: Colors.black,
+                ),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        guides[guideIndex],
+                        textAlign: TextAlign.center,
                       ),
-                      Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                        Expanded(
-                            child: IconButton(
-                              padding: EdgeInsets.zero,
-                              iconSize: 30,
-                              icon: Icon(
-                                  _isRearCameraSelected
-                                      ? CupertinoIcons.switch_camera
-                                      : CupertinoIcons.switch_camera_solid,
-                                  color: Colors.white),
-                              onPressed: () {
-                                setState(
-                                        () => _isRearCameraSelected = !_isRearCameraSelected);
-                                initCamera(widget.cameras![_isRearCameraSelected ? 0 : 1]);
-                              },
-                            )),
-                        Expanded(
-                            child: IconButton(
-                              onPressed: takePicture,
-                              iconSize: 50,
-                              padding: EdgeInsets.zero,
-                              constraints: const BoxConstraints(),
-                              icon: const Icon(Icons.circle, color: Colors.white),
-                            )),
-                        // const Spacer(),
-                        Expanded(
-                          child: IconButton(
-                              onPressed: () { 
-                                print(pictures[0].mimeType);
-                                Navigator.push(context, MaterialPageRoute(
-                                    builder: (context) =>
-                                        UploadImagePage(images: pictures, caseId: widget.caseId)
-                                ),
-                                  // (Route<dynamic> route) => false,
-                                );
-                                },
-                              iconSize: 40,
-                              icon: const Icon(CupertinoIcons.check_mark_circled, color: Colors.white)
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          padding: const EdgeInsets.all(8.0),
+                          iconSize: 30,
+                          icon: Icon(
+                            _isRearCameraSelected ? CupertinoIcons.switch_camera : CupertinoIcons.switch_camera_solid,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            setState(() => _isRearCameraSelected = !_isRearCameraSelected);
+                            initCamera(widget.cameras![_isRearCameraSelected ? 0 : 1]);
+                          },
+                        ),
+                        SizedBox(
+                          width: width * 0.5,
+                          height: height * 0.13,
+                          child: ElevatedButton(
+                            onPressed: takePicture,
+                            style: ElevatedButton.styleFrom(
+                              shape: CircleBorder(),
+                              primary: Colors.white, // Set button color to white
+                            ),
+                            child: Icon(
+                              Icons.circle,
+                              color: Colors.black, // Set icon color to black
+                              size: 50,
+                            ),
                           ),
                         ),
-                      ]),
-                    ],
-                  ),
-                )),
-          ]),
-        ));
+                        IconButton(
+                          onPressed: () {
+                            print(pictures[0].mimeType);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => UploadImagePage(images: pictures, caseId: widget.caseId),
+                              ),
+                            );
+                          },
+                          iconSize: 40,
+                          icon: const Icon(CupertinoIcons.check_mark_circled, color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
