@@ -1,5 +1,6 @@
 const Case = require('../models/accidentcase')
 const Car = require('../models/car')
+const User = require('../models/user')
 const cloudinary = require('cloudinary').v2;
 require('dotenv').config();
 
@@ -41,6 +42,55 @@ module.exports.add_minor_case = (req, res)=>{
             res.status(201).json({case: result._id})
         })
         .catch((err)=>console.log(err))
+}
+
+module.exports.add_major_case = (req, res)=>{
+    const {longitude, latitude, driverId, carId} = req.body;
+    User.findById(driverId)
+        .then((driver)=> {
+            if (driver){
+                Car.findById(carId)
+                    .then((car) => {
+                        if(car){
+                            const location = {
+                                type : "Point",
+                                coordinates: [longitude, latitude]
+                            }
+                            const crashcase = {
+                                location : location,
+                                severity : "major",
+                                status: "open",
+                                subjectId: driverId,
+                                carName: car.name,
+                                carColor: car.color,
+                                carModel: car.model,
+                                carPlateNumber: car.plateNumber,
+                                driverName: driver.name,
+                                driverPhoneNumber: driver.phoneNumber
+                            }
+                            const accidentcase = new Case(crashcase)
+                            accidentcase.save()
+                                .then((result)=>{
+                                    res.status(201).json({case: result._id})
+                                })
+                                .catch((err)=>{
+                                    console.log(err)
+                                    res.status(400).send("Error creating case!")
+                                })
+                        }else{
+                            throw Error("Driver has no car with this ID!")
+                        }
+                    })
+                    .catch((err)=>{
+                        res.status(400).send(err.message)
+                    })
+            }else{
+                throw Error("No driver with this ID!")
+            }
+        })
+        .catch((err)=>{
+            res.status(400).send(err.message)
+        })
 }
 
 module.exports.add_case_images = async (req, res) => {
