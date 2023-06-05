@@ -2,7 +2,7 @@ const Case = require('../models/accidentcase')
 const User = require('../models/user')
 
 module.exports.cases_get = (req, res)=>{
-    Case.find({handlerId: req.params.id})
+    Case.find({handlerId: req.params.id}).sort({ createdAt: -1 })
         .then((result)=>{
             res.status(201).json({cases: result})
         })

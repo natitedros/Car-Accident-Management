@@ -11,7 +11,7 @@ cloudinary.config({
 });
 
 module.exports.cases_get = (req, res) =>{
-    Case.find({subjectId: req.params.id})
+    Case.find({subjectId: req.params.id}).sort({ createdAt: -1 })
         .then((result)=>{
             res.status(201).json(result)
         })
