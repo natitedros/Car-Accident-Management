@@ -248,7 +248,7 @@ class _CaseDetailPageState extends State<CaseDetailPage> {
                 ],
               ),
               SizedBox(
-                height: height * 0.05,
+                height: height * 0.01,
               ),
               Container(
                 child: (widget.singleCase?.status == 'open' &&
@@ -272,7 +272,7 @@ class _CaseDetailPageState extends State<CaseDetailPage> {
                       }
                     }
                   },
-                  child: Text(assignBtn,style: TextStyle(
+                  child: Text(assignBtn,style: const TextStyle(
                     color: Color(0xFF3AD425), decoration: TextDecoration.underline,
                   ),),
                 )
@@ -282,19 +282,20 @@ class _CaseDetailPageState extends State<CaseDetailPage> {
                     padding: const EdgeInsets.all(17.0),
                     child: Column(
                       children: <Widget>[
-                       Text(
+                       const Text(
                           "Verdict",
                           style: TextStyle(
                               color: Color(0xFFBEBEBE), fontSize: 20.0), textAlign: TextAlign.center,
                         ),
-                        SizedBox(
-                          height: height * 0.01,
-                        ),
-                    Text(
+
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: (widget.singleCase?.verdict != null) ? Text(
                         "${widget.singleCase?.verdict}",
                         style: TextStyle(
                             color: Color(0xFFBEBEBE), fontSize: 15.0), textAlign: TextAlign.left,
-                      ),
+                      ) : Text("Verdict still in progress..."),
+                    )
                     ]
                     ),
                   )

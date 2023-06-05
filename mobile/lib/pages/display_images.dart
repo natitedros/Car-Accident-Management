@@ -1,6 +1,5 @@
 
-import 'dart:io';
-
+import 'package:car_accident_management/pages/single_image.dart';
 import 'package:flutter/material.dart';
 
 class DisplayImagesPage extends StatelessWidget {
@@ -12,10 +11,15 @@ class DisplayImagesPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
+            icon: const Icon(Icons.arrow_back, color: Color(0xFF3AD425)),
             onPressed: () => Navigator.of(context).pop(),
-          ),
-          title: const Text('Accident Images')
+          ),backgroundColor: Colors.white,
+        elevation: 3,
+        title: const Text(
+          'Crash Images',
+          style: TextStyle(color: Color(0xFF3AD425), fontSize: 15.0),
+        ),
+        centerTitle: true,
       ),
       body: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -28,7 +32,17 @@ class DisplayImagesPage extends StatelessWidget {
           ),
 
           itemBuilder: (context, index) {
-          return Image.network(images?[index]);
+          return GestureDetector(
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SingleImage(
+                  imageLink: images?[index],
+                )),
+              );
+            },
+            child: Image.network(images?[index]),
+          );
           }),
           ),
     );
