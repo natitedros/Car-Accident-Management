@@ -1,5 +1,7 @@
+import 'package:car_accident_management/pages/token_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:car_accident_management/pages/case_info_layout.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../datamodel.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -13,9 +15,10 @@ class DriverCasesPage extends StatefulWidget {
 
 class _DriverCasesPageState extends State<DriverCasesPage> {
   Future<List<returenCases>?> fetchCases(String id) async {
+    String? token = await TokenService().readToken();
     final url = Uri.parse(
-        'https://adega.onrender.com/driver/mycases/$id');
-    http.Response response = await http.get(url);
+        '${dotenv.env['STARTING_URI']}/driver/mycases/$id');
+    http.Response response = await http.get(url, headers: { 'Authorization' : 'Bearer $token' });
     Iterable resBody = jsonDecode(response.body);
     // accepts the data from the server and maps it onto temp
 

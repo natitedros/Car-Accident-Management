@@ -1,11 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
-
+import 'package:car_accident_management/pages/token_checker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import '../datamodel.dart';
-// import 'package:requests/requests.dart';
-
 import 'package:car_accident_management/pages/signup.dart';
 import 'package:car_accident_management/pages/driver/driver.dart';
 import 'package:car_accident_management/pages/admin/admin.dart';
@@ -57,7 +56,7 @@ class _LoginStatefulState extends State<LoginStateful> {
       'Content-Type': 'application/json'
     };
 
-    var url = Uri.parse('https://adega.onrender.com/login');
+    var url = Uri.parse('${dotenv.env['STARTING_URI']}/login');
     var body = {'email': email, 'password': password};
 
     var req = http.Request('POST', url);
@@ -73,6 +72,7 @@ class _LoginStatefulState extends State<LoginStateful> {
     if (res.statusCode == 200 ||
         res.statusCode == 201 ||
         res.statusCode == 300) {
+
       returenData data = returenData(
         name: temp['user']['name'],
         email: temp['user']['email'],
@@ -80,7 +80,9 @@ class _LoginStatefulState extends State<LoginStateful> {
         role: temp['user']['role'],
         id: temp['user']['_id'],
       );
+      TokenService().writeTokenUser(temp['token'], data);
       return data;
+
     } else {
       returenData data = returenData(errors: Map.from(temp['errors']));
       return data;

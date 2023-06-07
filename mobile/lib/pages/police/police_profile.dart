@@ -1,13 +1,7 @@
-import 'package:http/http.dart';
 import '../../datamodel.dart';
 import '../changepassword.dart';
 import '../changenumber.dart';
-
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:car_accident_management/pages/login.dart';
 
 class PoliceProfilePage extends StatefulWidget {
   final returenData data;
@@ -69,7 +63,7 @@ class _PoliceProfilePageState extends State<PoliceProfilePage> {
               style: TextStyle(color: Color(0xFFBEBEBE), fontSize: 15.0)),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text("+ 251933908669",
+            child: Text('${widget.data.phoneNumber}',
                 style: TextStyle(color: Color(0xFFBEBEBE), fontSize: 15.0)),
           ),
           SizedBox(

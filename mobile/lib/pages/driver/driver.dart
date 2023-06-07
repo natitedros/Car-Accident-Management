@@ -9,6 +9,8 @@ import 'package:car_accident_management/datamodel.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../token_checker.dart';
+
 // void main() => runApp(DriverPage());
 
 class DriverPage extends StatefulWidget {
@@ -54,6 +56,7 @@ class _DriverPageState extends State<DriverPage> {
                 color: Color(0xFFFFC107),
               ),
               onPressed: () {
+                TokenService().removeTokenUser();
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => Login()),
@@ -92,7 +95,7 @@ class _DriverPageState extends State<DriverPage> {
                       mainTitle = title3;
                     }
                   } ),
-              destinations: [
+              destinations: const [
                 NavigationDestination(
                     icon: Icon(
                       Icons.home_outlined,

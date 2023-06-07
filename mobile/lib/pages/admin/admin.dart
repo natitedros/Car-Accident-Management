@@ -1,6 +1,7 @@
 //import 'package:flutter/cupertino.dart';
 import 'dart:convert';
 
+import 'package:car_accident_management/pages/token_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:car_accident_management/pages/admin/admin_profile.dart';
 import 'package:car_accident_management/pages/admin/admin_home.dart';
@@ -53,6 +54,7 @@ class _AdminPageState extends State<AdminPage> {
                 color: Color(0xFFFFC107),
               ),
               onPressed: () {
+                TokenService().removeTokenUser();
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => Login()),

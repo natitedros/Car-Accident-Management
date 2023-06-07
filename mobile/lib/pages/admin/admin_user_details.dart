@@ -1,11 +1,13 @@
 
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../datamodel.dart';
+import '../token_checker.dart';
 
 class UserDetailsPage extends StatefulWidget {
   final returenData data;
@@ -20,11 +22,14 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
   String deleteBtn = "Delete Account";
 
   Future<void> deleteUser(String id) async {
+    String? token = await TokenService().readToken();
     var headersList = {
       'Accept': '*/*',
-      'User-Agent': 'Thunder Client (https://www.thunderclient.com)'
+      'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
+      'Content-Type': 'application/json',
+      'Authorization' : 'Bearer $token'
     };
-    String ep = "https://adega.onrender.com/admin/delete/"+id;
+    String ep = "${dotenv.env['STARTING_URI']}/admin/delete/$id";
     var url = Uri.parse(ep);
 
     var req = http.Request('DELETE', url);
