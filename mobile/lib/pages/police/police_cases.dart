@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:car_accident_management/pages/case_info_layout.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import '../../datamodel.dart';
+import '../token_checker.dart';
 
 class PoliceCasesPage extends StatefulWidget {
   final returenData data;
@@ -13,13 +15,15 @@ class PoliceCasesPage extends StatefulWidget {
 
 class _PoliceCasesPageState extends State<PoliceCasesPage> {
   Future<List<returenCases>?> fetchCases(String id) async {
+    String? token = await TokenService().readToken();
     var headersList = {
       'Accept': '*/*',
       'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization' : 'Bearer $token'
     };
     final url = Uri.parse(
-        'https://adega.onrender.com/police/mycases/$id');
+        '${dotenv.env['STARTING_URI']}/police/mycases/$id');
     var req = http.Request('GET', url);
     req.headers.addAll(headersList);
     var res = await req.send();

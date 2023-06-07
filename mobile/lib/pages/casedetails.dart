@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:car_accident_management/pages/display_images.dart';
 import 'package:car_accident_management/pages/update_verdict.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../datamodel.dart';
 import 'package:http/http.dart' as http;
@@ -42,7 +43,7 @@ class _CaseDetailPageState extends State<CaseDetailPage> {
       "policeId": handlerId,
       "caseId": caseId
     };
-    final url = Uri.parse('https://adega.onrender.com/police/cases/assign');
+    final url = Uri.parse('${dotenv.env['STARTING_URI']}/police/cases/assign');
     var req = http.Request('POST', url);
     req.headers.addAll(headersList);
     req.body = jsonEncode(body);

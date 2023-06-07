@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:car_accident_management/pages/admin/admin_user_details.dart';
 import 'package:flutter/material.dart';
 import '../../datamodel.dart';
+import '../token_checker.dart';
 import 'admin_create_police.dart';
 
 class AdminHomePage extends StatefulWidget {
@@ -19,13 +21,15 @@ class _AdminHomePageState extends State<AdminHomePage> {
   String? errorEmail = "";
 
   Future<returenData> searchUser(String email) async {
+    String? token = await TokenService().readToken();
     var headersList = {
       'Accept': '*/*',
       'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization' : 'Bearer $token'
     };
 
-    var url = Uri.parse('https://adega.onrender.com/admin/search');
+    var url = Uri.parse('${dotenv.env['STARTING_URI']}/admin/search');
     var body = {'email': email};
 
     var req = http.Request('POST', url);

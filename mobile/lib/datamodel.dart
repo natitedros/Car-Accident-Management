@@ -57,6 +57,25 @@ class returenData {
   //here is where all the information received from the server is stored
 
   returenData({this.email, this.name, this.role, this.phoneNumber, this.errors, this.id});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'id': id,
+      'email': email,
+      'role' : role,
+      'phoneNumber' : phoneNumber
+    };
+  }
+  factory returenData.fromJson(Map<String, dynamic> json){
+    return returenData(id: json['id'],
+        name: json['name'],
+        email: json['email'],
+        role: json['role'],
+        phoneNumber: json['phoneNumber']
+    );
+  }
+
 }
 
 class Location {

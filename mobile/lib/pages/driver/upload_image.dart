@@ -1,9 +1,12 @@
 import 'dart:io';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+
+import '../token_checker.dart';
 
 class UploadImagePage extends StatefulWidget {
   final List<XFile> images;
@@ -18,8 +21,12 @@ class _UploadImagePageState extends State<UploadImagePage> {
   String uploadBtn = "Upload";
   Future<bool> uploadImage() async {
 
+    String? token = await TokenService().readToken();
+
     var request = http.MultipartRequest(
-        'POST', Uri.parse('https://adega.onrender.com/driver/caseimages/${widget.caseId}'));
+        'POST', Uri.parse('${dotenv.env['STARTING_URI']}/driver/caseimages/${widget.caseId}'));
+    request.headers['Authorization'] = 'Bearer $token';
+
     for(var i = 0; i < widget.images.length; i++){
       var path = File(widget.images[i].path).path;
       request.files.add(

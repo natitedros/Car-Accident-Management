@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 import '../../datamodel.dart';
+import '../token_checker.dart';
 
 class CreatePolicePage extends StatefulWidget {
   const CreatePolicePage({Key? key}) : super(key: key);
@@ -29,13 +31,15 @@ class _CreatePolicePageState extends State<CreatePolicePage> {
 
   Future<returenData> submitData(String name, String badgeNumber, String email,
       String phoneNumber, String password) async {
+    String? token = await TokenService().readToken();
     var headersList = {
       'Accept': '*/*',
       'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization' : 'Bearer $token'
     };
 
-    var url = Uri.parse('https://adega.onrender.com/signup');
+    var url = Uri.parse('${dotenv.env['STARTING_URI']}/signup');
     var body = {
       'email': email,
       'phoneNumber': phoneNumber,

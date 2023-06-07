@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import '../../datamodel.dart';
 import 'package:http/http.dart' as http;
 
+import '../token_checker.dart';
 import 'camera_page.dart';
 
 class ChooseCars extends StatelessWidget {
@@ -61,13 +63,15 @@ class _ChooseCarsPageState extends State<ChooseCarsPage> {
 
   Future<String?> createCase(Position pos, returenCars? car, returenData data) async {
 
+    String? token = await TokenService().readToken();
     var headersList = {
       'Accept': '*/*',
       'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization' : 'Bearer $token'
     };
 
-    var url = Uri.parse('https://adega.onrender.com/driver/minor/addcase');
+    var url = Uri.parse('${dotenv.env['STARTING_URI']}/driver/minor/addcase');
     var body = {
       "location": {
         "type": "Point",

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 import '../datamodel.dart';
@@ -64,7 +65,7 @@ class _ChangePhoneStatefulState extends State<ChangePhoneStateful> {
       'Content-Type': 'application/json'
     };
 
-    var url = Uri.parse('https://adega.onrender.com/changePassword');
+    var url = Uri.parse('${dotenv.env['STARTING_URI']}/changePassword');
     var body = {
       'newPhone': newPhone,
     };

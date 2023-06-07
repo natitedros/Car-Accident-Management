@@ -5,6 +5,7 @@ import 'dart:developer';
 
 import 'package:car_accident_management/pages/login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import '../datamodel.dart';
 
@@ -61,7 +62,7 @@ class _SignupStatefulState extends State<SignupStateful> {
       'Content-Type': 'application/json'
     };
 
-    var url = Uri.parse('https://adega.onrender.com/signup');
+    var url = Uri.parse('${dotenv.env['STARTING_URI']}/signup');
     var body = {
       'email': email,
       'phoneNumber': phoneNumber,

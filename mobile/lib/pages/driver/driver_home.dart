@@ -2,12 +2,14 @@
 
 import 'dart:convert';
 import 'package:camera/camera.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:car_accident_management/pages/driver/choose_cars.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
 import '../../datamodel.dart';
+import '../token_checker.dart';
 import 'camera_page.dart';
 
 class DriverHomePage extends StatefulWidget {
@@ -33,9 +35,10 @@ class _DriverHomePageState extends State<DriverHomePage> {
 
   Future<List<returenCars>?> fetchCars(String id) async {
 
+    String? token = await TokenService().readToken();
     final url = Uri.parse(
-        'https://adega.onrender.com/driver/mycars/$id');
-    http.Response response = await http.get(url);
+        '${dotenv.env['STARTING_URI']}/driver/mycars/$id');
+    http.Response response = await http.get(url, headers: { 'Authorization' : 'Bearer $token' } );
     Iterable resBody = jsonDecode(response.body);
     // accepts the data from the server and maps it onto temp
 

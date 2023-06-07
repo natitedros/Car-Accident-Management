@@ -1,6 +1,5 @@
 import 'package:car_accident_management/datamodel.dart';
 import 'package:car_accident_management/pages/casedetails.dart';
-import 'package:car_accident_management/pages/changepassword.dart';
 import 'package:flutter/material.dart';
 
 class CaseInfoLayout extends StatelessWidget {

@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 import '../../datamodel.dart';
+import '../token_checker.dart';
 
 class AddCar extends StatelessWidget {
   final returenData data;
@@ -73,13 +75,15 @@ class _AddCarStatefulState extends State<AddCarStateful> {
       String plate,
       String region
   ) async {
+    String? token = await TokenService().readToken();
     var headersList = {
       'Accept': '*/*',
       'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization' : 'Bearer $token'
     };
 
-    var url = Uri.parse('https://adega.onrender.com/driver/addcar');
+    var url = Uri.parse('${dotenv.env['STARTING_URI']}/driver/addcar');
     var body = {
       'name': name,
       'model': model,

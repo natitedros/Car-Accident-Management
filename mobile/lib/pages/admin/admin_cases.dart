@@ -1,7 +1,10 @@
 import 'dart:convert';
 
+import 'package:car_accident_management/pages/login.dart';
+import 'package:car_accident_management/pages/token_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:car_accident_management/pages/case_info_layout.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import '../../datamodel.dart';
 
@@ -18,14 +21,21 @@ class AdminCasesPage extends StatefulWidget {
 class _AdminCasesPageState extends State<AdminCasesPage> {
   // perform GET REQUEST here using the id as the parameter and save the incoming data to the list below
 
+  void redirectToLoginScreen(BuildContext context) {
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const Login()), (route) => false);
+  }
+
   Future<List<returenCases>?> fetchCases() async {
+
+    String? token = await TokenService().readToken();
     var headersList = {
       'Accept': '*/*',
       'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization' : 'Bearer $token'
     };
 
-    var url = Uri.parse('https://adega.onrender.com/admin/cases');
+    var url = Uri.parse('${dotenv.env['STARTING_URI']}/admin/cases');
 
     var req = http.Request('GET', url);
     req.headers.addAll(headersList);
@@ -82,6 +92,13 @@ class _AdminCasesPageState extends State<AdminCasesPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    TokenService().hasToken().then((hasToken){
+      if (!hasToken){
+        redirectToLoginScreen(context);
+      }
+    });
+
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 

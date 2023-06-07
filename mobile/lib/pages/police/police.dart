@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:car_accident_management/pages/police/police_profile.dart';
@@ -9,6 +10,8 @@ import 'package:car_accident_management/pages/police/police_cases.dart';
 import 'package:car_accident_management/pages/login.dart';
 import 'package:car_accident_management/datamodel.dart';
 import 'package:geolocator/geolocator.dart';
+
+import '../token_checker.dart';
 
 
 class PolicePage extends StatefulWidget {
@@ -38,18 +41,22 @@ class _PolicePageState extends State<PolicePage> {
       }
     }
     Position pos = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    print(pos.longitude);
+    print(pos.latitude);
     return pos;
   }
 
   Future<List<returenCases>> fetchCases(Position? pos) async {
 
+    String? token = await TokenService().readToken();
     var headersList = {
       'Accept': '*/*',
       'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization' : 'Bearer $token'
     };
     final url = Uri.parse(
-        'https://adega.onrender.com/police/nearme');
+        '${dotenv.env['STARTING_URI']}/police/nearme');
     var body = {
       "location": {
         "coordinates": [pos?.longitude, pos?.latitude]
@@ -112,13 +119,13 @@ class _PolicePageState extends State<PolicePage> {
       });
     }
   }
-
+  late Timer timer;
 
   @override
   void initState(){
     super.initState();
     initializeNearby();
-    Timer timer = Timer.periodic(Duration(seconds: 30), (timer) async {
+    timer = Timer.periodic(Duration(seconds: 5), (timer) async {
       Position? pos = await getLocation();
       if (pos != null){
         List<returenCases> temp = await fetchCases(pos);
@@ -165,6 +172,8 @@ class _PolicePageState extends State<PolicePage> {
                 color: Color(0xFFFFC107),
               ),
               onPressed: () {
+                timer.cancel();
+                TokenService().removeTokenUser();
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => Login()),
