@@ -7,6 +7,7 @@ const authRoutes = require('./routes/authRoutes')
 const adminRoutes = require('./routes/adminRoutes')
 const driverRoutes = require('./routes/driverRoutes')
 const policeRoutes = require('./routes/policeRoutes')
+const { validateToken } = require('./middleware/validateTokenMiddleware')
 
 
 //connect to db
@@ -29,6 +30,7 @@ app.use(cookieParser())
 
 app.get('/isconnected', (req, res)=>res.status(200).json({msg: "server online"}))
 app.use(authRoutes)
+app.use(validateToken)
 app.use('/admin', adminRoutes)
 app.use('/driver', driverRoutes)
 app.use('/police', policeRoutes)
