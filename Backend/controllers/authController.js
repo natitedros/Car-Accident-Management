@@ -37,10 +37,10 @@ const createToken = (id)=>{
 }
 
 module.exports.signup_post = async (req, res)=>{
-    const {name, role, email, password, phoneNumber, location} = req.body;
-    
+    const {name, role, email, password, phoneNumber} = req.body;
+    const isActive = true;
     try{
-        const user = await User.create({ name, role, email, password, phoneNumber, location })
+        const user = await User.create({ name, role, email, password, phoneNumber, isActive })
         //add the session key here
         res.status(201).json({ user: user })
 
@@ -57,8 +57,9 @@ module.exports.login_post = async (req, res)=>{
     try{
         const user = await User.login(email, password)
         const token = createToken(user._id)
-
-        // res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 })
+        if (!user.isActive){
+            res.status(400).json({ email : "The account is inactive" })
+        }
         res.status(200).json({ token: token, user: user})
     }catch(err){
         console.log(err)
