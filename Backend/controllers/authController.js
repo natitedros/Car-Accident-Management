@@ -29,8 +29,7 @@ const handleErrors = (err)=>{
 }
 
 //create token
-// const maxAge = 3 * 24 * 60 * 60
-const maxAge = 60*60
+const maxAge = 3 * 24 * 60 * 60
 const createToken = (id)=>{
     return jwt.sign({ id }, 'natitedros secret', {
         expiresIn: maxAge
