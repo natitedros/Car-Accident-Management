@@ -73,7 +73,11 @@ class _DriverCarsPageState extends State<DriverCarsPage> {
 
               return Container(
                   alignment: Alignment.center,
-                  child: ListView.builder(
+                  child: (z != null && z.isEmpty) ? const Text(
+                    "You don't have any cars registered",
+                    style: TextStyle(
+                        fontSize: 20
+                    ),) : ListView.builder(
                       itemCount: z?.length,
                       itemBuilder: (context, index) {
                         return CarInfoLayout(
