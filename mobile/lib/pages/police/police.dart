@@ -13,7 +13,6 @@ import 'package:geolocator/geolocator.dart';
 
 import '../token_checker.dart';
 
-
 class PolicePage extends StatefulWidget {
   final returenData data;
   const PolicePage({Key? key, required this.data}) : super(key: key);
@@ -29,7 +28,7 @@ class _PolicePageState extends State<PolicePage> {
   String title2 = "Profile";
   String mainTitle = "Home";
   List<returenCases> cases = [];
-  late final screens = [];
+  late final List<Widget> screens = [];
 
   Future<Position?> getLocation() async {
     LocationPermission permission = await Geolocator.checkPermission();
@@ -47,7 +46,6 @@ class _PolicePageState extends State<PolicePage> {
   }
 
   Future<List<returenCases>> fetchCases(Position? pos) async {
-
     String? token = await TokenService().readToken();
     var headersList = {
       'Accept': '*/*',
@@ -107,23 +105,27 @@ class _PolicePageState extends State<PolicePage> {
       return [];
     }
   }
+
   Future<void> initializeNearby() async{
     Position? pos = await getLocation();
     if (pos != null){
       List<returenCases> temp = await fetchCases(pos);
       setState(() {
         cases = temp;
-          screens.add(PoliceHomePage(data: widget.data, cases: cases));
-          screens.add(PoliceCasesPage(data: widget.data));
-          screens.add(PoliceProfilePage(data: widget.data));
+        screens.add(PoliceHomePage(data: widget.data, cases: cases));
+        screens.add(PoliceCasesPage(data: widget.data));
+        screens.add(PoliceProfilePage(data: widget.data));
       });
     }
   }
+
   late Timer timer;
+  late PageController pageController;
 
   @override
   void initState(){
     super.initState();
+    pageController = PageController(initialPage: index);
     initializeNearby();
     timer = Timer.periodic(Duration(seconds: 30), (timer) async {
       Position? pos = await getLocation();
@@ -137,13 +139,13 @@ class _PolicePageState extends State<PolicePage> {
           }else{
             //show notification
             AwesomeNotifications().createNotification(
-                content: NotificationContent( //simple notification
-                  id: 123,
-                  channelKey: 'basic', //set configuration with key "basic"
-                  title: 'Accident Near You!',
-                  body: 'There has been a crash near you! Check feed for info.',
-                  largeIcon: 'asset://assets/logo.png',
-                )
+              content: NotificationContent( //simple notification
+                id: 123,
+                channelKey: 'basic', //set configuration with key "basic"
+                title: 'Accident Near You!',
+                body: 'There has been a crash near you! Check feed for info.',
+                largeIcon: 'asset://assets/logo.png',
+              ),
             );
           }
         }
@@ -156,92 +158,122 @@ class _PolicePageState extends State<PolicePage> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 3,
-          title: Text(
-            mainTitle,
-            style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 15.0),
-          ),
-          centerTitle: true,
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(
-                Icons.logout,
-                color: Color(0xFFFFC107),
-              ),
-              onPressed: () {
-                timer.cancel();
-                TokenService().removeTokenUser();
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => Login()),
-                      (Route<dynamic> route) => false,
-                );
-              },
-            )
-          ],
-        ),
-        body: (screens.isEmpty) ? const Center(child: Text("Loading...")) : screens[index],
-        bottomNavigationBar: NavigationBarTheme(
-          data: NavigationBarThemeData(
-              indicatorColor: Colors.white,
-              labelTextStyle: MaterialStateProperty.all(
-                TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-              )),
-          child: NavigationBar(
-              height: 60,
-              backgroundColor: Colors.white,
-              elevation: 5,
-              labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-              selectedIndex: index,
-              onDestinationSelected: (index) =>
-                  setState(() {
-                    this.index = index;
-                    if (index == 0){
-                      mainTitle = title0;
-                    }
-                    else if (index == 1){
-                      mainTitle = title1;
-                    }
-                    else if (index == 2){
-                      mainTitle = title2;
-                    }
-                  } ),
-              destinations: [
-                NavigationDestination(
-                    icon: Icon(
-                      Icons.home_outlined,
-                      color: Color(0xFFAFAFAF),
-                    ),
-                    selectedIcon: Icon(
-                      Icons.home_outlined,
-                      color: Color(0xFF2CACE7),
-                    ),
-                    label: 'Home'),
+  void dispose() {
+    pageController.dispose();
+    timer.cancel();
+    super.dispose();
+  }
 
-                NavigationDestination(
-                    icon: Icon(
-                      Icons.file_copy_outlined,
-                      color: Color(0xFFAFAFAF),
-                    ),
-                    selectedIcon: Icon(
-                      Icons.file_copy_outlined,
-                      color: Color(0xFF3AD425),
-                    ),
-                    label: 'Cases'),
-                NavigationDestination(
-                    icon: Icon(
-                      Icons.person_outline_rounded,
-                      color: Color(0xFFAFAFAF),
-                    ),
-                    selectedIcon: Icon(
-                      Icons.person_outline_rounded,
-                      color: Color(0xFFFFC107),
-                    ),
-                    label: 'Profile'),
-              ]),
-        ),
-      );
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(
+      backgroundColor: Colors.white,
+      elevation: 3,
+      title: Text(
+        mainTitle,
+        style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 15.0),
+      ),
+      centerTitle: true,
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(
+            Icons.logout,
+            color: Color(0xFFFFC107),
+          ),
+          onPressed: () {
+            timer.cancel();
+            TokenService().removeTokenUser();
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => Login()),
+                  (Route<dynamic> route) => false,
+            );
+          },
+        )
+      ],
+    ),
+    body: (screens.isEmpty) ? const Center(child: Text("Loading...")) :
+    PageView(
+      controller: pageController,
+      onPageChanged: (int newIndex) {
+        setState(() {
+          index = newIndex;
+          if (index == 0){
+            mainTitle = title0;
+          }
+          else if (index == 1){
+            mainTitle = title1;
+          }
+          else if (index == 2){
+            mainTitle = title2;
+          }
+        });
+      },
+      children: screens,
+    ),
+    bottomNavigationBar: NavigationBarTheme(
+      data: NavigationBarThemeData(
+          indicatorColor: Colors.white,
+          labelTextStyle: MaterialStateProperty.all(
+            TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+          )),
+      child: NavigationBar(
+          height: 60,
+          backgroundColor: Colors.white,
+          elevation: 5,
+          labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+          selectedIndex: index,
+          onDestinationSelected: (int newIndex) {
+            setState(() {
+              index = newIndex;
+              pageController.animateToPage(
+                index,
+                duration: Duration(milliseconds: 200),
+                curve: Curves.easeInOut,
+              );
+              if (index == 0){
+                mainTitle = title0;
+              }
+              else if (index == 1){
+                mainTitle = title1;
+              }
+              else if (index == 2){
+                mainTitle = title2;
+              }
+            });
+          },
+          destinations: [
+            NavigationDestination(
+                icon: Icon(
+                  Icons.home_outlined,
+                  color: Color(0xFFAFAFAF),
+                ),
+                selectedIcon: Icon(
+                  Icons.home_outlined,
+                  color: Color(0xFF2CACE7),
+                ),
+                label: 'Home'),
+            NavigationDestination(
+                icon: Icon(
+                  Icons.file_copy_outlined,
+                  color: Color(0xFFAFAFAF),
+                ),
+                selectedIcon: Icon(
+                  Icons.file_copy_outlined,
+                  color: Color(0xFF3AD425),
+                ),
+                label: 'Cases'),
+            NavigationDestination(
+                icon: Icon(
+                  Icons.person_outline_rounded,
+                  color: Color(0xFFAFAFAF),
+                ),
+                selectedIcon: Icon(
+                  Icons.person_outline_rounded,
+                  color: Color(0xFFFFC107),
+                ),
+                label: 'Profile'),
+          ]),
+    ),
+  );
 }
