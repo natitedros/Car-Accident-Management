@@ -53,10 +53,21 @@ class returenData {
   String? email;
   String? role;
   String? phoneNumber;   //when a phone number is obtained from the server
+  int? caseNumber;
+  bool? isActive;
 
   //here is where all the information received from the server is stored
 
-  returenData({this.email, this.name, this.role, this.phoneNumber, this.errors, this.id});
+  returenData({
+    this.email,
+    this.name,
+    this.role,
+    this.phoneNumber,
+    this.errors,
+    this.id,
+    this.caseNumber,
+    this.isActive
+  });
 
   Map<String, dynamic> toJson() {
     return {

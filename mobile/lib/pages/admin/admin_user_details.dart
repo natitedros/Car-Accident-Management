@@ -20,8 +20,17 @@ class UserDetailsPage extends StatefulWidget {
 class _UserDetailsPageState extends State<UserDetailsPage> {
 
   String deleteBtn = "Delete Account";
+  late String activityStatus;
+  late String activationButton;
 
-  Future<void> deleteUser(String id) async {
+  @override
+  void initState() {
+    super.initState();
+    activityStatus = (widget.data.isActive!) ? "Active" : "Inactive";
+    activationButton = (widget.data.isActive!) ? "Deactivate" : "Activate";
+  }
+
+  Future<bool> deleteUser(String id) async {
     String? token = await TokenService().readToken();
     var headersList = {
       'Accept': '*/*',
@@ -39,7 +48,38 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
     final resBody = await res.stream.bytesToString();
     Map temp = jsonDecode(
         resBody); // accepts the data from the server and maps it onto temp
+    if (res.statusCode == 200 ||
+        res.statusCode == 201 ||
+        res.statusCode == 300) {
+      return true;
+    }
+    return false;
+  }
 
+  Future<bool> activationUser(String id) async {
+    String? token = await TokenService().readToken();
+    var headersList = {
+      'Accept': '*/*',
+      'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
+      'Content-Type': 'application/json',
+      'Authorization' : 'Bearer $token'
+    };
+    String ep = "${dotenv.env['STARTING_URI']}/admin/activation/$id";
+    var url = Uri.parse(ep);
+
+    var req = http.Request('GET', url);
+    req.headers.addAll(headersList);
+    // log(req.body);
+    var res = await req.send();
+    final resBody = await res.stream.bytesToString();
+    Map temp = jsonDecode(
+        resBody); // accepts the data from the server and maps it onto temp
+    if (res.statusCode == 200 ||
+        res.statusCode == 201 ||
+        res.statusCode == 300) {
+      return true;
+    }
+    return false;
   }
 
   @override
@@ -82,20 +122,71 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                   style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 20.0)),
               Text("Accident Participation:",
                   style: TextStyle(color: Color(0xFFBEBEBE), fontSize: 15.0)),
-              ElevatedButton(
-                  onPressed: () async {
-                    // Function to write to delete the respective user with the email entered
-                    setState(() {
-                      deleteBtn = "Deleting...";
-                    });
-                    await deleteUser("${widget.data.id}");
-                    print('deleted!');
-                    Navigator.of(context).pop();
-
-                  },
-                  child: Text(
-                    deleteBtn,
-                  ))
+              Text("${widget.data.caseNumber}",
+                  style: TextStyle(color: Color(0xFFBEBEBE), fontSize: 15.0)),
+              Text("Activity Status:",
+                  style: TextStyle(color: Color(0xFFBEBEBE), fontSize: 15.0)),
+              Text(activityStatus,
+                  style: TextStyle(color: Color(0xFFBEBEBE), fontSize: 15.0)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                      onPressed: () async {
+                        if (deleteBtn == "User Deleted"){
+                          Navigator.of(context).pop();
+                          return;
+                        }
+                        // Function to write to delete the respective user with the email entered
+                        setState(() {
+                          deleteBtn = "Deleting...";
+                        });
+                        bool isDeleted = await deleteUser("${widget.data.id}");
+                        if (isDeleted){
+                          setState(() {
+                            deleteBtn = "User Deleted";
+                          });
+                        }
+                        else{
+                          setState(() {
+                            deleteBtn = "Try Again";
+                          });
+                        }
+                      },
+                      child: Text(
+                        deleteBtn,
+                      )),
+                  ElevatedButton(
+                      onPressed: () async {
+                        // Function to write to delete the respective user with the email entered
+                        String temp = activationButton;
+                        setState(() {
+                           activationButton = "Loading...";
+                        });
+                        bool isToggled = await activationUser("${widget.data.id}");
+                        if (isToggled){
+                          if(activityStatus == "Active"){
+                            setState(() {
+                              activityStatus = "Inactive";
+                              activationButton = "Activate";
+                            });
+                          } else {
+                            setState(() {
+                              activityStatus = "Active";
+                              activationButton = "Deactivate";
+                            });
+                          }
+                        } else{
+                          setState(() {
+                            activationButton = temp;
+                          });
+                        }
+                      },
+                      child: Text(
+                        activationButton,
+                      )),
+                ],
+              )
             ],
           ),
         ),

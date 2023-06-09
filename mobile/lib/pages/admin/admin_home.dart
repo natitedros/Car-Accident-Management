@@ -50,6 +50,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
         phoneNumber: temp['phoneNumber'],
         role: temp['role'],
         id: temp['id'],
+        caseNumber: temp['caseNumber'],
+        isActive: temp['isActive']
       );
       return data;
     } else {
@@ -71,7 +73,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               "Search any user here...",
               style: TextStyle(
                 fontSize: 17
