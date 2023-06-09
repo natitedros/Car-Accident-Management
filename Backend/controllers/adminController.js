@@ -5,7 +5,11 @@ const Car = require('../models/car')
 module.exports.search_post = (req, res)=>{
     User.find({email: req.body.email})
         .then((result) => {
-            Case.countDocuments({ subjectId: result[0]._id })
+            let searchKey = "subjectId";
+            if (result[0].role == "police"){
+                searchKey = "handlerId";
+            }
+            Case.countDocuments({ [searchKey]: result[0]._id })
                 .then((caseNumber)=>{
                     res.status(201).json({id: result[0]._id, 
                         name: result[0].name, 
