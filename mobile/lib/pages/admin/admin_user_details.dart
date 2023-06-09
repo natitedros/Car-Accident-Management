@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -18,7 +17,6 @@ class UserDetailsPage extends StatefulWidget {
 }
 
 class _UserDetailsPageState extends State<UserDetailsPage> {
-
   String deleteBtn = "Delete Account";
   late String activityStatus;
   late String activationButton;
@@ -36,7 +34,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
       'Accept': '*/*',
       'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
       'Content-Type': 'application/json',
-      'Authorization' : 'Bearer $token'
+      'Authorization': 'Bearer $token'
     };
     String ep = "${dotenv.env['STARTING_URI']}/admin/delete/$id";
     var url = Uri.parse(ep);
@@ -62,7 +60,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
       'Accept': '*/*',
       'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
       'Content-Type': 'application/json',
-      'Authorization' : 'Bearer $token'
+      'Authorization': 'Bearer $token'
     };
     String ep = "${dotenv.env['STARTING_URI']}/admin/activation/$id";
     var url = Uri.parse(ep);
@@ -85,19 +83,19 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Color(0xFF3AD425)),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          backgroundColor: Colors.white,
-          elevation: 3,
-          title: Text(
-            'User Details',
-            style: TextStyle(color: Color(0xFF3AD425), fontSize: 15.0),
-          ),
-          centerTitle: true,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Color(0xFF3AD425)),
+          onPressed: () => Navigator.of(context).pop(),
         ),
+        backgroundColor: Colors.white,
+        elevation: 3,
+        title: Text(
+          'User Details',
+          style: TextStyle(color: Color(0xFF3AD425), fontSize: 15.0),
+        ),
+        centerTitle: true,
+      ),
       body: Container(
         child: Center(
           child: Column(
@@ -133,7 +131,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                 children: [
                   ElevatedButton(
                       onPressed: () async {
-                        if (deleteBtn == "User Deleted"){
+                        if (deleteBtn == "User Deleted") {
                           Navigator.of(context).pop();
                           return;
                         }
@@ -142,12 +140,11 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                           deleteBtn = "Deleting...";
                         });
                         bool isDeleted = await deleteUser("${widget.data.id}");
-                        if (isDeleted){
+                        if (isDeleted) {
                           setState(() {
                             deleteBtn = "User Deleted";
                           });
-                        }
-                        else{
+                        } else {
                           setState(() {
                             deleteBtn = "Try Again";
                           });
@@ -161,11 +158,12 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                         // Function to write to delete the respective user with the email entered
                         String temp = activationButton;
                         setState(() {
-                           activationButton = "Loading...";
+                          activationButton = "Loading...";
                         });
-                        bool isToggled = await activationUser("${widget.data.id}");
-                        if (isToggled){
-                          if(activityStatus == "Active"){
+                        bool isToggled =
+                            await activationUser("${widget.data.id}");
+                        if (isToggled) {
+                          if (activityStatus == "Active") {
                             setState(() {
                               activityStatus = "Inactive";
                               activationButton = "Activate";
@@ -176,7 +174,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                               activationButton = "Deactivate";
                             });
                           }
-                        } else{
+                        } else {
                           setState(() {
                             activationButton = temp;
                           });
@@ -194,3 +192,5 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
     );
   }
 }
+//squashing
+

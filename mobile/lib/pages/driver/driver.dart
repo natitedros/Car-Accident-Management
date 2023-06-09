@@ -10,8 +10,6 @@ import 'dart:convert';
 
 import '../token_checker.dart';
 
-// void main() => runApp(DriverPage());
-
 class DriverPage extends StatefulWidget {
   final returenData data;
   const DriverPage({Key? key, required this.data}) : super(key: key);
@@ -21,12 +19,13 @@ class DriverPage extends StatefulWidget {
 }
 
 class _DriverPageState extends State<DriverPage> {
-  int index = 0;
+  int currentIndex = 0;
   String title0 = "Home";
   String title1 = "Cars";
   String title2 = "Cases";
   String title3 = "Profile";
   String mainTitle = "Home";
+  late final PageController pageController;
   late final List<Widget> screens;
 
   @override
@@ -38,6 +37,48 @@ class _DriverPageState extends State<DriverPage> {
       DriverCasesPage(data: widget.data),
       DriverProfilePage(data: widget.data),
     ];
+    pageController = PageController(initialPage: currentIndex);
+  }
+
+  void onPageChanged(int pageIndex) {
+    setState(() {
+      currentIndex = pageIndex;
+      if (currentIndex == 0) {
+        mainTitle = title0;
+      } else if (currentIndex == 1) {
+        mainTitle = title1;
+      } else if (currentIndex == 2) {
+        mainTitle = title2;
+      } else if (currentIndex == 3) {
+        mainTitle = title3;
+      }
+    });
+  }
+
+  void onTabTapped(int tabIndex) {
+    setState(() {
+      currentIndex = tabIndex;
+      if (currentIndex == 0) {
+        mainTitle = title0;
+      } else if (currentIndex == 1) {
+        mainTitle = title1;
+      } else if (currentIndex == 2) {
+        mainTitle = title2;
+      } else if (currentIndex == 3) {
+        mainTitle = title3;
+      }
+      pageController.animateToPage(
+        currentIndex,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -61,103 +102,72 @@ class _DriverPageState extends State<DriverPage> {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => Login()),
-                (Route<dynamic> route) => false,
+                    (Route<dynamic> route) => false,
               );
             },
           )
         ],
       ),
       body: PageView(
+        controller: pageController,
         children: screens,
-        onPageChanged: (pageIndex) {
-          setState(() {
-            index = pageIndex;
-            if (index == 0) {
-              mainTitle = title0;
-            } else if (index == 1) {
-              mainTitle = title1;
-            } else if (index == 2) {
-              mainTitle = title2;
-            } else if (index == 3) {
-              mainTitle = title3;
-            }
-          });
-        },
+        onPageChanged: onPageChanged,
       ),
-      bottomNavigationBar: NavigationBarTheme(
-        data: NavigationBarThemeData(
-          indicatorColor: Colors.white,
-          labelTextStyle: MaterialStateProperty.all(
-            TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
+        elevation: 5,
+        currentIndex: currentIndex,
+        onTap: onTabTapped,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,// Set the highlight color
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home_outlined,
+              color: Color(0xFFAFAFAF),
+            ),
+            label: 'Home',
+            activeIcon: Icon( // Define the active icon
+              Icons.home_outlined,
+                color: Color(0xFF2CACE7) // Set the active color
+            ),
           ),
-        ),
-        child: NavigationBar(
-          height: 60,
-          backgroundColor: Colors.white,
-          elevation: 5,
-          labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-          selectedIndex: index,
-          onDestinationSelected: (pageIndex) {
-            setState(() {
-              index = pageIndex;
-              if (index == 0) {
-                mainTitle = title0;
-              } else if (index == 1) {
-                mainTitle = title1;
-              } else if (index == 2) {
-                mainTitle = title2;
-              } else if (index == 3) {
-                mainTitle = title3;
-              }
-            });
-          },
-          destinations: [
-            NavigationDestination(
-              icon: Icon(
-                Icons.home_outlined,
-                color: Color(0xFFAFAFAF),
-              ),
-              selectedIcon: Icon(
-                Icons.home_outlined,
-                color: Color(0xFF2CACE7),
-              ),
-              label: 'Home',
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.car_repair_outlined,
+              color: Color(0xFFAFAFAF),
             ),
-            NavigationDestination(
-              icon: Icon(
+            label: 'Cars',
+            activeIcon: Icon( // Define the active icon
                 Icons.car_repair_outlined,
-                color: Color(0xFFAFAFAF),
-              ),
-              selectedIcon: Icon(
-                Icons.car_repair_outlined,
-                color: Color(0xFFCB3D2D),
-              ),
-              label: 'Cars',
+                color: Color(0xFFCB3D2D) // Set the active color
             ),
-            NavigationDestination(
-              icon: Icon(
+
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.file_copy_outlined,
+              color: Color(0xFFAFAFAF),
+            ),
+            label: 'Cases',
+            activeIcon: Icon( // Define the active icon
                 Icons.file_copy_outlined,
-                color: Color(0xFFAFAFAF),
-              ),
-              selectedIcon: Icon(
-                Icons.file_copy_outlined,
-                color: Color(0xFF3AD425),
-              ),
-              label: 'Cases',
+                color: Color(0xFF3AD425) // Set the active color
             ),
-            NavigationDestination(
-              icon: Icon(
-                Icons.person_outline_rounded,
-                color: Color(0xFFAFAFAF),
-              ),
-              selectedIcon: Icon(
-                Icons.person_outline_rounded,
-                color: Color(0xFFFFC107),
-              ),
-              label: 'Profile',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.person_outline_rounded,
+              color: Color(0xFFAFAFAF),
             ),
-          ],
-        ),
+
+            label: 'Profile',
+            activeIcon: Icon( // Define the active icon
+                Icons.person_outline_rounded,
+                color: Colors.amber // Set the active color
+            ),
+          ),
+        ],
       ),
     );
   }
