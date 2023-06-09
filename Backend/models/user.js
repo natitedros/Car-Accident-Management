@@ -11,8 +11,11 @@ const userSchema = new mongoose.Schema({
     role: {
         type: String,
         required: [true, 'Please choose a role'],
-        
     },
+    isActive: {
+        type: Boolean,
+        required: [true, "Please add in active status"]
+    }, 
     phoneNumber: {
         type: String,
         required: [true, 'Please enter a phone number'],

@@ -10,6 +10,7 @@ router.post('/create', authController.signup_post)
 router.post('/search', adminController.search_post)
 //post the id of user to delete
 router.delete('/delete/:id', adminController.delete_user)
+router.get('/activation/:id', adminController.toggle_activation)
 router.get('/cases', adminController.list_cases)
 
 module.exports = router
