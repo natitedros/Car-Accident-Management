@@ -1,12 +1,21 @@
 const User = require('../models/user')
 const Case = require('../models/accidentcase')
-const Cars  = require('../models/car')
 const Car = require('../models/car')
 
 module.exports.search_post = (req, res)=>{
     User.find({email: req.body.email})
         .then((result) => {
-            res.status(201).json({id: result[0]._id, name: result[0].name, role: result[0].role})
+            Case.countDocuments({ subjectId: result[0]._id })
+                .then((caseNumber)=>{
+                    res.status(201).json({id: result[0]._id, 
+                        name: result[0].name, 
+                        email: result[0].email, 
+                        role: result[0].role, 
+                        phoneNumber: result[0].phoneNumber, 
+                        caseNumber: caseNumber,
+                        isActive: result[0].isActive
+                    })
+                })
         })
         .catch((err)=>{
             console.log(err)
@@ -17,7 +26,7 @@ module.exports.delete_user = (req, res)=>{
     User.findByIdAndDelete(req.params.id)
         .then((result)=>{
             Car.deleteMany({ ownerId: result._id })
-                .then((res)=>{
+                .then((r)=>{
                     res.status(201).json({message: "user deleted"})
                 })
                 .catch((err)=>console.log(err))
@@ -26,7 +35,7 @@ module.exports.delete_user = (req, res)=>{
         .catch((err)=>console.log(err))
 }
 module.exports.toggle_activation = (req, res)=>{
-    User.findByIdAndUpdate(req.params.id, { $bit: { isActive: { xor: 1 } } },
+    User.findByIdAndUpdate(req.params.id, [{ $set: { isActive: { $not: "$isActive" } } }],
         { new: true })
         .then((result)=>{
             const msg = result.isActive ? "active" : "inactive";

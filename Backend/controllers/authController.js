@@ -58,7 +58,8 @@ module.exports.login_post = async (req, res)=>{
         const user = await User.login(email, password)
         const token = createToken(user._id)
         if (!user.isActive){
-            res.status(400).json({ email : "The account is inactive" })
+            res.status(400).json({ errors : { email : "The account is inactive" , password : ""}});
+            return;
         }
         res.status(200).json({ token: token, user: user})
     }catch(err){
