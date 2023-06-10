@@ -1,18 +1,15 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:car_accident_management/pages/token_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
-import '../datamodel.dart';
-
-void main() => runApp(const ChangePhone());
-
 class ChangePhone extends StatelessWidget {
-  const ChangePhone({Key? key}) : super(key: key);
+  final String id;
+  const ChangePhone({Key? key, required this.id}) : super(key: key);
 
-  // static const String _title = 'Sample App';
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +28,7 @@ class ChangePhone extends StatelessWidget {
           centerTitle: true,
           backgroundColor: Color(0xFFFFC107),
         ),
-        body: const ChangePhoneStateful(),
+        body: ChangePhoneStateful(id: id),
       ),
       theme: ThemeData(
           fontFamily: 'Feather',
@@ -46,28 +43,33 @@ class ChangePhone extends StatelessWidget {
 }
 
 class ChangePhoneStateful extends StatefulWidget {
-  const ChangePhoneStateful({Key? key}) : super(key: key);
+  final String id;
+  const ChangePhoneStateful({Key? key, required this.id}) : super(key: key);
 
   @override
   State<ChangePhoneStateful> createState() => _ChangePhoneStatefulState();
 }
 
 class _ChangePhoneStatefulState extends State<ChangePhoneStateful> {
-  DataModel? _dataModel;
   TextEditingController newPhoneController = TextEditingController();
+  String changeMessage = "";
+  String btnText = "CHANGE NUMBER";
 
-  Future<DataModel?> submitData(
-    String newPhone,
-  ) async {
+  Future<String?> changeNumber(
+      String newNumber,
+      String? id
+      ) async {
+    String? token = await TokenService().readToken();
     var headersList = {
       'Accept': '*/*',
       'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization' : 'Bearer $token'
     };
 
-    var url = Uri.parse('${dotenv.env['STARTING_URI']}/changePassword');
+    var url = Uri.parse('${dotenv.env['STARTING_URI']}/common/changenumber/$id');
     var body = {
-      'newPhone': newPhone,
+      'newNumber': newNumber
     };
 
     var req = http.Request('POST', url);
@@ -76,61 +78,21 @@ class _ChangePhoneStatefulState extends State<ChangePhoneStateful> {
 
     var res = await req.send();
     final resBody = await res.stream.bytesToString();
-    print(req.body);
-    if (res.statusCode == 201 || res.statusCode == 300) {
-      print(resBody);
-    } else {
-      print('hi');
-      print(res.reasonPhrase);
-    }
+    Map temp = jsonDecode(resBody);
+    return temp['message'];
 
-    return null;
-
-    // var headers = {
-    //   'Content-Type': 'application/json',
-    //   'Cookie':
-    //       'jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzY2ZkMWM1M2M4M2NjNGU3ZDBjNzU5ZiIsImlhdCI6MTY3NDU3MTAyMywiZXhwIjoxNjc0ODMwMjIzfQ.Un4CcfQiZK-YFZ5YSX-Idq4FihEFKXE0iimyWQGhBE0'
-    // };
-    // var request =
-    //     http.Request('POST', Uri.parse('https://adega.onrender.com/login'));
-    // request.body =
-    //     json.encode({"email": "nati@google.com", "password": "1234567"});
-    // request.headers.addAll(headers);
-    // var response = await request.send();
-    // log(request.toString());
-    // print(response);
-    // // http.StreamedResponse response = await request.send();
-
-    // if (response.statusCode == 200) {
-    //   print(await response.stream.bytesToString());
-    // } else {
-    //   print(response.reasonPhrase);
-    // }
   }
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-    // print(height);
-    // print(width);
 
     return Container(
-      //height: height * 0.1, //height to 10% of screen height, 100/10 = 0.1
-      //width: width * 0.7, //width t 70% of screen width
       child: Padding(
           padding: const EdgeInsets.all(5),
           child: ListView(
             children: <Widget>[
-              // Container(
-              //   alignment: Alignment.center,
-              //   padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-              //   child: Image.asset(
-              //     'assets/logo.png',
-              //     height: height * 0.3, //height to 9% of screen height,
-              //     width: width * 0.3,
-              //   ),
-              // ),
+
               SizedBox(
                 height: height * 0.2, //height to 9% of screen height,
               ),
@@ -165,15 +127,22 @@ class _ChangePhoneStatefulState extends State<ChangePhoneStateful> {
                   ),
                 ),
               ),
-
               SizedBox(
-                height: height * 0.15,
+                height: height * 0.06,
+              ),
+              Center(
+                child: Text(
+                  changeMessage,
+                  style: TextStyle(color: Colors.red, fontSize: 12.0),
+                ),
+              ),
+              SizedBox(
+                height: height * 0.06,
               ),
               Container(
                   height: height * 0.09,
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: ElevatedButton(
-                    child: const Text('CHANGE NUMBER'),
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -182,19 +151,17 @@ class _ChangePhoneStatefulState extends State<ChangePhoneStateful> {
                       backgroundColor: Color(0xFFFFC107),
                     ),
                     onPressed: () async {
-                      String newPhone = newPhoneController.text;
-
-                      // print(newPassword);
-                      // print(repeatedPassword);
-                      // print(oldPaswword);
-
-                      DataModel? data = //await getData();
-                          await submitData(newPhone);
-
                       setState(() {
-                        _dataModel = data;
+                        btnText = "Changing...";
+                      });
+                      String? message = await changeNumber(
+                          newPhoneController.text, widget.id!);
+                      setState(() {
+                        changeMessage = "$message";
+                        btnText = "CHANGE PASSWORD";
                       });
                     },
+                    child: Text(btnText),
                   )),
             ],
           )),

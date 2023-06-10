@@ -82,7 +82,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ChangePassword()),
+                MaterialPageRoute(builder: (context) => ChangePassword(id: widget.data.id!,)),
                 // (Route<dynamic> route) => false,
               );
             },
@@ -100,7 +100,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ChangePhone()),
+                MaterialPageRoute(builder: (context) => ChangePhone(id: widget.data.id!,)),
                 // (Route<dynamic> route) => false,
               );
             },
