@@ -7,6 +7,7 @@ const authRoutes = require('./routes/authRoutes')
 const adminRoutes = require('./routes/adminRoutes')
 const driverRoutes = require('./routes/driverRoutes')
 const policeRoutes = require('./routes/policeRoutes')
+const commonRoutes = require('./routes/commonRoutes')
 const { validateToken } = require('./middleware/validateTokenMiddleware')
 
 
@@ -34,4 +35,5 @@ app.use(validateToken)
 app.use('/admin', adminRoutes)
 app.use('/driver', driverRoutes)
 app.use('/police', policeRoutes)
+app.use('/common', commonRoutes)
 app.use((req, res) => res.status(400).json({msg: "wrong endpoint"}))
