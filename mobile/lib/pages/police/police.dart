@@ -127,7 +127,7 @@ class _PolicePageState extends State<PolicePage> {
     super.initState();
     pageController = PageController(initialPage: index);
     initializeNearby();
-    timer = Timer.periodic(Duration(seconds: 30), (timer) async {
+    timer = Timer.periodic(const Duration(seconds: 5), (timer) async {
       Position? pos = await getLocation();
       if (pos != null){
         List<returenCases> temp = await fetchCases(pos);
