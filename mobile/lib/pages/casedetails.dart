@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:car_accident_management/pages/display_images.dart';
+import 'package:car_accident_management/pages/token_checker.dart';
 import 'package:car_accident_management/pages/update_verdict.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -34,10 +35,14 @@ class CaseDetailPage extends StatefulWidget {
 
 class _CaseDetailPageState extends State<CaseDetailPage> {
   Future<bool> assignSelf(String caseId, String handlerId) async {
+    String? token = await TokenService().readToken();
+
     var headersList = {
       'Accept': '*/*',
       'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization' : 'Bearer $token'
+
     };
     var body = {
       "policeId": handlerId,
