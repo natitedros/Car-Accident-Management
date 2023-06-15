@@ -97,100 +97,194 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
         centerTitle: true,
       ),
       body: Container(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text("Name:",
-                  style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 15.0)),
-              Text("${widget.data.name}",
-                  style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 25.0)),
-              Text("Email:",
-                  style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 10.0)),
-              Text("${widget.data.email}",
-                  style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 20.0)),
-              Text("Role:",
-                  style: TextStyle(color: Color(0xFFBEBEBE), fontSize: 10.0)),
-              Text("${widget.data.role}",
-                  style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 20.0)),
-              Text("Phone Number:",
-                  style: TextStyle(color: Color(0xFFBEBEBE), fontSize: 10.0)),
-              Text("${widget.data.phoneNumber}",
-                  style: TextStyle(color: Color(0xFFAFAFAF), fontSize: 20.0)),
-              Text("Accident Participation:",
-                  style: TextStyle(color: Color(0xFFBEBEBE), fontSize: 15.0)),
-              Text("${widget.data.caseNumber}",
-                  style: TextStyle(color: Color(0xFFBEBEBE), fontSize: 15.0)),
-              Text("Activity Status:",
-                  style: TextStyle(color: Color(0xFFBEBEBE), fontSize: 15.0)),
-              Text(activityStatus,
-                  style: TextStyle(color: Color(0xFFBEBEBE), fontSize: 15.0)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                      onPressed: () async {
-                        if (deleteBtn == "User Deleted") {
-                          Navigator.of(context).pop();
-                          return;
-                        }
-                        // Function to write to delete the respective user with the email entered
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Card(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Name:",
+                      style:
+                      TextStyle(color: Color(0xFFAFAFAF), fontSize: 15.0),
+                    ),
+                    Text(
+                      "${widget.data.name}",
+                      style:
+                      TextStyle(color: Color(0xFFAFAFAF), fontSize: 25.0),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Card(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Email:",
+                      style:
+                      TextStyle(color: Color(0xFFAFAFAF), fontSize: 10.0),
+                    ),
+                    Text(
+                      "${widget.data.email}",
+                      style:
+                      TextStyle(color: Color(0xFFAFAFAF), fontSize: 20.0),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Card(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Role:",
+                      style:
+                      TextStyle(color: Color(0xFFBEBEBE), fontSize: 10.0),
+                    ),
+                    Text(
+                      "${widget.data.role}",
+                      style:
+                      TextStyle(color: Color(0xFFAFAFAF), fontSize: 20.0),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Card(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Phone Number:",
+                      style:
+                      TextStyle(color: Color(0xFFBEBEBE), fontSize: 10.0),
+                    ),
+                    Text(
+                      "${widget.data.phoneNumber}",
+                      style:
+                      TextStyle(color: Color(0xFFAFAFAF), fontSize: 20.0),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Card(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Accident Participation:",
+                      style:
+                      TextStyle(color: Color(0xFFBEBEBE), fontSize: 15.0),
+                    ),
+                    Text(
+                      "${widget.data.caseNumber}",
+                      style:
+                      TextStyle(color: Color(0xFFBEBEBE), fontSize: 15.0),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Card(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Activity Status:",
+                      style:
+                      TextStyle(color: Color(0xFFBEBEBE), fontSize: 15.0),
+                    ),
+                    Text(
+                      activityStatus,
+                      style:
+                      TextStyle(color: Color(0xFFBEBEBE), fontSize: 15.0),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () async {
+                    if (deleteBtn == "User Deleted") {
+                      Navigator.of(context).pop();
+                      return;
+                    }
+                    // Function to write to delete the respective user with the email entered
+                    setState(() {
+                      deleteBtn = "Deleting...";
+                    });
+                    bool isDeleted = await deleteUser("${widget.data.id}");
+                    if (isDeleted) {
+                      setState(() {
+                        deleteBtn = "User Deleted";
+                      });
+                    } else {
+                      setState(() {
+                        deleteBtn = "Try Again";
+                      });
+                    }
+                  },
+                  child: Text(
+                    deleteBtn,
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    // Function to write to delete the respective user with the email entered
+                    String temp = activationButton;
+                    setState(() {
+                      activationButton = "Loading...";
+                    });
+                    bool isToggled = await activationUser("${widget.data.id}");
+                    if (isToggled) {
+                      if (activityStatus == "Active") {
                         setState(() {
-                          deleteBtn = "Deleting...";
+                          activityStatus = "Inactive";
+                          activationButton = "Activate";
                         });
-                        bool isDeleted = await deleteUser("${widget.data.id}");
-                        if (isDeleted) {
-                          setState(() {
-                            deleteBtn = "User Deleted";
-                          });
-                        } else {
-                          setState(() {
-                            deleteBtn = "Try Again";
-                          });
-                        }
-                      },
-                      child: Text(
-                        deleteBtn,
-                      )),
-                  ElevatedButton(
-                      onPressed: () async {
-                        // Function to write to delete the respective user with the email entered
-                        String temp = activationButton;
+                      } else {
                         setState(() {
-                          activationButton = "Loading...";
+                          activityStatus = "Active";
+                          activationButton = "Deactivate";
                         });
-                        bool isToggled =
-                            await activationUser("${widget.data.id}");
-                        if (isToggled) {
-                          if (activityStatus == "Active") {
-                            setState(() {
-                              activityStatus = "Inactive";
-                              activationButton = "Activate";
-                            });
-                          } else {
-                            setState(() {
-                              activityStatus = "Active";
-                              activationButton = "Deactivate";
-                            });
-                          }
-                        } else {
-                          setState(() {
-                            activationButton = temp;
-                          });
-                        }
-                      },
-                      child: Text(
-                        activationButton,
-                      )),
-                ],
-              )
-            ],
-          ),
+                      }
+                    } else {
+                      setState(() {
+                        activationButton = temp;
+                      });
+                    }
+                  },
+                  child: Text(
+                    activationButton,
+                  ),
+                ),
+              ],
+            )
+          ],
         ),
       ),
     );
   }
 }
-//squashing
-

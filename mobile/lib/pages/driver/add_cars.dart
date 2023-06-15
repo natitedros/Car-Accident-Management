@@ -20,15 +20,16 @@ class AddCar extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
+            icon: Icon(Icons.arrow_back, color: Color(0xFFCB3D2D)),
             onPressed: () => Navigator.of(context).pop(),
           ),
           title: const Text(
             'Add car',
-            style: TextStyle(fontSize: 15.0),
+            style: TextStyle(color: Color(0xFFCB3D2D),fontSize: 15.0),
+
           ),
           centerTitle: true,
-          backgroundColor: Color(0xFFCB3D2D),
+          backgroundColor: Colors.white,
         ),
         body: AddCarStateful(data: data,),
       ),
@@ -279,7 +280,9 @@ class _AddCarStatefulState extends State<AddCarStateful> {
                   ),
                 ),
               ),
-
+              SizedBox(
+                height: height * 0.08, //height to 9% of screen height,
+              ),
               Container(
                   height: height * 0.09,
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),

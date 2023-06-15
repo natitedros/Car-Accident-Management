@@ -43,15 +43,18 @@ class CarInfoLayout extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0),
-              child: IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.delete_outline_outlined,
-                    color: Color(0xFFCB3D2D),
-                  )),
-            ),
+            //---------------------- delete Btn -------------------------------------------------------
+            // Padding(
+            //   padding: const EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0),
+            //   child: IconButton(
+            //       onPressed: () {},
+            //       icon: Icon(
+            //         Icons.delete_outline_outlined,
+            //         color: Color(0xFFCB3D2D),
+            //       )),
+            // ),
+            //---------------------- delete Btn -------------------------------------------------------
+
           ],
         ),
       ),
