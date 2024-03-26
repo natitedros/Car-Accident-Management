@@ -26,7 +26,7 @@ To deploy the Car Accident Management System, follow these steps:
 3. Configure the hardware microcontroller code according to your vehicle's specifications and install it.
 4. Build and deploy the frontend mobile application using Flutter/Dart.
 
-##Contributing
+## Contributing
 Contributions to this project are welcome! If you have any suggestions, bug reports, or feature requests, please feel free to open an issue or submit a pull request.
 
 
