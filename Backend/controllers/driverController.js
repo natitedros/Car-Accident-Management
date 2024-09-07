@@ -71,6 +71,7 @@ module.exports.add_major_case = (req, res)=>{
                             const accidentcase = new Case(crashcase)
                             accidentcase.save()
                                 .then((result)=>{
+                                    console.log("accident major posted")
                                     res.status(201).json({case: result._id})
                                 })
                                 .catch((err)=>{
