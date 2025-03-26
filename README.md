@@ -1,4 +1,5 @@
 # Car-Accident-Management
+##[Final Presentation Slide](https://docs.google.com/presentation/d/1AYvPm52p2j-T5Eg2OVSnM34USyKKRwQG6whOnzoRA_o/edit?usp=sharing)
 This repository contains the codebase for a Final Year BSc. thesis project aimed at addressing one of the major challenges in Addis Ababa, Ethiopia - swift response to car accidents and requesting aid for severe accidents. The project aims to alleviate traffic congestion caused by accidents by providing prompt assistance for both minor and severe incidents.
 
 ## Project Overview
